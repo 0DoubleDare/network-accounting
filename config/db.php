@@ -1,5 +1,5 @@
 <?php
-//Подключение к БД
+//Подключение к БД (Mysql). Используется во всех файлах, где нужен доступ к БД.
 try{
     $pdo = new PDO('mysql:host=localhost;dbname=network_accounting_db', 'root', '');
 }catch(PDOException $error){
