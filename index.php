@@ -26,7 +26,7 @@
                         <a class="nav-link" href="#">Войти</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Зарегистрироваться</a>
+                        <a class="nav-link" href="view/registration.php">Зарегистрироваться</a>
                     </li>
                 </ul>
             </div>
