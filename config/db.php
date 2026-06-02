@@ -1,8 +1,8 @@
 <?php
 //Подключение к БД (Mysql). Используется во всех файлах, где нужен доступ к БД.
-try{
+try {
     $pdo = new PDO('mysql:host=localhost;dbname=network_accounting_db', 'root', '');
-}catch(PDOException $error){
+} catch(PDOException $error) {
     die('Error: ' .  $error->getMessage());
 }
 ?>
