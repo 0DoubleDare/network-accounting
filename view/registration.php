@@ -36,40 +36,23 @@ exit();
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="eu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
-    <link rel="stylesheet"  > <!-- href="путь для стилей" (ЭТУ Команду в тэг link после rel="stylesheet") -->
-</head>
-<body>
-<!-- Пропуски для div ( для стилей ) -->
+<?php include '../includes/header.php'; ?>
     <h1>Регистрация</h1>
-<!-- Пропуски для div ( для стилей ) -->
     <form action="" method="post">
-<!-- Пропуски для div ( для стилей ) -->
         <label>Логин</label>
         <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required><br><br>
-<!-- Пропуски для div ( для стилей ) -->
         <label>Пароль</label>
-        <input type="password" name="password" placeholder="Придумайте пароль" required><br><br>
-<!-- Пропуски для div ( для стилей ) -->      
+        <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50"><br><br>
         <label>Подтвердить пароль</label>
-        <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required><br><br>
-<!-- Пропуски для div ( для стилей ) -->
+        <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50"><br><br>
         <button type="submit">Зарегистрироваться</button><br><br>
-<!-- Пропуски для div ( для стилей ) -->
         <p>
             Уже есть аккаунт? - <a href="login.php">Войти</a>
         </p>
-<!-- Пропуски для div ( для стилей ) -->
-    <?php if (!empty($error)): ?>
-        <!-- Пропуски для div ( для стилей ) -->
-        <strong>Ошибка:</strong> <?php echo htmlspecialchars($error); ?>
-        <!-- Пропуски для div ( для стилей ) -->
-    <?php endif; ?>
     </form>
-</body>
-</html>
+    <div class="alert alert-danger">
+        <?php if (!empty($error)): ?>
+            <strong>Ошибка:</strong> <?php echo htmlspecialchars($error); ?>
+        <?php endif; ?>
+    </div>
+<?php include '../includes/footer.php'; ?>

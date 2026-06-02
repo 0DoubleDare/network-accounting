@@ -5,4 +5,4 @@ try {
 } catch(PDOException $error) {
     die('Error: ' . $error->getMessage());
 }
-?>1
+?>
