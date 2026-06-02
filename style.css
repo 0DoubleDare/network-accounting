@@ -1,0 +1,112 @@
+/* assets/css/style.css */
+
+/* 1. Прижимаем футер к низу (строго, без магии) */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Весь основной контент занимает всё свободное место */
+.content {
+    flex: 1;
+}
+
+/* 2. Сам подвал — скромно и строго */
+.site-footer {
+    background-color: #f5f5f5;
+    color: #333333;
+    padding: 2rem 0 1.5rem 0;
+    border-top: 1px solid #e0e0e0;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* Заголовки — жирность и размер, без украшательств */
+.footer-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    color: #111111;
+}
+
+.footer-section p {
+    font-size: 0.85rem;
+    color: #666666;
+    margin: 0;
+}
+
+.footer-section h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: #222222;
+}
+
+/* Социальные ссылки — без анимаций, без фонов при наведении */
+.social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-links a {
+    color: #444444;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.social-links a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* Копирайт — скромно и незаметно */
+.copyright {
+    font-size: 0.75rem;
+    color: #888888;
+    margin: 0;
+}
+
+/* Адаптивность для планшетов и десктопов */
+@media (min-width: 768px) {
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .social-links {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 767px) {
+    .site-footer {
+        padding: 1.5rem 0 1rem 0;
+    }
+    
+    .footer-section {
+        margin-bottom: 1rem;
+    }
+    
+    .footer-section:last-child {
+        margin-bottom: 0;
+    }
+}
