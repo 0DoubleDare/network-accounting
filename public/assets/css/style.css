@@ -115,4 +115,71 @@ body {
     }
 }
 
-/* Header */
+/** Header **/
+
+/* Стили для шапки */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    padding: 15px 40px;
+    border-bottom: 1px solid #c0c0c0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.site-logo {
+    text-decoration: none;
+}
+
+.site-logo:hover {
+    opacity: 0.8;
+}
+
+.logo-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.header-nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-greeting {
+    font-size: 14px;
+    color: #555;
+    background-color: #f0f0f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 12px 20px;
+    }
+    
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo-title {
+        font-size: 20px;
+    }
+}
