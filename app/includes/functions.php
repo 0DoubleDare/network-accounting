@@ -79,10 +79,15 @@ if (!function_exists('registerUser')) {
     function registerUser($pdo, $login, $password_hash) {
         try {
             $stmt = $pdo->prepare("INSERT INTO users (login, password_hash, role) VALUES (:login, :password_hash, 'operator')");
-            return $stmt->execute([
+            $stmt->execute([
                 ':login' => $login,
                 ':password_hash' => $password_hash
             ]);
+            return $response = [
+                'id' => $pdo->lastInsertId(),
+                'login' => $login,
+                'role' => 'operator'
+            ];
         } catch (PDOException $e) {
             error_log("Register error: " . $e->getMessage());
             return false;

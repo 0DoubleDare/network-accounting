@@ -8,7 +8,7 @@ $message = getMessage();
 <?php include '../includes/header.php'; ?>
 
 <h1>Регистрация</h1>
-<form action="../../controllers/authcontroller.php" method="post">
+<form action="../../controllers/registration_controller.php" method="post">
     <label>Логин</label>
     <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50"><br><br>
     <label>Пароль</label>
