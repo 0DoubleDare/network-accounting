@@ -20,7 +20,7 @@ if (!isset($points)) {
 <div class="container mt-4 w-20 p-3 border border-dark" style="background-color: #eee;">
     <h1 class="text-center">Реестр оборудования</h1>
     <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-primary">
             <tr>
                 <th>ID</th>
                 <th>Метка</th>
@@ -28,6 +28,8 @@ if (!isset($points)) {
                 <th>Расположение</th>
                 <th>Статус</th>
                 <th>Проверено</th>
+                <th>Дата создания</th>
+                <th>Фото</th>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +47,8 @@ if (!isset($points)) {
                 <th><?php echo $point['location'] ?></th>
                 <th><?php echo $point['status'] ?></th>
                 <th><?php echo $point['last_check'] ?></th>
+                <th><?php echo $point['point_created_at'] ?></th>
+                <th><?php echo $point['image_path']?></th>
             </tr>
             <?php endforeach; ?>
             <?php endif; ?>
