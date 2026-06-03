@@ -38,19 +38,34 @@ exit();
 ?>
 <?php include __DIR__ . '/../includes/header.php'; ?>
 
-    <h1>Регистрация</h1>
-    <form action="" method="post">
-        <label>Логин</label>
-        <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50"><br><br>
-        <label>Пароль</label>
-        <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50"><br><br>
-        <label>Подтвердить пароль</label>
-        <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50"><br><br>
-        <button type="submit">Зарегистрироваться</button><br><br>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <body>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 150px); padding: 20px;">
+    
+    
+    <form action="" method="post" style="max-width: 650px; width:100%;">
+        <h1>Регистрация</h1>
+        <div class="mb-3 w-50">
+
+         <label for="exampleFormControlInput1" class="form-label">Логин</label>
+        <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50" class="form-control" id="exampleFormControlInput1"><br><br>
+        
+        <label for="inputPassword5" class="form-label">Пароль</label>
+        <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
+        
+        <label for="exampleFormControlInput1" class="form-label">Подтвердить пароль</label>
+        <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
+        
+<button type="submit" class="btn btn-outline-info">Зарегистрироваться</button>
         <p>
-            Уже есть аккаунт? - <a href="../view/login.php">Войти</a>
+            Уже есть аккаунт? - <a href="../view/login.php" class="link-success">Войти</a>
         </p>
+                </div>
     </form>
+    </div>
+    </body>
     <div class="alert alert-danger">
         <?php if (!empty($error)): ?>
             <strong>Ошибка:</strong> <?php echo htmlspecialchars($error); ?>
