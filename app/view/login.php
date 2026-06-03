@@ -3,10 +3,9 @@
  * Страница входа. Форма с логином и паролем.
  */
 ?>
-
 <?php include '../includes/header.php'; ?>
 
-    <form action="../includes/auth.php" method="post">
+    <form action="../../public/index.php" method="post">
         <label>Логин</label>
         <input type="text" name="login"><br><br>
 

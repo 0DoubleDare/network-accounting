@@ -5,7 +5,7 @@
 */
 
 session_start();
-require 'functions.php';
+require '../app/includes/functions.php';
 require '../config/db.php';
 
 $user_info = checkAuthorizedUser($pdo, $_POST['login'], $_POST['password_hash']);
@@ -13,7 +13,7 @@ $user_info = checkAuthorizedUser($pdo, $_POST['login'], $_POST['password_hash'])
 if(isset($user_info)){
     $_SESSION['user_info'] = $user_info;
     
-    header('Location: ..\index.php');
+    header('Location: ../public/index.php');
     exit();
 } else {
     echo "Ошибка логина или пароля";
