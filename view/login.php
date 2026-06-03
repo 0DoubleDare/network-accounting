@@ -10,7 +10,7 @@
         <label>Логин</label>
         <input type="text" name="login"><br><br>
 
-        <label>Пароль</label>
+        <label class="popa">Пароль</label>
         <input type="password" name="password_hash"><br><br>
     
 <!--        <select name="role">-->
