@@ -6,22 +6,21 @@
 <?php include '../includes/header.php'; ?>
 
 <body>
-<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 150px); padding: 20px;">
-    <form action="../../controllers/authcontroller.php" method="post" style="max-width: 650px; width:100%;">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh; padding: 20px;">
+    <form action="../../controllers/authcontroller.php" method="post" class="d-flex flex-column align-items-center" style="max-width: 450px; width: 100%;">
 
         <h1>Вход в аккаунт</h1>
 
-        <div class="mb-3 w-50">
+        <div class="mb-3 w-100">
 
         <label for="exampleFormControlInput1" class="form-label">Логин</label>
         <input type="text" name="login" class="form-control" id="exampleFormControlInput1"><br><br>
-
+        </div>
+        <div class="mb-4 w-100">
         <label for="inputPassword5" class="form-label">Пароль</label>
         <input type="password" name="password_hash" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
-
-        <button type="submit" class="btn btn-outline-success">Войти</button>
-        
         </div>
+        <button type="submit" class="btn btn-outline-success w-100">Войти</button>
     </form>
 </div>
 </body>
