@@ -16,7 +16,8 @@ function checkAuthorizedUser($pdo, $login, $password) {
             if (md5($password, $user['password_hash'])) {
                 $response = [
                     'user_id' => $user['id'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'login' => $login,
                 ];
                 return $response;
                 

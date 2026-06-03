@@ -5,7 +5,7 @@
 ?>
 <?php include '../includes/header.php'; ?>
 
-    <form action="../../public/index.php" method="post">
+    <form action="../../controllers/authcontroller.php" method="post">
         <label>Логин</label>
         <input type="text" name="login"><br><br>
 
@@ -22,5 +22,10 @@
 
         <button type="submit">Войти</button>
     </form>
+    <?php if (!empty($_SESSION['error'])): ?>
+        <div class="alert alert-danger">
+                <strong>Ошибка:</strong> <?php echo htmlspecialchars($_SESSION['error']) ?>;
+        </div>
+    <?php endif; ?>
 
 <?php include '../includes/footer.php'; ?>
