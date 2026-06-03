@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сетевые точки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Сетевые точки</h1>
+    <div class="sub">Добавление |Редактирование |Локальное хранилище</div>
+
+    <div class="form-card">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Название точки *</label>
+                <input type="text" id="pointName" placeholder="Офис-Астрахань" maxlength="50">
+            </div>
+            <div class="form-group">
+                <label>IP-адрес *</label>
+                <input type="text" id="pointIp" placeholder="192.168.1.1">
+            </div>
+            <div class="form-group">
+                <label>Порт (1-999999)</label>
+                <input type="number" id="pointPort" placeholder="8080" min="1" max="65535">
+            </div>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="pointDesc" placeholder="Доп. информация"></textarea>
+            </div>
+        </div>
+        <div class="button-group">
+            <button id="saveBtn">Сохранить (добавить)</button>
+            <button id="cancelBtn" class="outline">Отменить</button>
+        </div>
+        <div id="formError" class="error-msg"></div>
+    </div>
+
+    <div class="points-section">
+        <h3>Список точек</h3>
+        <table id="pointsTable">
+            <thead>
+                <tr><th>Название</th><th>IP-адрес</th><th>Порт</th><th>Описание</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr class="empty-row"><td colspan="5">Нет добавленных точек. Создайте первую!</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
