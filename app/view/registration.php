@@ -7,18 +7,30 @@ $message = getMessage();
 ?>
 <?php include '../includes/header.php'; ?>
 
-<h1>Регистрация</h1>
-<form action="../../controllers/authcontroller.php" method="post">
-    <label>Логин</label>
-    <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50"><br><br>
-    <label>Пароль</label>
-    <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50"><br><br>
-    <label>Подтвердить пароль</label>
-    <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50"><br><br>
-    <button type="submit">Зарегистрироваться</button><br><br>
+<body>
+<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 150px); padding: 20px;">
+
+<form action="../../controllers/authcontroller.php" method="post" style="max-width: 650px; width:100%;">
+    <h1>Регистрация</h1>
+
+    <div class="mb-3 w-50">
+
+    <label for="exampleFormControlInput1" class="form-label">Логин</label>
+    <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50" class="form-control" id="exampleFormControlInput1"><br><br>
+    
+    <label for="inputPassword5" class="form-label">Пароль</label>
+    <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
+    
+    <label for="inputPassword5" class="form-label">Подтвердить пароль</label>
+    <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
+    
+    <button type="submit" class="btn btn-outline-info">Зарегистрироваться</button><br><br>
+    
     <p>
-        Уже есть аккаунт? - <a href="login.php">Войти</a>
+        Уже есть аккаунт? - <a href="login.php" class="link-success">Войти</a>
+   
     </p>
+    </div>
 </form>
 <?php if ($error !== null): ?>
     <div class="alert alert-danger">
