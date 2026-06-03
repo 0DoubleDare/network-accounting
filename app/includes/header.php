@@ -26,9 +26,9 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?= $web_root ?>public/index.php" class="site-logo">
             <h1 class="logo-title">Network accounting</h1>
         </a>
-<nav style="display: flex; gap: 12px;">
+<nav style="display: flex; gap: 12px; align-items: center">
     <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
-        <span><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
+        <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
         <a href="<?= $web_root ?>controllers/logout.php"><button type="button" class="btn btn-danger">Выйти</button></a>
     <?php else: ?>
         <a href="<?= $web_root ?>app/view/registration.php"><button type="button" class="btn btn-primary">Регистрация</button></a>

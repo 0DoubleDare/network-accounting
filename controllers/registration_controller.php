@@ -34,7 +34,7 @@ $password_hash = md5($password);
 
 if ($user_info = registerUser($pdo, $login, $password_hash)) {
 unset($_SESSION['error']);
-$_SESSION['message'] = "Регистрация прошла успешно! Теперь вы можете войти.";
+//$_SESSION['message'] = "Регистрация прошла успешно! Теперь вы можете войти.";
 $_SESSION['user_info'] = $user_info;
 header('Location: ../public/index.php');
 exit();
