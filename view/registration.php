@@ -37,10 +37,11 @@ exit();
 }
 ?>
 <?php include '../includes/header.php'; ?>
+
     <h1>Регистрация</h1>
     <form action="" method="post">
         <label>Логин</label>
-        <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required><br><br>
+        <input type="text" name="login" placeholder="Придумайте логин" value="<?php echo htmlspecialchars($_POST['login'] ?? ''); ?>" required maxlength="50"><br><br>
         <label>Пароль</label>
         <input type="password" name="password" placeholder="Придумайте пароль" required maxlength="50"><br><br>
         <label>Подтвердить пароль</label>
@@ -55,4 +56,5 @@ exit();
             <strong>Ошибка:</strong> <?php echo htmlspecialchars($error); ?>
         <?php endif; ?>
     </div>
+
 <?php include '../includes/footer.php'; ?>

@@ -8,14 +8,14 @@ session_start();
 require 'functions.php';
 require '../config/db.php';
 
-$user_info = checkAuthorizedUser($pdo, $_POST['login'], $_POST['password_hash'], $_POST['role']);
+$user_info = checkAuthorizedUser($pdo, $_POST['login'], $_POST['password_hash']);
 
 if(isset($user_info)){
     $_SESSION['user_info'] = $user_info;
     
     header('Location: ..\index.php');
     exit();
-}else{
+} else {
     echo "Ошибка логина или пароля";
 }
 

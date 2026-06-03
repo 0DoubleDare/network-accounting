@@ -2,7 +2,6 @@
 // Берем корень нашего проекта. Нужно чтобы
 $web_root = explode('/', trim($_SERVER['SCRIPT_NAME'], '/'))[0];
 $web_root = '/' . $web_root . '/';
-echo "{$web_root}assets/css/style.css";
 /**
  * Шапка сайта. Открывает HTML, показывает меню, подключает стили. Используем на всех страницах в самом конце.
  */
@@ -12,7 +11,8 @@ echo "{$web_root}assets/css/style.css";
 <head>
     <meta charset="UTF-8">
     <title>Учёт сетевой инфраструктуры</title>
-    <link rel="stylesheet" href="<?= $web_root ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?= $web_root ?>assets/css/style.css"
+    <script src="assets/js/script.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
