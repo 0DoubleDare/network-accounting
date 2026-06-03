@@ -30,9 +30,8 @@ $message = getMessage();
         Уже есть аккаунт? - <a href="login.php" class="link-success">Войти</a>
    
     </p>
-    </div>
-</form>
-<?php if ($error !== null): ?>
+
+    <?php if ($error !== null): ?>
     <div class="alert alert-danger">
         <strong>Ошибка:</strong> <?php echo htmlspecialchars($error); ?>
     </div>
@@ -43,4 +42,8 @@ $message = getMessage();
         <strong>Успех:</strong> <?php echo htmlspecialchars($message); ?>
     </div>
 <?php endif; ?>
+
+    </div>
+</form>
+
 <?php include '../includes/footer.php'; ?>
