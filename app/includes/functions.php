@@ -89,4 +89,17 @@ if (!function_exists('registerUser')) {
         }
     }
 }
+
+//Таблица инвентарь 
+function getAllInventory($pdo){
+    try{
+        $sql = "SELECT * FROM network_points";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $points = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $points;
+    }catch(PDOException $error){
+        error_log("Error: " . $error->getMessage());
+    }
+}
 ?>

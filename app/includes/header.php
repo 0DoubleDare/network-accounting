@@ -23,7 +23,7 @@ $web_root = '/' . $web_root . '/';
         <nav style="display: flex; gap: 12px;">
             <a href="<?= $web_root ?>app/view/registration.php"><button type="button" class="btn btn-primary">Регистрация</button></a>
             <a href="<?= $web_root ?>app/view/login.php"><button type="button" class="btn btn-success">Войти</button></a></a>
-        </nav>
+            <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index"><button type="button" class="btn btn-info">Инвентарь</button></a>
     </div>
 </header>
 <main class="content">
