@@ -150,21 +150,6 @@ function getAllDefects($pdo, $point_id){
         return [];
     }
 }
-// функция для таблицы логов
-function getAllLogs($pdo) {
-    try {
-        $sql = "SELECT logs.*, users.login, users.role 
-                FROM logs 
-                LEFT JOIN users ON logs.user_id = users.id 
-                ORDER BY logs.created_at DESC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        error_log("getAllLogs error: " . $e->getMessage());
-        return [];
-    }
-}
 
 // Запись лога в журнал действий
 function addLog($pdo, $user_id, $action, $target_table, $target_id = null) {
@@ -244,4 +229,108 @@ function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
             $stmt -> execute(['id' => $id]);
             return $stmt -> fetch(PDO::FETCH_ASSOC);
         }
+
+// функция плагинации для логов
+function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = []) {
+    $offset = ($page - 1) * $perPage;
+    $where = [];
+    $params = [];
+    // Фильтр по ID пользователя
+    if (!empty($filters['user_id'])) {
+        $where[] = "logs.user_id = :user_id";
+        $params[':user_id'] = $filters['user_id'];
+    }
+     // Фильтр по роли
+    if (!empty($filters['role'])) {
+        $where[] = "users.role = :role";
+        $params[':role'] = $filters['role'];
+    }
+    // Фильтр по действию (поиск по части строки)
+    if (!empty($filters['action'])) {
+        $where[] = "logs.action LIKE :action";
+        $params[':action'] = '%' . $filters['action'] . '%';
+    }
+    // Фильтр по названию таблицы
+    if (!empty($filters['target_table'])) {
+        $where[] = "logs.target_table = :target_table";
+        $params[':target_table'] = $filters['target_table'];
+    }
+    // Фильтр по дате (с какой даты)
+    if (!empty($filters['date_from'])) {
+        $where[] = "DATE(logs.created_at) >= :date_from";
+        $params[':date_from'] = $filters['date_from'];
+    }
+    // Фильтр по дате (по какую дату)
+    if (!empty($filters['date_to'])) {
+        $where[] = "DATE(logs.created_at) <= :date_to";
+        $params[':date_to'] = $filters['date_to'];
+    }
+    $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
+    // Подсчёт общего количества записей (для пагинации)
+    $countSql = "SELECT COUNT(*) FROM logs $whereClause";
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->execute($params);
+    $total = $countStmt->fetchColumn(); 
+
+    $sql = "SELECT logs.*, users.login, users.role 
+            FROM logs 
+            LEFT JOIN users ON logs.user_id = users.id 
+            $whereClause
+            ORDER BY logs.created_at DESC 
+            LIMIT $offset, $perPage";
+
+    $stmt = $pdo->prepare($sql);
+
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->execute();
+    return [
+        'logs' => $stmt->fetchAll(),           // Список логов
+        'total' => $total,                      // Всего записей
+        'page' => $page,                        // Текущая страница
+        'perPage' => $perPage,                  // Записей на странице
+        'totalPages' => ceil($total / $perPage) // Всего страниц
+    ];
+}
+
+// Функция получения списка пользователей для фильтра
+function getLogUsers($pdo) {
+    $sql = "SELECT DISTINCT users.id, users.login 
+            FROM logs 
+            LEFT JOIN users ON logs.user_id = users.id 
+            WHERE users.id IS NOT NULL 
+            ORDER BY users.login";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Функция получения списка действий для фильтра
+function getLogActions($pdo) {
+    $sql = "SELECT DISTINCT action FROM logs ORDER BY action";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+// Функция получения списка таблиц для фильтра
+function getLogTables($pdo) {
+    $sql = "SELECT DISTINCT target_table FROM logs WHERE target_table IS NOT NULL ORDER BY target_table";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+// Функция получения списка ролей для фильтра
+function getLogRoles($pdo) {
+    $sql = "SELECT DISTINCT users.role 
+            FROM logs 
+            LEFT JOIN users ON logs.user_id = users.id 
+            WHERE users.role IS NOT NULL 
+            ORDER BY users.role";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
 ?>
