@@ -2,7 +2,9 @@
 require '../../config/db.php';
 require '../includes/functions.php';
 $id = $_GET['id'];
-$networkPointId = networkPointId($pdo, $id)
+$networkPointInfo = networkPointInfo($pdo, $id);
+$types = getNetworkPointTypeList($pdo);
+$statuses = getNetworkPointStatusList($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -15,33 +17,37 @@ $networkPointId = networkPointId($pdo, $id)
 <body>
     
     <form action="../../controllers/updateNetworkPoint.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="<?php echo $networkPointId['id']; ?>">
+    <input type="hidden" name="id" value="<?php echo $networkPointInfo['id']; ?>">
 
     <label>Название сетевой точки</label><br>
-    <input type="text" name="label" value="<?php echo $networkPointId['label']; ?>"><br><br>
+    <input type="text" name="label" value="<?php echo $networkPointInfo['label']; ?>"><br><br>
 
     <label>Тип</label><br>
-    <select name="type">
-        <option value="<?php echo $networkPointId['type']; ?>"><?php echo $networkPointId['type']; ?></option>
-        <option value="socket">socket</option>
-        <option value="switch">switch</option>
-        <option value="cable_run">cable_run</option>
-        <option value="patch_cord">patch_cord</option>
-    </select><br><br>
-
+        <select name="type">
+            <?php foreach ($types as $type): ?>
+                <option value="<?= $type['id']?>" <?= $type['id'] == $networkPointInfo['type'] ? 'selected' : ''?>>
+                    <?= $type['display_name']?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
     <label>Локация</label><br>
-    <input type="text" name="location" value="<?php echo $networkPointId['location']; ?>"><br><br>
+    <input type="text" name="location" value="<?php echo $networkPointInfo['location']; ?>"><br><br>
 
     <label>Статус</label><br>
     <select name="status" >
-        <option value="<?php echo $networkPointId['status']; ?>"><?php echo $networkPointId['status']; ?></option>
-        <option value="active">active</option>
-        <option value="defect">defect</option>
-        <option value="decommissioned">decommissioned</option>
+        <?php foreach ($statuses as $status): ?>
+            <option value="<?= $status['id']?>" <?= $status['id'] == $networkPointInfo['status'] ? 'selected' : ''?>>
+                <?= $status['display_name']?>
+            </option>
+        <?php endforeach; ?>
+<!--        <option value="--><?php //echo $networkPointId['status']; ?><!--">--><?php //echo $networkPointId['status']; ?><!--</option>-->
+<!--        <option value="active">active</option>-->
+<!--        <option value="defect">defect</option>-->
+<!--        <option value="decommissioned">decommissioned</option>-->
     </select><br><br>
 
     <label>Текущая фотография сетевой точки</label><br>
-    <textarea type="text" name="image_path" ><?php echo $networkPointId['image_path']; ?></textarea><br><br>
+    <textarea type="text" name="image_path" ><?php echo $networkPointInfo['image_path']; ?></textarea><br><br>
 
     <label>Фотография сетевой точки</label><br>
     <input type="file" name="image_path"><br><br>

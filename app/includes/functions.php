@@ -104,7 +104,21 @@ if (!function_exists('registerUser')) {
 function getAllInventory($pdo)
 {
     try {
-        $sql = "SELECT * FROM network_points";
+        $sql = "SELECT
+            np.id,
+            np.label,
+            np.location,
+            np.last_check,
+            np.point_created_at,
+            np.image_path,
+            npt.display_name AS type,
+            nps.display_name AS status
+        FROM network_points np
+                 LEFT JOIN network_point_type npt
+                           ON np.type = npt.id
+                 LEFT JOIN network_point_status nps
+                           ON np.status = nps.id;
+";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $points = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -118,7 +132,14 @@ function getAllInventory($pdo)
 function getIDDefects($pdo, $point_id)
 {
     try {
-        $sql = "SELECT * FROM `network_points` WHERE id = :point_id";
+        $sql = "
+            SELECT
+                network_points.*,
+                network_point_status.display_name AS status_name
+            FROM `network_points`
+                     LEFT JOIN `network_point_status` ON network_points.status = network_point_status.id
+            WHERE network_points.id = :point_id
+        ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':point_id' => $point_id]);
         $point = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -133,7 +154,8 @@ function getIDDefects($pdo, $point_id)
 function getAllDefects($pdo, $point_id)
 {
     try {
-        $sql = "SELECT
+        $sql = "
+SELECT
             defects.id,
             defects.category,
             defects.severity,
@@ -148,7 +170,8 @@ function getAllDefects($pdo, $point_id)
         LEFT JOIN users ON defects.created_by = users.id
         LEFT JOIN network_points ON defects.point_id = network_points.id
         WHERE defects.point_id = :point_id
-        ORDER BY defects.created_at DESC";
+        ORDER BY defects.created_at DESC
+        ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':point_id' => $point_id]);
         $defects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -241,7 +264,7 @@ function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
         'image_path' => $image_path]);
 }
 
-function networkPointId($pdo, $id)
+function networkPointInfo($pdo, $id)
 {
     $sql = "SELECT * FROM `network_points` WHERE id = :id";
     $stmt = $pdo->prepare($sql);
@@ -360,7 +383,7 @@ function getLogRoles($pdo)
 
 /**
  * Получение списка типов материала
-*/
+ */
 function getMaterialTypeList($pdo)
 {
     $sql = "SELECT * FROM material_type";
@@ -372,7 +395,8 @@ function getMaterialTypeList($pdo)
 /**
  * Получение списка статусов сетевой точки
  */
-function getNetworkPointStatusList($pdo) {
+function getNetworkPointStatusList($pdo)
+{
     $sql = "SELECT * FROM network_point_status";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -382,7 +406,8 @@ function getNetworkPointStatusList($pdo) {
 /**
  * Получение списка типов сетевой точки
  */
-function getNetworkPointTypeList($pdo) {
+function getNetworkPointTypeList($pdo)
+{
     $sql = "SELECT * FROM network_point_type";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();

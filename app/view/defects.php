@@ -14,7 +14,7 @@
 <div>
     <h1>Дефекты точки: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
     <p><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></p>
-    <p><strong>Статус точки:</strong> <?= $point['status'] ?? '—' ?></p>
+    <p><strong>Статус точки:</strong> <?= $point['status_name'] ?? '—' ?></p>
     
     <div>
         <a href="../controllers/inventorycontroller.php?action=index">← Назад к точкам</a>

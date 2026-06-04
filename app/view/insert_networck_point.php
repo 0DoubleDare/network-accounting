@@ -1,3 +1,10 @@
+<?php
+require '../includes/functions.php';
+require '../../config/db.php';
+$types = getNetworkPointTypeList($pdo);
+$statuses = getNetworkPointStatusList($pdo);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,20 +20,20 @@
 
     <label>Тип</label><br>
     <select name="type">
-        <option value="socket">socket</option>
-        <option value="switch">switch</option>
-        <option value="cable_run">cable_run</option>
-        <option value="patch_cord">cable_run</option>
+        <?php foreach ($types as $type): ?>
+            <option value="<?= $type['id']?>"><?= $type['display_name']?></option>
+        <?php endforeach; ?>
     </select><br><br>
+
 
     <label>Локация</label><br>
     <input type="text" name="location"><br><br>
 
     <label>Статус</label><br>
     <select name="status">
-        <option value="active">active</option>
-        <option value="defect">defect</option>
-        <option value="decommissioned">decommissioned</option>
+        <?php foreach ($statuses as $status): ?>
+            <option value="<?= $status['id']?>"><?= $status['display_name']?></option>
+        <?php endforeach; ?>
     </select><br><br>
 
     <label>Фотография сетевой точки</label><br>
