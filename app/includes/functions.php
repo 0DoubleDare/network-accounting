@@ -10,16 +10,17 @@ require ROOT_PATH . '/config/db.php';
 
 
 if (!function_exists('checkAuthorizedUser')) {
-    function checkAuthorizedUser($pdo, $login, $password) {
+    function checkAuthorizedUser($pdo, $login, $password)
+    {
         try {
             $sql = "SELECT id, login, password_hash, role FROM users WHERE login = :login";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':login', $login);
             $stmt->execute();
-            
+
             if ($stmt->rowCount() > 0) {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 if (md5($password) == $user['password_hash']) {
                     return [
                         'user_id' => $user['id'],
@@ -38,7 +39,8 @@ if (!function_exists('checkAuthorizedUser')) {
 
 // функция тимура - для сессии
 if (!function_exists('getError')) {
-    function getError() {
+    function getError()
+    {
         if (isset($_SESSION['error'])) {
             $error = $_SESSION['error'];
             unset($_SESSION['error']);
@@ -50,7 +52,8 @@ if (!function_exists('getError')) {
 
 // функция тимура - для сессии
 if (!function_exists('getMessage')) {
-    function getMessage() {
+    function getMessage()
+    {
         if (isset($_SESSION['message'])) {
             $message = $_SESSION['message'];
             unset($_SESSION['message']);
@@ -62,7 +65,8 @@ if (!function_exists('getMessage')) {
 
 // функция тимура - регистрация
 if (!function_exists('checkUserExists')) {
-    function checkUserExists($pdo, $login) {
+    function checkUserExists($pdo, $login)
+    {
         try {
             $stmt = $pdo->prepare("SELECT id FROM users WHERE login = :login");
             $stmt->execute([':login' => $login]);
@@ -76,7 +80,8 @@ if (!function_exists('checkUserExists')) {
 
 // функция тимура - регистрация
 if (!function_exists('registerUser')) {
-    function registerUser($pdo, $login, $password_hash) {
+    function registerUser($pdo, $login, $password_hash)
+    {
         try {
             $stmt = $pdo->prepare("INSERT INTO users (login, password_hash, role) VALUES (:login, :password_hash, 'operator')");
             $stmt->execute([
@@ -96,36 +101,61 @@ if (!function_exists('registerUser')) {
 }
 
 //Таблица инвентарь 
-function getAllInventory($pdo){
-    try{
-        $sql = "SELECT * FROM network_points";
+function getAllInventory($pdo)
+{
+    try {
+        $sql = "SELECT
+            np.id,
+            np.label,
+            np.location,
+            np.last_check,
+            np.point_created_at,
+            np.image_path,
+            npt.display_name AS type,
+            nps.display_name AS status
+        FROM network_points np
+                 LEFT JOIN network_point_type npt
+                           ON np.type = npt.id
+                 LEFT JOIN network_point_status nps
+                           ON np.status = nps.id;
+";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $points = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $points;
-    }catch(PDOException $error){
+    } catch (PDOException $error) {
         error_log("Error: " . $error->getMessage());
     }
 }
 
 //Получение данные одной конкретной точки по её ID
-function getIDDefects($pdo, $point_id){
-    try{
-        $sql = "SELECT * FROM `network_points` WHERE id = :point_id";
+function getIDDefects($pdo, $point_id)
+{
+    try {
+        $sql = "
+            SELECT
+                network_points.*,
+                network_point_status.display_name AS status_name
+            FROM `network_points`
+                     LEFT JOIN `network_point_status` ON network_points.status = network_point_status.id
+            WHERE network_points.id = :point_id
+        ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':point_id' => $point_id]);
         $point = $stmt->fetch(PDO::FETCH_ASSOC);
         return $point;
-    }catch(PDOException $error){
+    } catch (PDOException $error) {
         error_log("Error: " . $error->getMessage());
         return null;
     }
 }
 
 //Для получения всех дефектов конкретной точки
-function getAllDefects($pdo, $point_id){
-    try{
-        $sql = "SELECT
+function getAllDefects($pdo, $point_id)
+{
+    try {
+        $sql = "
+SELECT
             defects.id,
             defects.category,
             defects.severity,
@@ -140,19 +170,21 @@ function getAllDefects($pdo, $point_id){
         LEFT JOIN users ON defects.created_by = users.id
         LEFT JOIN network_points ON defects.point_id = network_points.id
         WHERE defects.point_id = :point_id
-        ORDER BY defects.created_at DESC";
+        ORDER BY defects.created_at DESC
+        ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':point_id' => $point_id]);
         $defects = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $defects;
-    }catch(PDOException $error){
+    } catch (PDOException $error) {
         error_log("Error: " . $error->getMessage());
         return [];
     }
 }
 
 // Запись лога в журнал действий
-function addLog($pdo, $user_id, $action, $target_table, $target_id = null) {
+function addLog($pdo, $user_id, $action, $target_table, $target_id = null)
+{
     try {
         $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, target_table, target_id) VALUES (:user_id, :action, :target_table, :target_id)");
         $stmt->execute([
@@ -167,30 +199,37 @@ function addLog($pdo, $user_id, $action, $target_table, $target_id = null) {
         return false;
     }
 }
+
 // Запись лога о входе в систему
-function addLoginLog($pdo, $user_id, $role) {
+function addLoginLog($pdo, $user_id, $role)
+{
     return addLog($pdo, $user_id, 'Вход в систему (роль: ' . $role . ')', 'users', $user_id);
 }
+
 // Запись лога о регистрации
-function addRegistrationLog($pdo, $user_id) {
+function addRegistrationLog($pdo, $user_id)
+{
     return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
 }
-function uploudImage($image, $uploadDir = '..\public\storage\network_points'){
-        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-        $filename = uniqid('', true) . '.' . $extension;
+
+function uploudImage($image, $uploadDir = '..\public\storage\network_points')
+{
+    $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+    $filename = uniqid('', true) . '.' . $extension;
     $fullPath = $uploadDir . $filename;
-    
+
     move_uploaded_file($image['tmp_name'], $fullPath);
-    
-    return $filename; 
-    }
+
+    return $filename;
+}
 
 
-function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
+function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
+{
     $image_path = uploudImage($file);
     $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_path`) VALUES (:label, :type, :location, :status, :image_path)";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
         'label' => $label,
         'type' => $type,
         'location' => $location,
@@ -198,40 +237,44 @@ function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
         'image_path' => $image_path
     ]);
     $response = [
-        'id' => $pdo -> lastInsertId(),
+        'id' => $pdo->lastInsertId(),
         'image_path' => $image_path
     ];
     return $response;
-    }
+}
 
-    function deleteNetworkPoint($pdo, $id){
-        $sql = "DELETE FROM `network_points` WHERE id=:id";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute(['id' => $id]);
-    }
+function deleteNetworkPoint($pdo, $id)
+{
+    $sql = "DELETE FROM `network_points` WHERE id=:id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+}
 
-    function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file){
-        $image_path = uploudImage($file);
-        $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_path=:image_path WHERE id = :id";
-    $stmt = $pdo -> prepare($sql);
-    return $stmt -> execute([
+function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
+{
+    $image_path = uploudImage($file);
+    $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_path=:image_path WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
         'id' => $id,
         'label' => $label,
         'type' => $type,
         'location' => $location,
         'status' => $status,
         'image_path' => $image_path]);
-        }
+}
 
-        function networkPointId($pdo, $id){
-            $sql = "SELECT * FROM `network_points` WHERE id = :id";
-            $stmt = $pdo -> prepare($sql);
-            $stmt -> execute(['id' => $id]);
-            return $stmt -> fetch(PDO::FETCH_ASSOC);
-        }
+function networkPointInfo($pdo, $id)
+{
+    $sql = "SELECT * FROM `network_points` WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 // функция плагинации для логов
-function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = []) {
+function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = [])
+{
     $offset = ($page - 1) * $perPage;
     $where = [];
     $params = [];
@@ -240,7 +283,7 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = []) {
         $where[] = "logs.user_id = :user_id";
         $params[':user_id'] = $filters['user_id'];
     }
-     // Фильтр по роли
+    // Фильтр по роли
     if (!empty($filters['role'])) {
         $where[] = "users.role = :role";
         $params[':role'] = $filters['role'];
@@ -270,7 +313,7 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = []) {
     $countSql = "SELECT COUNT(*) FROM logs $whereClause";
     $countStmt = $pdo->prepare($countSql);
     $countStmt->execute($params);
-    $total = $countStmt->fetchColumn(); 
+    $total = $countStmt->fetchColumn();
 
     $sql = "SELECT logs.*, users.login, users.role 
             FROM logs 
@@ -295,7 +338,8 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = []) {
 }
 
 // Функция получения списка пользователей для фильтра
-function getLogUsers($pdo) {
+function getLogUsers($pdo)
+{
     $sql = "SELECT DISTINCT users.id, users.login 
             FROM logs 
             LEFT JOIN users ON logs.user_id = users.id 
@@ -307,7 +351,8 @@ function getLogUsers($pdo) {
 }
 
 // Функция получения списка действий для фильтра
-function getLogActions($pdo) {
+function getLogActions($pdo)
+{
     $sql = "SELECT DISTINCT action FROM logs ORDER BY action";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -315,7 +360,8 @@ function getLogActions($pdo) {
 }
 
 // Функция получения списка таблиц для фильтра
-function getLogTables($pdo) {
+function getLogTables($pdo)
+{
     $sql = "SELECT DISTINCT target_table FROM logs WHERE target_table IS NOT NULL ORDER BY target_table";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -323,7 +369,8 @@ function getLogTables($pdo) {
 }
 
 // Функция получения списка ролей для фильтра
-function getLogRoles($pdo) {
+function getLogRoles($pdo)
+{
     $sql = "SELECT DISTINCT users.role 
             FROM logs 
             LEFT JOIN users ON logs.user_id = users.id 
@@ -353,7 +400,36 @@ function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
     WHERE defects.point_id = $point_id $filter
     ORDER BY defects.created_at DESC
     LIMIT $limit OFFSET $offset";
-    
+}
+
+/**
+ * Получение списка типов материала
+ */
+function getMaterialTypeList($pdo)
+{
+    $sql = "SELECT * FROM material_type";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Получение списка статусов сетевой точки
+ */
+function getNetworkPointStatusList($pdo)
+{
+    $sql = "SELECT * FROM network_point_status";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Получение списка типов сетевой точки
+ */
+function getNetworkPointTypeList($pdo)
+{
+    $sql = "SELECT * FROM network_point_type";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

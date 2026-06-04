@@ -48,7 +48,7 @@ if (!isset($points)) {
                 <th><?php echo $point['type'] ?></th>
                 <th><?php echo $point['location'] ?></th>
                 <th><?php echo $point['status'] ?></th>
-                <th><?php echo $point['last_check'] ?></th>
+                <th><?php echo $point['last_check'] ?? ' ' ?></th>
                 <th><?php echo $point['point_created_at'] ?></th>
                 <th><?php echo $point['image_path']?></th>
                 <th>
