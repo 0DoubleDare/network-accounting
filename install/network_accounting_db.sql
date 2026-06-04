@@ -93,7 +93,7 @@ CREATE TABLE `logs` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,7 +115,8 @@ INSERT INTO `logs` VALUES
 (10,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 11:27:08'),
 (11,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 11:28:01'),
 (12,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 12:18:14'),
-(13,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 14:04:47');
+(13,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 14:04:47'),
+(14,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 15:45:29');
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,7 +275,7 @@ DROP TABLE IF EXISTS `network_points`;
 CREATE TABLE `network_points` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(20) NOT NULL,
-  `type` enum('socket','switch','cable_run','patch_cord') NOT NULL,
+  `type` int(11) NOT NULL,
   `location` varchar(100) DEFAULT NULL,
   `status` int(11) NOT NULL,
   `last_check` date DEFAULT NULL,
@@ -283,8 +284,10 @@ CREATE TABLE `network_points` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `label` (`label`),
   KEY `fk_network_points_status` (`status`),
-  CONSTRAINT `fk_network_points_status` FOREIGN KEY (`status`) REFERENCES `network_point_status` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `fk_network_points_type` (`type`),
+  CONSTRAINT `fk_network_points_status` FOREIGN KEY (`status`) REFERENCES `network_point_status` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_network_points_type` FOREIGN KEY (`type`) REFERENCES `network_point_type` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,6 +296,8 @@ CREATE TABLE `network_points` (
 
 LOCK TABLES `network_points` WRITE;
 /*!40000 ALTER TABLE `network_points` DISABLE KEYS */;
+INSERT INTO `network_points` VALUES
+(30,'vxcvfsdfsdfsdfs',2,'fsdfsdfsd',2,NULL,'2026-06-04 15:30:05','6a219d34a36321.81004593.');
 /*!40000 ALTER TABLE `network_points` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,4 +351,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-04 19:08:13
+-- Dump completed on 2026-06-04 19:59:21
