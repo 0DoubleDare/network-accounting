@@ -27,7 +27,12 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?= $web_root ?>public/index.php" class="site-logo">
             <h1 class="logo-title">Network accounting</h1>
         </a>
-<nav style="display: flex; gap: 12px; align-items: center">
+
+        <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index">
+            <button type="button" class="btn btn-info">Инвентарь</button>
+        </a>
+        
+        <nav style="display: flex; gap: 12px; align-items: center">
             <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                 <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
                 
@@ -46,9 +51,6 @@ if (session_status() === PHP_SESSION_NONE) {
                 </a>
                 <a href="<?= $web_root ?>app/view/login.php">
                     <button type="button" class="btn btn-success">Войти</button>
-                </a>
-                <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index">
-                    <button type="button" class="btn btn-info">Инвентарь</button>
                 </a>
             <?php endif; ?>
         </nav>
