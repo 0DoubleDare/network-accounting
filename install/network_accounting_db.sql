@@ -17,6 +17,30 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Table structure for table `defect_category`
+--
+
+DROP TABLE IF EXISTS `defect_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `defect_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `defect_category`
+--
+
+LOCK TABLES `defect_category` WRITE;
+/*!40000 ALTER TABLE `defect_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `defect_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `defects`
 --
 
@@ -26,7 +50,7 @@ DROP TABLE IF EXISTS `defects`;
 CREATE TABLE `defects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `point_id` int(11) NOT NULL,
-  `category` varchar(50) DEFAULT NULL,
+  `category` int(11) NOT NULL,
   `severity` enum('high','medium','low') DEFAULT NULL,
   `description` text DEFAULT NULL,
   `status` enum('open','in_progress','closed') DEFAULT 'open',
@@ -36,8 +60,10 @@ CREATE TABLE `defects` (
   PRIMARY KEY (`id`),
   KEY `point_id` (`point_id`),
   KEY `created_by` (`created_by`),
+  KEY `fk_defects_category` (`category`),
   CONSTRAINT `defects_ibfk_1` FOREIGN KEY (`point_id`) REFERENCES `network_points` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `defects_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+  CONSTRAINT `defects_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_defects_category` FOREIGN KEY (`category`) REFERENCES `defect_category` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,15 +73,6 @@ CREATE TABLE `defects` (
 
 LOCK TABLES `defects` WRITE;
 /*!40000 ALTER TABLE `defects` DISABLE KEYS */;
-INSERT INTO `defects` VALUES
-(1,1,'Скрутка','high','Самодельная скрутка на 2 розетки, провода оголены','open',2,'2026-06-02 17:35:29',NULL),
-(2,2,'Крепление','high','Розетка не закреплена, валяется на полу, без маркировки','open',3,'2026-06-02 17:35:29',NULL),
-(3,3,'Кабель','medium','Старая розетка со скотчем, провода без короба','open',4,'2026-06-02 17:35:29',NULL),
-(4,4,'Механический','high','Корпус сломан, плата вывалилась','in_progress',5,'2026-06-02 17:35:29',NULL),
-(5,5,'Электрический','high','Голая плата на трубе отопления, оголённые провода','open',2,'2026-06-02 17:35:29',NULL),
-(6,6,'Кабель','high','Огромный ком из кабелей под столами','open',6,'2026-06-02 17:35:29',NULL),
-(7,7,'Электрический','high','Розетка без крышки за трубами воды','open',1,'2026-06-02 17:35:29',NULL),
-(8,8,'Электрический','','Оголённые непромаркированные провода','open',3,'2026-06-02 17:35:29',NULL);
 /*!40000 ALTER TABLE `defects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,7 +93,7 @@ CREATE TABLE `logs` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,8 +110,39 @@ INSERT INTO `logs` VALUES
 (5,5,'Удаление','network_points',10,'2026-06-01 11:00:00'),
 (6,6,'Экспорт отчёта','report',NULL,'2026-06-02 06:00:00'),
 (7,1,'Закрытие дефекта','defects',1,'2026-06-02 08:00:00'),
-(8,2,'Просмотр логов','logs',NULL,'2026-06-02 09:00:00');
+(8,2,'Просмотр логов','logs',NULL,'2026-06-02 09:00:00'),
+(9,14,'Регистрация нового пользователя (роль: operator)','users',14,'2026-06-04 11:26:19'),
+(10,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 11:27:08'),
+(11,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 11:28:01'),
+(12,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 12:18:14'),
+(13,14,'Вход в систему (роль: admin)','users',14,'2026-06-04 14:04:47');
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `material_type`
+--
+
+DROP TABLE IF EXISTS `material_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `material_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `material_type`
+--
+
+LOCK TABLES `material_type` WRITE;
+/*!40000 ALTER TABLE `material_type` DISABLE KEYS */;
+INSERT INTO `material_type` VALUES
+(1,'cabel','Кабель');
+/*!40000 ALTER TABLE `material_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -131,14 +179,6 @@ CREATE TABLE `material_usage` (
 
 LOCK TABLES `material_usage` WRITE;
 /*!40000 ALTER TABLE `material_usage` DISABLE KEYS */;
-INSERT INTO `material_usage` VALUES
-(15,1,25.50,3,3,2,'2026-05-31 10:00:00','Заменили повреждённый участок кабеля'),
-(16,3,8.00,1,1,3,'2026-05-31 11:30:00','Переобжали концы на новые коннекторы'),
-(17,4,3.00,4,4,4,'2026-06-01 09:00:00','Установили новые двойные розетки'),
-(18,6,10.00,6,6,5,'2026-06-01 14:00:00','Проложили кабель-канал'),
-(19,7,20.00,NULL,NULL,1,'2026-06-02 08:00:00','Закупили на склад для ремонта'),
-(20,2,50.00,8,8,2,'2026-06-02 10:00:00','Проложили новый кабель cat6'),
-(21,10,5.00,NULL,NULL,3,'2026-06-02 12:00:00','Патч-корды для свитча');
 /*!40000 ALTER TABLE `material_usage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,10 +192,12 @@ DROP TABLE IF EXISTS `materials`;
 CREATE TABLE `materials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `type` enum('cable','connector','socket','fastener','other') NOT NULL,
+  `type` int(11) NOT NULL,
   `unit` enum('m','pcs') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `fk_material_type` (`type`),
+  CONSTRAINT `fk_material_type` FOREIGN KEY (`type`) REFERENCES `material_type` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,20 +206,62 @@ CREATE TABLE `materials` (
 
 LOCK TABLES `materials` WRITE;
 /*!40000 ALTER TABLE `materials` DISABLE KEYS */;
-INSERT INTO `materials` VALUES
-(1,'Кабель UTP cat5e','cable','m'),
-(2,'Кабель UTP cat6','cable','m'),
-(3,'Коннектор RJ45','connector','pcs'),
-(4,'Розетка RJ45 двойная','socket','pcs'),
-(5,'Розетка RJ45 одинарная','socket','pcs'),
-(6,'Кабель-канал 20x10','fastener','m'),
-(7,'Стяжки кабельные','fastener','pcs'),
-(8,'Дюбель-хомуты','fastener','pcs'),
-(9,'Патч-корд 0.5м','other','pcs'),
-(10,'Патч-корд 1м','other','pcs'),
-(11,'Изолента ПВХ','other','pcs'),
-(12,'Коробка подрозетник','other','pcs');
 /*!40000 ALTER TABLE `materials` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `network_point_status`
+--
+
+DROP TABLE IF EXISTS `network_point_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `network_point_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `network_point_status`
+--
+
+LOCK TABLES `network_point_status` WRITE;
+/*!40000 ALTER TABLE `network_point_status` DISABLE KEYS */;
+INSERT INTO `network_point_status` VALUES
+(1,'active','Активный'),
+(2,'defect','Дефектный');
+/*!40000 ALTER TABLE `network_point_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `network_point_type`
+--
+
+DROP TABLE IF EXISTS `network_point_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `network_point_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `network_point_type`
+--
+
+LOCK TABLES `network_point_type` WRITE;
+/*!40000 ALTER TABLE `network_point_type` DISABLE KEYS */;
+INSERT INTO `network_point_type` VALUES
+(1,'socket','Сокет'),
+(2,'cabel_run','Сетевой кабель'),
+(3,'path_cord','Патч-корд');
+/*!40000 ALTER TABLE `network_point_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -192,13 +276,15 @@ CREATE TABLE `network_points` (
   `label` varchar(20) NOT NULL,
   `type` enum('socket','switch','cable_run','patch_cord') NOT NULL,
   `location` varchar(100) DEFAULT NULL,
-  `status` enum('active','defect','decommissioned') DEFAULT 'active',
+  `status` int(11) NOT NULL,
   `last_check` date DEFAULT NULL,
   `point_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `image_path` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `label` (`label`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `label` (`label`),
+  KEY `fk_network_points_status` (`status`),
+  CONSTRAINT `fk_network_points_status` FOREIGN KEY (`status`) REFERENCES `network_point_status` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,15 +293,6 @@ CREATE TABLE `network_points` (
 
 LOCK TABLES `network_points` WRITE;
 /*!40000 ALTER TABLE `network_points` DISABLE KEYS */;
-INSERT INTO `network_points` VALUES
-(1,'ROOM319-1','socket','над плинтусом','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(2,'ROOM319-2','socket','на полу у плинтуса','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(3,'ROOM319-3','cable_run','на полу, старая розетка','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(4,'ROOM319-4','socket','на стене, сломана','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(5,'ROOM319-5','socket','на трубе отопления','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(6,'ROOM319-6','cable_run','под столами, куча кабелей','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(7,'ROOM319-7','socket','за трубами воды','defect','2026-05-30','2026-06-03 09:25:13',NULL),
-(8,'ROOM319-8','cable_run','оголённые провода','defect','2026-05-30','2026-06-03 09:25:13',NULL);
 /*!40000 ALTER TABLE `network_points` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +310,7 @@ CREATE TABLE `users` (
   `role` enum('admin','operator') DEFAULT 'operator',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +327,13 @@ INSERT INTO `users` VALUES
 (5,'vladislava','32424432','operator'),
 (6,'almira','3432432423432','operator'),
 (7,'ilya','6546456','operator'),
-(8,'test','$2y$12$5BBAwnFgF9u/g9.q0iwVruk8hE9vJl/cezVG9ZYi17cDAcLBFPYt2','operator');
+(8,'test','$2y$12$5BBAwnFgF9u/g9.q0iwVruk8hE9vJl/cezVG9ZYi17cDAcLBFPYt2','operator'),
+(9,'dirka','81dc9bdb52d04dc20036dbd8313ed055','operator'),
+(10,'яфаавыаыв','e9510081ac30ffa83f10b68cde1cac07','operator'),
+(11,'lllllllllllllllll','e9510081ac30ffa83f10b68cde1cac07','operator'),
+(12,'LOGIN','4a7d1ed414474e4033ac29ccb8653d9b','operator'),
+(13,'Yarik','b59c67bf196a4758191e42f76670ceba','operator'),
+(14,'admin','b59c67bf196a4758191e42f76670ceba','admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -263,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-03 14:52:22
+-- Dump completed on 2026-06-04 19:08:13
