@@ -54,6 +54,7 @@ if (!isset($points)) {
                 <th>
                     <a href="#" class="btn btn-danger">Удалить</a>
                     <a href="#" class="btn btn-warning">Изменить</a>
+                                        <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Перейти к дефектам</a>
                 </th>
             </tr>
             <?php endforeach; ?>
