@@ -19,7 +19,7 @@ if (!function_exists('checkAuthorizedUser')) {
             
             if ($stmt->rowCount() > 0) {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-               
+                
                 if (md5($password) == $user['password_hash']) {
                     return [
                         'user_id' => $user['id'],
@@ -150,4 +150,98 @@ function getAllDefects($pdo, $point_id){
         return [];
     }
 }
+// функция для таблицы логов
+function getAllLogs($pdo) {
+    try {
+        $sql = "SELECT logs.*, users.login, users.role 
+                FROM logs 
+                LEFT JOIN users ON logs.user_id = users.id 
+                ORDER BY logs.created_at DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("getAllLogs error: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Запись лога в журнал действий
+function addLog($pdo, $user_id, $action, $target_table, $target_id = null) {
+    try {
+        $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, target_table, target_id) VALUES (:user_id, :action, :target_table, :target_id)");
+        $stmt->execute([
+            ':user_id' => $user_id,
+            ':action' => $action,
+            ':target_table' => $target_table,
+            ':target_id' => $target_id
+        ]);
+        return true;
+    } catch (PDOException $e) {
+        error_log("Log insert error: " . $e->getMessage());
+        return false;
+    }
+}
+// Запись лога о входе в систему
+function addLoginLog($pdo, $user_id, $role) {
+    return addLog($pdo, $user_id, 'Вход в систему (роль: ' . $role . ')', 'users', $user_id);
+}
+// Запись лога о регистрации
+function addRegistrationLog($pdo, $user_id) {
+    return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
+}
+function uploudImage($image, $uploadDir = '..\public\storage\network_points'){
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+        $filename = uniqid('', true) . '.' . $extension;
+    $fullPath = $uploadDir . $filename;
+    
+    move_uploaded_file($image['tmp_name'], $fullPath);
+    
+    return $filename; 
+    }
+
+
+function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
+    $image_path = uploudImage($file);
+    $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_path`) VALUES (:label, :type, :location, :status, :image_path)";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute([
+        'label' => $label,
+        'type' => $type,
+        'location' => $location,
+        'status' => $status,
+        'image_path' => $image_path
+    ]);
+    $response = [
+        'id' => $pdo -> lastInsertId(),
+        'image_path' => $image_path
+    ];
+    return $response;
+    }
+
+    function deleteNetworkPoint($pdo, $id){
+        $sql = "DELETE FROM `network_points` WHERE id=:id";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute(['id' => $id]);
+    }
+
+    function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file){
+        $image_path = uploudImage($file);
+        $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_path=:image_path WHERE id = :id";
+    $stmt = $pdo -> prepare($sql);
+    return $stmt -> execute([
+        'id' => $id,
+        'label' => $label,
+        'type' => $type,
+        'location' => $location,
+        'status' => $status,
+        'image_path' => $image_path]);
+        }
+
+        function networkPointId($pdo, $id){
+            $sql = "SELECT * FROM `network_points` WHERE id = :id";
+            $stmt = $pdo -> prepare($sql);
+            $stmt -> execute(['id' => $id]);
+            return $stmt -> fetch(PDO::FETCH_ASSOC);
+        }
 ?>

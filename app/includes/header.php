@@ -28,15 +28,30 @@ if (session_status() === PHP_SESSION_NONE) {
             <h1 class="logo-title">Network accounting</h1>
         </a>
 <nav style="display: flex; gap: 12px; align-items: center">
-    <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
-        <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
-        <a href="<?= $web_root ?>controllers/logout.php"><button type="button" class="btn btn-danger">Выйти</button></a>
-    <?php else: ?>
-        <a href="<?= $web_root ?>app/view/registration.php"><button type="button" class="btn btn-primary">Регистрация</button></a>
-        <a href="<?= $web_root ?>app/view/login.php"><button type="button" class="btn btn-success">Войти</button></a>
-        <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index"><button type="button" class="btn btn-info">Инвентарь</button></a>
-    <?php endif; ?>
-</nav>
+            <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
+                <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
+                
+                <?php if (isset($_SESSION['user_info']['role']) && $_SESSION['user_info']['role'] === 'admin'): ?>
+                    <a href="<?= $web_root ?>controllers/logscontroller.php?action=index">
+                        <button type="button" class="btn btn-secondary">Журнал действий</button>
+                    </a>
+                <?php endif; ?>
+                
+                <a href="<?= $web_root ?>controllers/logout.php">
+                    <button type="button" class="btn btn-danger">Выйти</button>
+                </a>
+            <?php else: ?>
+                <a href="<?= $web_root ?>app/view/registration.php">
+                    <button type="button" class="btn btn-primary">Регистрация</button>
+                </a>
+                <a href="<?= $web_root ?>app/view/login.php">
+                    <button type="button" class="btn btn-success">Войти</button>
+                </a>
+                <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index">
+                    <button type="button" class="btn btn-info">Инвентарь</button>
+                </a>
+            <?php endif; ?>
+        </nav>
     </div>
 </header>
 <main class="content">
