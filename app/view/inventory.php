@@ -19,7 +19,7 @@ if (!isset($points)) {
 <body>
 <div class="container mt-4 w-20 p-3 border border-dark" style="background-color: #eee;">
     <h1 class="text-center">Реестр оборудования</h1>
-    <a href="#" class="btn btn-success mb-3">Добавить точку</a>
+    <a href="insert_networck_point.php" class="btn btn-success mb-3">Добавить точку</a>
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
             <tr>
@@ -52,8 +52,8 @@ if (!isset($points)) {
                 <th><?php echo $point['point_created_at'] ?></th>
                 <th><?php echo $point['image_path']?></th>
                 <th>
-                    <a href="#" class="btn btn-danger">Удалить</a>
-                    <a href="#" class="btn btn-warning">Изменить</a>
+                    <a href="../../controllers/deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-danger">Удалить</a>
+                    <a href="../view/updateNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-warning">Изменить</a>
                 </th>
             </tr>
             <?php endforeach; ?>
