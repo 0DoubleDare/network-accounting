@@ -52,6 +52,7 @@ if (!isset($points)) {
                 <th><?php echo $point['point_created_at'] ?></th>
                 <th><?php echo $point['image_path']?></th>
                 <th>
+                    <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Перейти к дефектам</a>
                     <a href="../../controllers/deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-danger">Удалить</a>
                     <a href="../view/updateNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-warning">Изменить</a>
                 </th>

@@ -108,6 +108,48 @@ function getAllInventory($pdo){
     }
 }
 
+//Получение данные одной конкретной точки по её ID
+function getIDDefects($pdo, $point_id){
+    try{
+        $sql = "SELECT * FROM `network_points` WHERE id = :point_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':point_id' => $point_id]);
+        $point = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $point;
+    }catch(PDOException $error){
+        error_log("Error: " . $error->getMessage());
+        return null;
+    }
+}
+
+//Для получения всех дефектов конкретной точки
+function getAllDefects($pdo, $point_id){
+    try{
+        $sql = "SELECT
+            defects.id,
+            defects.category,
+            defects.severity,
+            defects.description,
+            defects.status,
+            defects.created_by,
+            defects.created_at,
+            defects.image_path,
+            users.login AS author,
+            network_points.label AS point_label
+        FROM defects
+        LEFT JOIN users ON defects.created_by = users.id
+        LEFT JOIN network_points ON defects.point_id = network_points.id
+        WHERE defects.point_id = :point_id
+        ORDER BY defects.created_at DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':point_id' => $point_id]);
+        $defects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $defects;
+    }catch(PDOException $error){
+        error_log("Error: " . $error->getMessage());
+        return [];
+    }
+}
 // функция для таблицы логов
 function getAllLogs($pdo) {
     try {
@@ -202,5 +244,4 @@ function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
             $stmt -> execute(['id' => $id]);
             return $stmt -> fetch(PDO::FETCH_ASSOC);
         }
-
 ?>
