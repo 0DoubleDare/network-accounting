@@ -19,7 +19,7 @@ if (!function_exists('checkAuthorizedUser')) {
             
             if ($stmt->rowCount() > 0) {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-               
+                
                 if (md5($password) == $user['password_hash']) {
                     return [
                         'user_id' => $user['id'],
@@ -148,4 +148,59 @@ function addLoginLog($pdo, $user_id, $role) {
 function addRegistrationLog($pdo, $user_id) {
     return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
 }
+function uploudImage($image, $uploadDir = '..\public\storage\network_points'){
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+        $filename = uniqid('', true) . '.' . $extension;
+    $fullPath = $uploadDir . $filename;
+    
+    move_uploaded_file($image['tmp_name'], $fullPath);
+    
+    return $filename; 
+    }
+
+
+function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file){
+    $image_path = uploudImage($file);
+    $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_path`) VALUES (:label, :type, :location, :status, :image_path)";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute([
+        'label' => $label,
+        'type' => $type,
+        'location' => $location,
+        'status' => $status,
+        'image_path' => $image_path
+    ]);
+    $response = [
+        'id' => $pdo -> lastInsertId(),
+        'image_path' => $image_path
+    ];
+    return $response;
+    }
+
+    function deleteNetworkPoint($pdo, $id){
+        $sql = "DELETE FROM `network_points` WHERE id=:id";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute(['id' => $id]);
+    }
+
+    function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file){
+        $image_path = uploudImage($file);
+        $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_path=:image_path WHERE id = :id";
+    $stmt = $pdo -> prepare($sql);
+    return $stmt -> execute([
+        'id' => $id,
+        'label' => $label,
+        'type' => $type,
+        'location' => $location,
+        'status' => $status,
+        'image_path' => $image_path]);
+        }
+
+        function networkPointId($pdo, $id){
+            $sql = "SELECT * FROM `network_points` WHERE id = :id";
+            $stmt = $pdo -> prepare($sql);
+            $stmt -> execute(['id' => $id]);
+            return $stmt -> fetch(PDO::FETCH_ASSOC);
+        }
+
 ?>
