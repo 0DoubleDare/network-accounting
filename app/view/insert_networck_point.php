@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="../../controllers\networckPointControler.php" method="post" enctype="multipart/form-data">
+    <form action="../../controllers/networckPointControler.php" method="post" enctype="multipart/form-data">
     
     <label>Название сетевой точки</label><br>
     <input type="text" name="label"><br><br>

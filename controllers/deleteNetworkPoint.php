@@ -8,4 +8,4 @@ $id = $_GET['id'];
 
 deleteNetworkPoint($pdo, $id);
 
-header('Location: ..\app\view\inventory.php');
+header('Location: ./inventorycontroller.php');
