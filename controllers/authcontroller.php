@@ -8,18 +8,17 @@ require '../app/includes/functions.php';
 
 $user_info = checkAuthorizedUser($pdo, $_POST['login'], $_POST['password_hash']);
 
-    if(isset($user_info)){
-        $_SESSION['user_info'] = $user_info;
-//    $_SESSION['id'] = $user_info['id'];
-//    $_SESSION['role'] = $user_info['role'];
-//    $_SESSION['login'] = $user_info['login'];
+if (isset($user_info)) {
+    $_SESSION['user_info'] = $user_info;
 
-        unset($_SESSION['error']);
+    // Добавляем запись в лог о входе
+    addLoginLog($pdo, $user_info['user_id'], $user_info['role']);
 
+    unset($_SESSION['error']);
     header('Location: ../public/index.php');
     exit();
-    } else {
+} else {
     $_SESSION['error'] = "Ошибка логина или пароля";
     header('Location: ../app/view/login.php');
     exit();
-    }
+}

@@ -107,4 +107,45 @@ function getAllInventory($pdo){
         error_log("Error: " . $error->getMessage());
     }
 }
+
+// функция для таблицы логов
+function getAllLogs($pdo) {
+    try {
+        $sql = "SELECT logs.*, users.login, users.role 
+                FROM logs 
+                LEFT JOIN users ON logs.user_id = users.id 
+                ORDER BY logs.created_at DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("getAllLogs error: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Запись лога в журнал действий
+function addLog($pdo, $user_id, $action, $target_table, $target_id = null) {
+    try {
+        $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, target_table, target_id) VALUES (:user_id, :action, :target_table, :target_id)");
+        $stmt->execute([
+            ':user_id' => $user_id,
+            ':action' => $action,
+            ':target_table' => $target_table,
+            ':target_id' => $target_id
+        ]);
+        return true;
+    } catch (PDOException $e) {
+        error_log("Log insert error: " . $e->getMessage());
+        return false;
+    }
+}
+// Запись лога о входе в систему
+function addLoginLog($pdo, $user_id, $role) {
+    return addLog($pdo, $user_id, 'Вход в систему (роль: ' . $role . ')', 'users', $user_id);
+}
+// Запись лога о регистрации
+function addRegistrationLog($pdo, $user_id) {
+    return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
+}
 ?>
