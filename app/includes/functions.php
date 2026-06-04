@@ -381,6 +381,27 @@ function getLogRoles($pdo)
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
+//Фильтрация для defect
+function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
+    $sql = "SELECT
+        defects.id,
+        defects.category,
+        defects.severity,
+        defects.description,
+        defects.status,
+        defects.created_by,
+        defects.created_at,
+        defects.image_path,
+        users.login AS author,
+        network_points.label AS point_label
+    FROM defects
+    LEFT JOIN users ON defects.created_by = users.id
+    LEFT JOIN network_points ON defects.point_id = network_points.id
+    WHERE defects.point_id = $point_id $filter
+    ORDER BY defects.created_at DESC
+    LIMIT $limit OFFSET $offset";
+}
+
 /**
  * Получение списка типов материала
  */
@@ -413,5 +434,4 @@ function getNetworkPointTypeList($pdo)
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 ?>
