@@ -7,6 +7,10 @@ $message = getMessage();
 ?>
 <?php include '../includes/header.php'; ?>
 
+
+<!-- Основной контент который уникален именно для этой страницы -->
+
+
 <div class="d-flex justify-content-center align-items-center flex-column" style="min-height: 70vh; padding: 20px;">
 
     <form action="../../controllers/registration_controller.php" method="post" class="d-flex flex-column align-items-center" style="max-width: 450px; width: 100%;">
@@ -43,4 +47,9 @@ $message = getMessage();
 <!--    </div>-->
 <?php //endif; ?>
 </div>
+
+
+<!-- Конец уникального контента -->
+
+
 <?php include '../includes/footer.php'; ?>
