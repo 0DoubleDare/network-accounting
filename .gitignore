@@ -1,2 +1,5 @@
 ./.idea
-./public/storage/network_points
+./public/storage/network_points/*
+./public/storage/defects/*
+
+!./public/storage/.gitkeep
