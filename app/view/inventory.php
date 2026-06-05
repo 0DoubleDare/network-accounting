@@ -74,10 +74,62 @@ if (!isset($points)) {
             <?php endif; ?>
         </tbody>
     </table>
+<!-- Форма фильтрации -->
+<div>
+    <form method="get">
+        <input type="hidden" name="action" value="index">
+        
+        <label>Метка:</label>
+        <input type="text" name="label" value="<?= $_GET['label']?>">
+        
+        <label>Тип:</label>
+        <select name="type">
+            <option value="">Все</option>
+            <?php foreach ($typeList as $type): ?>
+                <option value="<?= $type['id'] ?>" <?= (isset($_GET['type']) && $_GET['type'] == $type['id'])?>><?= $type['display_name']?></option>
+            <?php endforeach; ?>
+        </select>
+        
+        <label>Расположение:</label>
+        <input type="text" name="location" value="<?= $_GET['location']?>">
+        
+        <label>Статус:</label>
+        <select name="status">
+            <option value="">Все</option>
+            <?php foreach ($statusList as $status): ?>
+                <option value="<?= $status['id'] ?>" <?= (isset($_GET['status']) && $_GET['status'] == $status['id'])?>><?= htmlspecialchars($status['display_name']) ?></option>
+            <?php endforeach; ?>
+        </select>
+        
+        <button type="submit">Найти</button>
+        <a href="?action=index">Сбросить</a>
+    </form>
+</div>
+        <!-- Пагинация -->
+    <?php if (isset($pages) && $pages > 0): ?>
+    <div>
+        <?php if ($page > 1): ?>
+            <a href="?action=index&point_id=<?= $id ?>&page=<?= $page - 1 ?>">← Назад</a>
+        <?php endif; ?>
+        
+        <?php for ($i = 1; $i <= $pages; $i++): ?>
+            <?php if ($i == $page): ?>
+                <strong><?= $i ?></strong>
+            <?php else: ?>
+                <a href="?action=index&point_id=<?= $id ?>&page=<?= $i ?>"><?= $i ?></a>
+            <?php endif; ?>
+        <?php endfor; ?>
+        
+        <?php if ($page < $pages): ?>
+            <a href="?action=index&point_id=<?= $id ?>&page=<?= $page + 1 ?>">Вперёд →</a>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
     <!-- Кнопка назад на главную страницу -->
     <div class="mb-3">
         <button onclick="history.back()" class="btn btn-secondary">← Назад</button>
     </div>
+    
 </div>
 </body>
 <?php include '../app/includes/footer.php'; ?>
