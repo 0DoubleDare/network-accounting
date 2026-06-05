@@ -5,12 +5,7 @@ $types = getNetworkPointTypeList($pdo);
 $statuses = getNetworkPointStatusList($pdo);
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<?php include '../includes/header.php'; ?>
 </head>
 <body>
     <form action="../../controllers/networckPointControler.php" method="post" enctype="multipart/form-data">
@@ -43,4 +38,4 @@ $statuses = getNetworkPointStatusList($pdo);
 
     </form>
 </body>
-</html>
+<?php include '../includes/footer.php'; ?>
