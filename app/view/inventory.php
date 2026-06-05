@@ -80,3 +80,4 @@ if (!isset($points)) {
     </div>
 </div>
 </body>
+<?php include '../app/includes/footer.php'; ?>
