@@ -452,4 +452,87 @@ function updateCheck($pdo, $point_id){
         return false; // Ошибка при обновлении
     }
 }
+
+function getAllMaterials($pdo)
+{
+    try {
+        $sql = "SELECT m.*, mt.display_name as type_name 
+                FROM materials m 
+                LEFT JOIN material_type mt ON m.type = mt.id 
+                ORDER BY m.id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("getAllMaterials error: " . $e->getMessage());
+        return [];
+    }
+}
+// функция фильтрации для материалов
+function getMaterialUnits($pdo)
+{
+    try {
+        $sql = "SELECT DISTINCT unit FROM materials ORDER BY unit";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    } catch (PDOException $e) {
+        error_log("getMaterialUnits error: " . $e->getMessage());
+        return [];
+    }
+}
+// функция плагинации для материалов
+function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
+{
+    $offset = ($page - 1) * $perPage;
+    $where = [];
+    $params = [];
+    // Фильтр по названию (поиск)
+    if (!empty($filters['name'])) {
+        $where[] = "m.name LIKE :name";
+        $params[':name'] = '%' . $filters['name'] . '%';
+    }
+    // Фильтр по типу
+    if (!empty($filters['type'])) {
+        $where[] = "m.type = :type";
+        $params[':type'] = $filters['type'];
+    }
+    // Фильтр по единице измерения
+    if (!empty($filters['unit'])) {
+        $where[] = "m.unit = :unit";
+        $params[':unit'] = $filters['unit'];
+    }
+
+    $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
+    // Подсчёт общего количества записей
+    $countSql = "SELECT COUNT(*) FROM materials m $whereClause";
+    $countStmt = $pdo->prepare($countSql);
+    
+    foreach ($params as $key => $value) {
+        $countStmt->bindValue($key, $value);
+    }
+    $countStmt->execute();
+    $total = $countStmt->fetchColumn();
+    // Основной запрос
+    $sql = "SELECT m.*, mt.display_name as type_name 
+            FROM materials m 
+            LEFT JOIN material_type mt ON m.type = mt.id 
+            $whereClause
+            ORDER BY m.id 
+            LIMIT $offset, $perPage";
+
+    $stmt = $pdo->prepare($sql);
+
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->execute();
+    return [
+        'materials' => $stmt->fetchAll(),
+        'total' => $total,
+        'page' => $page,
+        'perPage' => $perPage,
+        'totalPages' => ceil($total / $perPage)
+    ];
+}
 ?>
