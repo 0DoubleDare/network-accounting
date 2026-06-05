@@ -52,7 +52,6 @@ if ($action === 'index') {
     
     include '../app/includes/header.php';
     include '../app/view/inventory.php';
-    include '../app/includes/footer.php';
     exit();
 }
 ?>
