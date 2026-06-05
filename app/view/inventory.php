@@ -6,7 +6,6 @@ if (!isset($points)) {
     require_once __DIR__ . '/../includes/functions.php';
     require_once __DIR__ . '/../../config/db.php';
     include '../app/includes/header.php'; 
-    $points = getAllInventory($pdo);
     $point_id = $_GET['point_id'] ?? $_POST['point_id'] ?? 0;
 }
 ?>
