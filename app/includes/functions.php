@@ -435,6 +435,61 @@ function getNetworkPointTypeList($pdo)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+function insertMaterials($pdo, $name, $type, $unit){
+    $sql = "INSERT INTO materials(name, type, unit) VALUES(:name, :type, :unit)";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute([
+        'name' => $name,
+        'type' => $type,
+        'unit' => $unit
+    ]);
+    $response = [
+        'id' => $pdo -> lastInsertId()
+    ];
+    return $response;
+}
+
+function materialType($pdo){
+    $sql = "SELECT * FROM material_type";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute();
+    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+}
+
+function updateMaterials($pdo, $id, $name, $type, $unit){
+    $sql = "UPDATE materials SET name = :name, type = :type, unit = :unit WHERE id = :id";
+    $stmt = $pdo -> prepare($sql);
+    return $stmt -> execute([
+        'id' => $id,
+        'name' => $name,
+        'type' => $type,
+        'unit' => $unit
+    ]);
+}
+
+function materialsId($pdo, $id){
+    $sql = "SELECT * FROM materials WHERE id = :id";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute([
+        'id' => $id
+    ]);
+    return $stmt -> fetch(PDO::FETCH_ASSOC);
+}
+
+function materialTypeId($pdo, $id){
+    $sql = "SELECT * FROM material_type";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute();
+    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+}
+
+function deleteMaterials($pdo, $id){
+    $sql = "DELETE FROM materials WHERE id = :id";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute(['id' => $id]);
+}
+
 /**
  * Последние посещение (last_check)
  */
