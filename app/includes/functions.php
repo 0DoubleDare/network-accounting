@@ -434,4 +434,22 @@ function getNetworkPointTypeList($pdo)
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+/**
+ * Последние посещение (last_check)
+ */
+function updateCheck($pdo, $point_id){
+    $sql = "UPDATE network_points SET last_check = NOW() WHERE id = :point_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':point_id' => $point_id]);
+    $result = $stmt->rowCount();
+
+    if($result && $stmt->rowCount() > 0){
+        require_once '../app/view/defects.php';
+        return true; // Обновление прошло успешно
+    }else {
+        error_log("Ошибка при обновлении last_check для точки с ID: " . $point_id);
+        return false; // Ошибка при обновлении
+    }
+}
 ?>
