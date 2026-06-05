@@ -4,14 +4,8 @@ require '../../config/db.php';
 $types = getNetworkPointTypeList($pdo);
 $statuses = getNetworkPointStatusList($pdo);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавление сетевой точки</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+
+<?php include '../includes/header.php'; ?>
 <body class="bg-white">
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -62,4 +56,4 @@ $statuses = getNetworkPointStatusList($pdo);
     </div>
 </div>
 </body>
-</html>
+<?php include '../includes/footer.php'; ?>

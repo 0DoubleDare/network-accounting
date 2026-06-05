@@ -100,44 +100,15 @@ if (!function_exists('registerUser')) {
     }
 }
 
-//Таблица инвентарь 
-function getAllInventory($pdo)
-{
-    try {
-        $sql = "SELECT
-            np.id,
-            np.label,
-            np.location,
-            np.last_check,
-            np.point_created_at,
-            np.image_path,
-            npt.display_name AS type,
-            nps.display_name AS status
-        FROM network_points np
-                 LEFT JOIN network_point_type npt
-                           ON np.type = npt.id
-                 LEFT JOIN network_point_status nps
-                           ON np.status = nps.id;
-";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $points = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $points;
-    } catch (PDOException $error) {
-        error_log("Error: " . $error->getMessage());
-    }
-}
-
 //Получение данные одной конкретной точки по её ID
 function getIDDefects($pdo, $point_id)
 {
     try {
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 network_points.*,
                 network_point_status.display_name AS status_name
             FROM `network_points`
-                     LEFT JOIN `network_point_status` ON network_points.status = network_point_status.id
+                    LEFT JOIN `network_point_status` ON network_points.status = network_point_status.id
             WHERE network_points.id = :point_id
         ";
         $stmt = $pdo->prepare($sql);
@@ -154,8 +125,7 @@ function getIDDefects($pdo, $point_id)
 function getAllDefects($pdo, $point_id)
 {
     try {
-        $sql = "
-SELECT
+        $sql = "SELECT
             defects.id,
             defects.category,
             defects.severity,
@@ -170,8 +140,7 @@ SELECT
         LEFT JOIN users ON defects.created_by = users.id
         LEFT JOIN network_points ON defects.point_id = network_points.id
         WHERE defects.point_id = :point_id
-        ORDER BY defects.created_at DESC
-        ";
+        ORDER BY defects.created_at DESC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':point_id' => $point_id]);
         $defects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -336,7 +305,6 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = [])
         'totalPages' => ceil($total / $perPage) // Всего страниц
     ];
 }
-
 // Функция получения списка пользователей для фильтра
 function getLogUsers($pdo)
 {
@@ -385,7 +353,7 @@ function getLogRoles($pdo)
 function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
     $sql = "SELECT
         defects.id,
-        defects.category,
+        defect_category.display_name AS category,
         defects.severity,
         defects.description,
         defects.status,
@@ -395,11 +363,16 @@ function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
         users.login AS author,
         network_points.label AS point_label
     FROM defects
+    LEFT JOIN defect_category ON defects.category = defect_category.id
     LEFT JOIN users ON defects.created_by = users.id
     LEFT JOIN network_points ON defects.point_id = network_points.id
     WHERE defects.point_id = $point_id $filter
     ORDER BY defects.created_at DESC
     LIMIT $limit OFFSET $offset";
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -500,7 +473,6 @@ function updateCheck($pdo, $point_id){
     $result = $stmt->rowCount();
 
     if($result && $stmt->rowCount() > 0){
-        require_once '../app/view/defects.php';
         return true; // Обновление прошло успешно
     }else {
         error_log("Ошибка при обновлении last_check для точки с ID: " . $point_id);
@@ -591,7 +563,6 @@ function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
     ];
 }
 
-
 function getPointsCount($pdo) {
     $sql = "SELECT COUNT(*) FROM `network_points`";
     $stmt = $pdo->prepare($sql);
@@ -614,5 +585,139 @@ function getDefectsCount($pdo) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchColumn();
+}
+//функция пагинации реестр оборудования и Таблица инвентарь 
+function getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params = [])
+{
+    try {
+        $sql = "SELECT
+            network_points.id,
+            network_points.label,
+            network_points.location,
+            network_points.last_check,
+            network_points.point_created_at,
+            network_points.image_name,
+            network_point_type.display_name AS type,
+            network_point_status.display_name AS status
+        FROM network_points
+        LEFT JOIN network_point_type ON network_points.type = network_point_type.id
+        LEFT JOIN network_point_status ON network_points.status = network_point_status.id
+        WHERE 1=1 $filter
+        ORDER BY network_points.id
+        LIMIT $limit OFFSET $offset";
+        
+        $stmt = $pdo->prepare($sql);
+        
+        // Привязываем параметры
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $error) {
+        error_log("getAllInventoryFiltered Error: " . $error->getMessage());
+        return [];
+    }
+}
+
+function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
+{
+    $offset = ($page - 1) * $perPage;
+    $where = [];
+    $params = [];
+    // Фильтр по материалу
+    if (!empty($filters['material_id'])) {
+        $where[] = "mu.material_id = :material_id";
+        $params[':material_id'] = $filters['material_id'];
+    }
+    // Фильтр по точке
+    if (!empty($filters['point_id'])) {
+        $where[] = "mu.point_id = :point_id";
+        $params[':point_id'] = $filters['point_id'];
+    }
+    // Фильтр по пользователю
+    if (!empty($filters['used_by'])) {
+        $where[] = "mu.used_by = :used_by";
+        $params[':used_by'] = $filters['used_by'];
+    }
+    // Фильтр по дате (с какой даты)
+    if (!empty($filters['date_from'])) {
+        $where[] = "DATE(mu.used_at) >= :date_from";
+        $params[':date_from'] = $filters['date_from'];
+    }
+    // Фильтр по дате (по какую дату)
+    if (!empty($filters['date_to'])) {
+        $where[] = "DATE(mu.used_at) <= :date_to";
+        $params[':date_to'] = $filters['date_to'];
+    }
+    $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
+    $countSql = "SELECT COUNT(*) FROM material_usage mu $whereClause";
+    $countStmt = $pdo->prepare($countSql);
+    foreach ($params as $key => $value) {
+        $countStmt->bindValue($key, $value);
+    }
+    $countStmt->execute();
+    $total = $countStmt->fetchColumn();
+    $sql = "SELECT 
+                mu.id,
+                mu.quantity,
+                mu.used_at,
+                mu.comment,
+                m.id AS material_id,
+                m.name AS material_name,
+                m.unit,
+                mt.display_name AS material_type,
+                np.id AS point_id,
+                np.label AS point_label,
+                np.location AS point_location,
+                u.id AS user_id,
+                u.login AS used_by_login
+            FROM material_usage mu
+            LEFT JOIN materials m ON mu.material_id = m.id
+            LEFT JOIN material_type mt ON m.type = mt.id
+            LEFT JOIN network_points np ON mu.point_id = np.id
+            LEFT JOIN users u ON mu.used_by = u.id
+            $whereClause
+            ORDER BY mu.used_at DESC
+            LIMIT $offset, $perPage";
+    
+    $stmt = $pdo->prepare($sql);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->execute();
+    
+    return [
+        'items' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+        'total' => $total,
+        'page' => $page,
+        'perPage' => $perPage,
+        'totalPages' => ceil($total / $perPage)
+    ];
+}
+
+function getMaterialsForFilter($pdo)
+{
+    $sql = "SELECT id, name FROM materials ORDER BY name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPointsForFilter($pdo)
+{
+    $sql = "SELECT id, label, location FROM network_points ORDER BY label";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUsersForFilter($pdo)
+{
+    $sql = "SELECT id, login FROM users ORDER BY login";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
