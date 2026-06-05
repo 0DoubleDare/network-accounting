@@ -563,6 +563,29 @@ function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
     ];
 }
 
+function getPointsCount($pdo) {
+    $sql = "SELECT COUNT(*) FROM `network_points`";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
+
+function getMaterialsStats($pdo) {
+    $sql = "SELECT 
+                COUNT(DISTINCT `type`) as unique_types, 
+                COUNT(*) as total_records 
+            FROM `materials`";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getDefectsCount($pdo) {
+    $sql = "SELECT COUNT(*) FROM `defects`"; // Убедитесь, что таблица называется defects
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
 //функция пагинации реестр оборудования и Таблица инвентарь 
 function getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params = [])
 {
