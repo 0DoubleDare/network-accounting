@@ -1,4 +1,3 @@
-/*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.4.9-MariaDB, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: network_accounting_db

@@ -64,7 +64,8 @@ if (!isset($points)) {
                 </th>
                 
                 <th>
-                    <a href="../../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Перейти к дефектам</a>
+<!--                    <a href="../controllers/defectscontroller.php?point_id=--><?php //= $point['id'] ?><!--">Перейти к дефектам</a>-->
+                    <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Подробнее</a>
                     <a href="./deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-danger">Удалить</a>
                     <a href="../app/view/updateNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-warning">Изменить</a>
                 </th>

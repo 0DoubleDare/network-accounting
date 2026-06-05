@@ -359,7 +359,7 @@ function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
         defects.status,
         defects.created_by,
         defects.created_at,
-        defects.image_path,
+        defects.image_name,
         users.login AS author,
         network_points.label AS point_label
     FROM defects
