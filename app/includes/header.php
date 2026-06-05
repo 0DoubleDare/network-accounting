@@ -31,6 +31,9 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index">
             <button type="button" class="btn btn-info">Инвентарь</button>
         </a>
+        <a href="<?= $web_root ?>controllers/materialscontroller.php?action=index">
+            <button type="button" class="btn btn-info">Материалы</button>
+        </a>
         
         <nav style="display: flex; gap: 12px; align-items: center">
             <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
