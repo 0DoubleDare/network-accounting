@@ -43,16 +43,11 @@ $pages = ceil($count_network_points / $limit);
 
 $action = $_GET['action'] ?? 'index';
 
-if ($action === 'index') {
-    $typeList = getNetworkPointTypeList($pdo);
-    $statusList = getNetworkPointStatusList($pdo);
-    
-    // Главная функция Вывод + фильтрация
-    $points = getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params);
-    
-    include '../app/includes/header.php';
+if($action === 'index'){
+    $points = getAllInventory($pdo);
+//    include '../app/includes/header.php';
     include '../app/view/inventory.php';
-    include '../app/includes/footer.php';
+//    include '../app/includes/footer.php';
     exit();
 }
 ?>
