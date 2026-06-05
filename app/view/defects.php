@@ -15,6 +15,8 @@
     <h1>Дефекты точки: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
     <p><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></p>
     <p><strong>Статус точки:</strong> <?= $point['status_name'] ?? '—' ?></p>
+    <p><strong>Фото:</strong> <?php $point['image_path'] ?? '' ?>
+            <img src="../public/storage/defects/картинкаа крутогоо котаа.webp"></p>
     
     <div>
         <a href="../controllers/inventorycontroller.php?action=index">← Назад к точкам</a>
