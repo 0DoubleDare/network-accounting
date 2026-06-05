@@ -7,6 +7,7 @@ if (!isset($points)) {
     require_once __DIR__ . '/../../config/db.php';
     include '../app/includes/header.php'; 
     $points = getAllInventory($pdo);
+    $point_id = $_GET['point_id'] ?? $_POST['point_id'] ?? 0;
 }
 ?>
 
@@ -23,9 +24,9 @@ if (!isset($points)) {
                 <th>Тип</th>
                 <th>Расположение</th>
                 <th>Статус</th>
-                <th>Проверено</th>
+                <th>Последние посещение</th>
                 <th>Дата создания</th>
-                <th>Фото</th>
+                <th>Кол-во дефектов</th>
                 <th>Действие</th>
             </tr>
         </thead>
@@ -35,7 +36,6 @@ if (!isset($points)) {
                     <td colspan="6">Нет данных</td>
                 </tr>
             <?php else: ?>
-            
                 <?php foreach($points as $point): ?>
             <tr >
                 <th><?php echo $point['id'] ?></th>
@@ -43,9 +43,27 @@ if (!isset($points)) {
                 <th><?php echo $point['type'] ?></th>
                 <th><?php echo $point['location'] ?></th>
                 <th><?php echo $point['status'] ?></th>
-                <th><?php echo $point['last_check'] ?? ' ' ?></th>
+                <th>
+                    <?php
+                    //Посещение 
+                    if (!empty($point['last_check'])) {
+                        echo htmlspecialchars($point['last_check']);
+                    } else {
+                        echo '-';
+                    }
+                    ?>
+                </th>
                 <th><?php echo $point['point_created_at'] ?></th>
-                <th><?php echo $point['image_path']?></th>
+                <th>
+                    <?php
+                    // Получаем количество дефектов для точки
+                        $sql = "SELECT COUNT(*) as defect_count FROM defects WHERE point_id = :point_id";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['point_id' => $point['id']]);
+                        echo $stmt->fetchColumn();
+                    ?>
+                </th>
+                
                 <th>
                     <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Перейти к дефектам</a>
                     <a href="./deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-danger">Удалить</a>

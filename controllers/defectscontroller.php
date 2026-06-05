@@ -52,7 +52,9 @@ if ($action === 'index') {
     
 $defects = getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset);
     
-    include '../app/view/defects.php';
+include '../app/includes/header.php';
+include '../app/view/defects.php';
+include '../app/includes/footer.php';
     exit();
 }
 ?>
