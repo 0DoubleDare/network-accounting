@@ -597,4 +597,104 @@ function getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params = [])
         return [];
     }
 }
+
+function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
+{
+    $offset = ($page - 1) * $perPage;
+    $where = [];
+    $params = [];
+    // Фильтр по материалу
+    if (!empty($filters['material_id'])) {
+        $where[] = "mu.material_id = :material_id";
+        $params[':material_id'] = $filters['material_id'];
+    }
+    // Фильтр по точке
+    if (!empty($filters['point_id'])) {
+        $where[] = "mu.point_id = :point_id";
+        $params[':point_id'] = $filters['point_id'];
+    }
+    // Фильтр по пользователю
+    if (!empty($filters['used_by'])) {
+        $where[] = "mu.used_by = :used_by";
+        $params[':used_by'] = $filters['used_by'];
+    }
+    // Фильтр по дате (с какой даты)
+    if (!empty($filters['date_from'])) {
+        $where[] = "DATE(mu.used_at) >= :date_from";
+        $params[':date_from'] = $filters['date_from'];
+    }
+    // Фильтр по дате (по какую дату)
+    if (!empty($filters['date_to'])) {
+        $where[] = "DATE(mu.used_at) <= :date_to";
+        $params[':date_to'] = $filters['date_to'];
+    }
+    $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
+    $countSql = "SELECT COUNT(*) FROM material_usage mu $whereClause";
+    $countStmt = $pdo->prepare($countSql);
+    foreach ($params as $key => $value) {
+        $countStmt->bindValue($key, $value);
+    }
+    $countStmt->execute();
+    $total = $countStmt->fetchColumn();
+    $sql = "SELECT 
+                mu.id,
+                mu.quantity,
+                mu.used_at,
+                mu.comment,
+                m.id AS material_id,
+                m.name AS material_name,
+                m.unit,
+                mt.display_name AS material_type,
+                np.id AS point_id,
+                np.label AS point_label,
+                np.location AS point_location,
+                u.id AS user_id,
+                u.login AS used_by_login
+            FROM material_usage mu
+            LEFT JOIN materials m ON mu.material_id = m.id
+            LEFT JOIN material_type mt ON m.type = mt.id
+            LEFT JOIN network_points np ON mu.point_id = np.id
+            LEFT JOIN users u ON mu.used_by = u.id
+            $whereClause
+            ORDER BY mu.used_at DESC
+            LIMIT $offset, $perPage";
+    
+    $stmt = $pdo->prepare($sql);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->execute();
+    
+    return [
+        'items' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+        'total' => $total,
+        'page' => $page,
+        'perPage' => $perPage,
+        'totalPages' => ceil($total / $perPage)
+    ];
+}
+
+function getMaterialsForFilter($pdo)
+{
+    $sql = "SELECT id, name FROM materials ORDER BY name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPointsForFilter($pdo)
+{
+    $sql = "SELECT id, label, location FROM network_points ORDER BY label";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUsersForFilter($pdo)
+{
+    $sql = "SELECT id, login FROM users ORDER BY login";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
