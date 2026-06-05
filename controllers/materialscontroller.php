@@ -4,12 +4,6 @@ session_start();
 require '../config/db.php';
 require '../app/includes/functions.php';
 
-// Проверка авторизации
-if (!isset($_SESSION['user_info']) || empty($_SESSION['user_info'])) {
-    $_SESSION['error'] = "Необходимо авторизоваться";
-    header('Location: ../app/view/login.php');
-    exit();
-}
 
 $action = $_GET['action'] ?? 'index';
 
