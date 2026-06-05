@@ -52,14 +52,6 @@ if ($action === 'index') {
     
 $defects = getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset);
 
-
-if (is_numeric($point_id) && $point_id > 0) {
-    $update_success = updateCheck($pdo, $point_id);
-} else {
-    die("Ошибка: недопустимый ID точки");
-}
-
-
 include '../app/includes/header.php';
 include '../app/view/defects.php';
 include '../app/includes/footer.php';
