@@ -13,8 +13,8 @@ if ($action === 'index') {
     
     $filters = [
         'material_id' => isset($_GET['material_id']) && $_GET['material_id'] !== '' ? (int)$_GET['material_id'] : '',
-        'point_id' => isset($_GET['point_id']) && $_GET['point_id'] !== '' ? (int)$_GET['point_id'] : '',
-        'used_by' => isset($_GET['used_by']) && $_GET['used_by'] !== '' ? (int)$_GET['used_by'] : '',
+        'point_label' => isset($_GET['point_label']) ? trim($_GET['point_label']) : '',
+        'used_by_login' => isset($_GET['used_by_login']) ? trim($_GET['used_by_login']) : '',
         'date_from' => isset($_GET['date_from']) ? trim($_GET['date_from']) : '',
         'date_to' => isset($_GET['date_to']) ? trim($_GET['date_to']) : ''
     ];
@@ -23,8 +23,7 @@ if ($action === 'index') {
     });
 // фильтрация
     $materialsList = getMaterialsForFilter($pdo);
-    $pointsList = getPointsForFilter($pdo);
-    $usersList = getUsersForFilter($pdo);
+
 // плагинация
     $result = getAllMaterialUsageFiltered($pdo, $page, $perPage, $filters);
     

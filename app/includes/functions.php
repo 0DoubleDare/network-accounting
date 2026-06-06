@@ -656,14 +656,15 @@ function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = 
         $params[':material_id'] = $filters['material_id'];
     }
     // Фильтр по точке
-    if (!empty($filters['point_id'])) {
-        $where[] = "mu.point_id = :point_id";
-        $params[':point_id'] = $filters['point_id'];
+    if (!empty($filters['point_label'])) {
+        $where[] = "np.label LIKE :point_label";
+        $params[':point_label'] = '%' . $filters['point_label'] . '%';
     }
+    
     // Фильтр по пользователю
-    if (!empty($filters['used_by'])) {
-        $where[] = "mu.used_by = :used_by";
-        $params[':used_by'] = $filters['used_by'];
+    if (!empty($filters['used_by_login'])) {
+        $where[] = "u.login LIKE :used_by_login";
+        $params[':used_by_login'] = '%' . $filters['used_by_login'] . '%';
     }
     // Фильтр по дате (с какой даты)
     if (!empty($filters['date_from'])) {
@@ -768,6 +769,7 @@ function getDefectCountWithCategories($pdo)
         'categories' => array_keys($data),
         'defect_count' => array_map('intval', array_values($data))
     ];
+}
 //Функция для экпорта
 
 function exportToCSV($data, $headers, $filename) {
