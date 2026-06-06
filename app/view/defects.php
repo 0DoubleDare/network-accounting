@@ -11,12 +11,29 @@
 
     <!-- Шапка страницы с информацией о точке -->
     <div class="row mb-4">
+        <h1>Информация</h1>
+        <img src="../public/storage/network_points/<?= $point['image_name'] ?>"
+             alt="Изображение точки <?= $point['label'] ?>">
+        <div class="text-muted small">
+            <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
+            <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
+        </div>
+        <!-- Кнопка назад -->
+        <div class="mb-3">
+            <a href="../controllers/inventorycontroller.php?action=index" class="btn btn-sm btn-outline-secondary">
+                &larr; Назад к точкам
+            </a>
+            <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
+            <a href="../controllers/materialusageControllers.php?action=index&point_id=<?= $point_id ?>"
+               class="btn btn-sm btn-info">
+                Расход материалов по этой точке
+            </a>
+        </div>
+    </div>
+    <div class="row mb-4">
         <div class="col-12">
-            <h1 class="h3 mb-2 fw-bold">Дефекты точки: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
-            <div class="text-muted small">
-                <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
-                <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
-            </div>
+            <h2 class="h3 mb-2 fw-bold">Дефекты точки</h2>
+
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
                     <img src="../public/storage/defects/<?= htmlspecialchars($point['image_path']) ?>" alt="Фото точки"
@@ -29,17 +46,6 @@
     <!-- Навигация и Форма фильтрации -->
     <div class="row mb-4">
         <div class="col-12">
-
-            <!-- Кнопка назад -->
-            <div class="mb-3">
-                <a href="../controllers/inventorycontroller.php?action=index" class="btn btn-sm btn-outline-secondary">
-                    &larr; Назад к точкам
-                </a>
-                <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
-                <a href="../controllers/materialusageControllers.php?action=index&point_id=<?= $point_id ?>" class="btn btn-sm btn-info">
-                    Расход материалов по этой точке
-                </a>
-            </div>
 
             <!-- Минималистичная карточка фильтра -->
             <div class="card border-secondary-subtle">
@@ -59,29 +65,6 @@
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                            <!--                            <select name="category" class="form-select">-->
-                            <!--                                <option value="">Все</option>-->
-                            <!--                                <option value="Скрутка" -->
-                            <?php //= ($_GET['category'] ?? '') === 'Скрутка' ? 'selected' : '' ?><!-->
-                            <!--                                    Скрутка-->
-                            <!--                                </option>-->
-                            <!--                                <option value="Крепление" -->
-                            <?php //= ($_GET['category'] ?? '') === 'Крепление' ? 'selected' : '' ?><!-->
-                            <!--                                    Крепление-->
-                            <!--                                </option>-->
-                            <!--                                <option value="Кабель" -->
-                            <?php //= ($_GET['category'] ?? '') === 'Кабель' ? 'selected' : '' ?><!-->
-                            <!--                                    Кабель-->
-                            <!--                                </option>-->
-                            <!--                                <option value="Механический" -->
-                            <?php //= ($_GET['category'] ?? '') === 'Механический' ? 'selected' : '' ?><!-->
-                            <!--                                    Механический-->
-                            <!--                                </option>-->
-                            <!--                                <option value="Электрический" -->
-                            <?php //= ($_GET['category'] ?? '') === 'Электрический' ? 'selected' : '' ?><!-->
-                            <!--                                    Электрический-->
-                            <!--                                </option>-->
-                            <!--                            </select>-->
                         </div>
 
                         <!-- Критичность -->
@@ -174,12 +157,28 @@
                                 <td class="pe-4 text-muted"><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
                                 <td>
                                     <?php if ($defect['status'] == 'open'): ?>
-                                        <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress">Начать работу</a>
+                                        <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress">Начать
+                                            работу</a>
                                     <?php elseif ($defect['status'] == 'in_progress'): ?>
                                         <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed">Исправлено</a>
                                     <?php else: ?>
-                                        Закрыто
+                                        <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open">
+                                            Переоткрыть
+                                        </a>
+                                        <!--                                        Закрыто-->
                                     <?php endif; ?>
+
+                                    <?php if (!empty($defect['image_name'])): ?>
+                                        <button onclick="document.getElementById('openImage').showModal()">
+                                            Открыть фотографию
+                                        </button>
+                                        <dialog id="openImage" onclick="this.close()">
+                                            <img src="../public/storage/defects/<?= $defect['image_name'] ?>"
+                                                 alt="Изображение дефекта для <?= $point['label'] ?>">
+                                            <p>Нажми на меня, чтобы закрыть окно</p>
+                                        </dialog>
+                                    <?php endif; ?>
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
