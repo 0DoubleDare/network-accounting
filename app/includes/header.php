@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <header class="site-header">
     <div class="header-container">
-        <a href="<?= $web_root ?>public/index.php" class="site-logo">
+        <a href="<?= $web_root ?>" class="site-logo">
             <h1 class="logo-title">Network accounting</h1>
         </a>
 

@@ -8,19 +8,19 @@ $types = materialType($pdo);
 
 
 <?php include '../includes/header.php'; ?>
-</head>
-<body>
+    </head>
+    <body>
     <form method="post" action="../../controllers/insertMaterials.php">
         <label>Название</label><br>
         <input type="text" name="name"><br><br>
 
         <label>тип</label><br>
         <select name="type">
-            <?php foreach($types as $type): ?>
-            <option value="<?= $type['id']?>"><?php echo htmlspecialchars($type['name']); ?></option>
+            <?php foreach ($types as $type): ?>
+                <option value="<?= $type['id'] ?>"><?php echo htmlspecialchars($type['display_name']); ?></option>
             <?php endforeach; ?>
         </select><br><br>
-        
+
         <label>Единица измерения</label><br>
         <select name="unit">
             <option value="m">m</option>
@@ -30,6 +30,6 @@ $types = materialType($pdo);
         <button type="submit">Добавить</button>
 
     </form>
-</body>
+    </body>
 
 <?php include '../includes/footer.php'; ?>

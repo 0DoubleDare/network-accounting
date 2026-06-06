@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_info']) || empty($_SESSION['user_info'])) {
 
 if ($_SESSION['user_info']['role'] !== 'admin') {
     $_SESSION['error'] = "Доступ запрещён. Только для администраторов";
-    header('Location: ../public/index.php');
+    header('Location: ../public/dashboard.php');
     exit();
 }
 
@@ -32,12 +32,12 @@ $filters = [
     'date_to' => isset($_GET['date_to']) ? trim($_GET['date_to']) : ''
 ];
 
-$filters = array_filter($filters, function($value) {
+$filters = array_filter($filters, function ($value) {
     return $value !== '' && $value !== null;
 });
 
 $logUsers = getLogUsers($pdo);
-$logRoles = getLogRoles($pdo);  
+$logRoles = getLogRoles($pdo);
 $logActions = getLogActions($pdo);
 $logTables = getLogTables($pdo);
 $result = getAllLogsFiltered($pdo, $page, $perPage, $filters);
