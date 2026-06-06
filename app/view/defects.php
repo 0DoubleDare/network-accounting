@@ -118,7 +118,7 @@
                         <div class="col-md-3 d-flex align-items-end gap-2">
                             <button type="submit" class="btn btn-primary">Применить</button>
                             <a href="?action=index&point_id=<?= $point_id ?>&category=&severity=&status="
-                               class="btn btn-outline-secondary">Сбросить</a>
+                                class="btn btn-outline-secondary">Сбросить</a>
                         </div>
                     </form>
                 </div>

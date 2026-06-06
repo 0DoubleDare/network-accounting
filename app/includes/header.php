@@ -29,13 +29,13 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
 
         <a href="<?= $web_root ?>controllers/inventorycontroller.php?action=index">
-            <button type="button" class="btn btn-info">Инвентарь</button>
+            <button type="submit" class="btn btn-primary">Инвентарь</button>
         </a>
         <a href="<?= $web_root ?>controllers/materialscontroller.php?action=index">
-            <button type="button" class="btn btn-info">Материалы</button>
+            <button type="submit" class="btn btn-primary">Материалы</button>
         </a>
         <a href="<?= $web_root ?>controllers/materialusageControllers.php?action=index">
-            <button type="button" class="btn btn-info">Расход материалов</button>
+            <button type="submit" class="btn btn-primary">Расход материалов</button>
         </a>
         <nav style="display: flex; gap: 12px; align-items: center">
             <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
@@ -52,7 +52,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </a>
             <?php else: ?>
                 <a href="<?= $web_root ?>app/view/registration.php">
-                    <button type="button" class="btn btn-primary">Регистрация</button>
+                    <button type="button" class="btn btn-outline-primary">Регистрация</button>
                 </a>
                 <a href="<?= $web_root ?>app/view/login.php">
                     <button type="button" class="btn btn-success">Войти</button>
