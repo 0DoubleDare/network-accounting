@@ -15,7 +15,7 @@ if (isset($user_info)) {
     addLoginLog($pdo, $user_info['user_id'], $user_info['role']);
 
     unset($_SESSION['error']);
-    header('Location: ../public/dashboard.php');
+    header('Location: ../');
     exit();
 } else {
     $_SESSION['error'] = "Ошибка логина или пароля";

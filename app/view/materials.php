@@ -24,7 +24,7 @@
 
                 <!-- Кнопка назад и добавления -->
                 <div class="mb-3 d-flex gap-2">
-                    <a href="../public/index.php" class="btn btn-sm btn-outline-secondary">
+                    <a href="../" class="btn btn-sm btn-outline-secondary">
                         &larr; Назад
                     </a>
                     <a href="../app/view/insertMaterials.php" class="btn btn-sm btn-primary">

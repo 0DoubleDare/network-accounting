@@ -40,7 +40,7 @@ if ($action === 'register' || (isset($_POST['password']) && isset($_POST['passwo
 
 //$_SESSION['message'] = "Регистрация прошла успешно! Теперь вы можете войти.";
             $_SESSION['user_info'] = $user_info;
-            header('Location: ../public/dashboard.php');
+            header('Location: ../');
             exit();
         } else {
             $_SESSION['error'] = "Ошибка при регистрации";
