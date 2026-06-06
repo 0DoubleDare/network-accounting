@@ -83,7 +83,7 @@ if (!isset($points)) {
             <input type="hidden" name="action" value="index">
 
             <label>Метка:</label>
-            <input type="text" name="label" value="<?= $_GET['label'] ?>">
+            <input type="text" name="label" value="<?= empty($_GET['label']) ? '' : $_GET['label'] ?>">
 
             <label>Тип:</label>
             <select name="type">
@@ -94,7 +94,7 @@ if (!isset($points)) {
             </select>
 
             <label>Расположение:</label>
-            <input type="text" name="location" value="<?= $_GET['location'] ?>">
+            <input type="text" name="location" value="<?= empty($_GET['location']) ? '' : $_GET['location'] ?>">
 
             <label>Статус:</label>
             <select name="status">

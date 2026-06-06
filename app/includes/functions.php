@@ -660,7 +660,7 @@ function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = 
         $where[] = "np.label LIKE :point_label";
         $params[':point_label'] = '%' . $filters['point_label'] . '%';
     }
-    
+
     // Фильтр по пользователю
     if (!empty($filters['used_by_login'])) {
         $where[] = "u.login LIKE :used_by_login";
@@ -677,7 +677,13 @@ function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = 
         $params[':date_to'] = $filters['date_to'];
     }
     $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
-    $countSql = "SELECT COUNT(*) FROM material_usage mu $whereClause";
+    $countSql = "
+        SELECT COUNT(*) 
+        FROM material_usage mu
+        LEFT JOIN network_points np ON mu.point_id = np.id
+        LEFT JOIN users u ON mu.used_by = u.id
+        $whereClause
+    ";
     $countStmt = $pdo->prepare($countSql);
     foreach ($params as $key => $value) {
         $countStmt->bindValue($key, $value);
@@ -770,23 +776,25 @@ function getDefectCountWithCategories($pdo)
         'defect_count' => array_map('intval', array_values($data))
     ];
 }
+
 //Функция для экпорта
 
-function exportToCSV($data, $headers, $filename) {
+function exportToCSV($data, $headers, $filename)
+{
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '_' . date('Y-m-d_H-i-s') . '.csv"');
     header('Cache-Control: no-cache, must-revalidate');
-    
+
     // BOM для кириллицы в Excel
     echo "\xEF\xBB\xBF";
-    
+
     $output = fopen('php://output', 'w');
     fputcsv($output, $headers, ';');
-    
+
     foreach ($data as $row) {
         fputcsv($output, $row, ';');
     }
-    
+
     fclose($output);
     exit();
 }
