@@ -32,32 +32,25 @@
                 </select>
             </td>
             
+            <tr>
             <td><label>Сетевая точка:</label></td>
             <td>
-                <select name="point_id">
-                    <option value="">Все</option>
-                    <?php foreach ($pointsList as $point): ?>
-                        <option value="<?php echo $point['id']; ?>" 
-                            <?php echo (isset($_GET['point_id']) && $_GET['point_id'] == $point['id']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($point['label'] . ' (' . $point['location'] . ')'); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="text" 
+                       name="point_label" 
+                       placeholder="Поиск по названию точки"
+                       value="<?php echo htmlspecialchars($_GET['point_label'] ?? ''); ?>">
             </td>
         </tr>
         <tr>
             <td><label>Пользователь:</label></td>
             <td>
-                <select name="used_by">
-                    <option value="">Все</option>
-                    <?php foreach ($usersList as $user): ?>
-                        <option value="<?php echo $user['id']; ?>" 
-                            <?php echo (isset($_GET['used_by']) && $_GET['used_by'] == $user['id']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($user['login']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="text" 
+                       name="used_by_login" 
+                       placeholder="Поиск по логину пользователя"
+                       value="<?php echo htmlspecialchars($_GET['used_by_login'] ?? ''); ?>">
             </td>
+        </tr>
+        
             
             <td><label>Дата с:</label></td>
             <td><input type="date" name="date_from" value="<?php echo htmlspecialchars($_GET['date_from'] ?? ''); ?>"></td>
