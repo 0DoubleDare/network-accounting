@@ -14,6 +14,7 @@ if (!isset($points)) {
 <div class="container mt-4 w-20 p-3 border border-dark" style="background-color: #eee;">
     <h1 class="text-center">Реестр оборудования</h1>
     <a href="../app/view/insert_networck_point.php" class="btn btn-success mb-3">Добавить точку</a>
+    <a href="../controllers/exportcontroller.php?type=network_points">Экспорт</a>
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
         <tr>

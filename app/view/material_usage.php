@@ -10,6 +10,7 @@
 
 <p>
     <a href="../public/index.php">назад</a>
+    <a href="../controllers/exportcontroller.php?type=material_usage">Экспорт</a>
 </p>
 
 <!-- Форма фильтрации -->

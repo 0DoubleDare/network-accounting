@@ -30,6 +30,9 @@
                     <a href="../app/view/insertMaterials.php" class="btn btn-sm btn-primary">
                         + Добавить материал
                     </a>
+                    <a href="../controllers/exportcontroller.php?type=materials">
+                        Экспорт
+                    </a>
                 </div>
 
                 <!-- Карточка фильтра -->
