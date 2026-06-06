@@ -19,6 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="<?= $web_root ?>public/assets/css/style.css">
     <script src="<?= $web_root ?>public/assets/js/script.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -40,13 +41,13 @@ if (session_status() === PHP_SESSION_NONE) {
         <nav style="display: flex; gap: 12px; align-items: center">
             <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                 <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
-                
+
                 <?php if (isset($_SESSION['user_info']['role']) && $_SESSION['user_info']['role'] === 'admin'): ?>
                     <a href="<?= $web_root ?>controllers/logscontroller.php?action=index">
                         <button type="button" class="btn btn-secondary">Журнал действий</button>
                     </a>
                 <?php endif; ?>
-                
+
                 <a href="<?= $web_root ?>controllers/logout.php">
                     <button type="button" class="btn btn-danger">Выйти</button>
                 </a>

@@ -15,6 +15,10 @@
             <p class="text-muted small mb-0">История расхода материалов по сетевым точкам</p>
         </div>
     </div>
+<p>
+    <a href="../public/index.php">назад</a>
+    <a href="../controllers/exportcontroller.php?type=material_usage">Экспорт</a>
+</p>
 
     <!-- Навигация (кнопка назад в едином стиле) -->
     <div class="mb-3">
