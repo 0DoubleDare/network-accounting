@@ -6,19 +6,20 @@ require '../app/includes/functions.php';
 
 //Пагинация
 $limit = 1;
+$categories = getDefectCategories($pdo);
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
-$offset = $limit * ($page -1);
+$offset = $limit * ($page - 1);
 
 //Фильтрация
 $filter = "";
-if(isset($_GET['category']) && $_GET['category']) {
+if (isset($_GET['category']) && $_GET['category']) {
     $filter .= " AND category = '" . $_GET['category'] . "'";
 }
-if(isset($_GET['severity']) && $_GET['severity']) {
+if (isset($_GET['severity']) && $_GET['severity']) {
     $filter .= " AND severity = '" . $_GET['severity'] . "'";
 }
-if(isset($_GET['status']) && $_GET['status']) {
+if (isset($_GET['status']) && $_GET['status']) {
     $filter .= " AND status = '" . $_GET['status'] . "'";
 }
 
@@ -42,19 +43,19 @@ if ($action === 'index') {
         header('Location: ../controllers/inventorycontroller.php?action=index');
         exit();
     }
-    
+
     $point = getIDDefects($pdo, $point_id);
 
     if (!$point) {
         header('Location: ../controllers/inventorycontroller.php?action=index');
         exit();
     }
-    
-$defects = getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset);
-    
-include '../app/includes/header.php';
-include '../app/view/defects.php';
-include '../app/includes/footer.php';
+
+    $defects = getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset);
+
+//include '../app/includes/header.php';
+    include '../app/view/defects.php';
+//include '../app/includes/footer.php';
     exit();
 }
 ?>

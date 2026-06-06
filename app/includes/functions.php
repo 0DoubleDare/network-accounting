@@ -193,21 +193,22 @@ function uploudImage($image, $uploadDir = '..\public\storage\network_points')
 }
 
 
+// Поменял "image_path" на "image_name"
 function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
 {
     $image_path = uploudImage($file);
-    $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_path`) VALUES (:label, :type, :location, :status, :image_path)";
+    $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_name`) VALUES (:label, :type, :location, :status, :image_name)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         'label' => $label,
         'type' => $type,
         'location' => $location,
         'status' => $status,
-        'image_path' => $image_path
+        'image_name' => $image_name
     ]);
     $response = [
         'id' => $pdo->lastInsertId(),
-        'image_path' => $image_path
+        'image_name' => $image_name
     ];
     return $response;
 }
@@ -221,8 +222,8 @@ function deleteNetworkPoint($pdo, $id)
 
 function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
 {
-    $image_path = uploudImage($file);
-    $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_path=:image_path WHERE id = :id";
+    $image_name = uploudImage($file);
+    $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_name=:image_name WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
         'id' => $id,
@@ -230,7 +231,7 @@ function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
         'type' => $type,
         'location' => $location,
         'status' => $status,
-        'image_path' => $image_path]);
+        'image_name' => $image_name]);
 }
 
 function networkPointInfo($pdo, $id)
@@ -305,6 +306,7 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = [])
         'totalPages' => ceil($total / $perPage) // Всего страниц
     ];
 }
+
 // Функция получения списка пользователей для фильтра
 function getLogUsers($pdo)
 {
@@ -350,7 +352,8 @@ function getLogRoles($pdo)
 }
 
 //Фильтрация для defect
-function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
+function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset)
+{
     $sql = "SELECT
         defects.id,
         defect_category.display_name AS category,
@@ -369,7 +372,7 @@ function getDefectsWithFilter($pdo, $point_id, $filter, $limit, $offset) {
     WHERE defects.point_id = $point_id $filter
     ORDER BY defects.created_at DESC
     LIMIT $limit OFFSET $offset";
-    
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -409,31 +412,34 @@ function getNetworkPointTypeList($pdo)
 }
 
 
-function insertMaterials($pdo, $name, $type, $unit){
+function insertMaterials($pdo, $name, $type, $unit)
+{
     $sql = "INSERT INTO materials(name, type, unit) VALUES(:name, :type, :unit)";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
         'name' => $name,
         'type' => $type,
         'unit' => $unit
     ]);
     $response = [
-        'id' => $pdo -> lastInsertId()
+        'id' => $pdo->lastInsertId()
     ];
     return $response;
 }
 
-function materialType($pdo){
+function materialType($pdo)
+{
     $sql = "SELECT * FROM material_type";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute();
-    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function updateMaterials($pdo, $id, $name, $type, $unit){
+function updateMaterials($pdo, $id, $name, $type, $unit)
+{
     $sql = "UPDATE materials SET name = :name, type = :type, unit = :unit WHERE id = :id";
-    $stmt = $pdo -> prepare($sql);
-    return $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
         'id' => $id,
         'name' => $name,
         'type' => $type,
@@ -441,40 +447,44 @@ function updateMaterials($pdo, $id, $name, $type, $unit){
     ]);
 }
 
-function materialsId($pdo, $id){
+function materialsId($pdo, $id)
+{
     $sql = "SELECT * FROM materials WHERE id = :id";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
         'id' => $id
     ]);
-    return $stmt -> fetch(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function materialTypeId($pdo, $id){
+function materialTypeId($pdo, $id)
+{
     $sql = "SELECT * FROM material_type";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute();
-    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function deleteMaterials($pdo, $id){
+function deleteMaterials($pdo, $id)
+{
     $sql = "DELETE FROM materials WHERE id = :id";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute(['id' => $id]);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
 }
 
 /**
  * Последние посещение (last_check)
  */
-function updateCheck($pdo, $point_id){
+function updateCheck($pdo, $point_id)
+{
     $sql = "UPDATE network_points SET last_check = NOW() WHERE id = :point_id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':point_id' => $point_id]);
     $result = $stmt->rowCount();
 
-    if($result && $stmt->rowCount() > 0){
+    if ($result && $stmt->rowCount() > 0) {
         return true; // Обновление прошло успешно
-    }else {
+    } else {
         error_log("Ошибка при обновлении last_check для точки с ID: " . $point_id);
         return false; // Ошибка при обновлении
     }
@@ -495,6 +505,7 @@ function getAllMaterials($pdo)
         return [];
     }
 }
+
 // функция фильтрации для материалов
 function getMaterialUnits($pdo)
 {
@@ -508,6 +519,7 @@ function getMaterialUnits($pdo)
         return [];
     }
 }
+
 // функция плагинации для материалов
 function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
 {
@@ -534,7 +546,7 @@ function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
     // Подсчёт общего количества записей
     $countSql = "SELECT COUNT(*) FROM materials m $whereClause";
     $countStmt = $pdo->prepare($countSql);
-    
+
     foreach ($params as $key => $value) {
         $countStmt->bindValue($key, $value);
     }
@@ -563,14 +575,16 @@ function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
     ];
 }
 
-function getPointsCount($pdo) {
+function getPointsCount($pdo)
+{
     $sql = "SELECT COUNT(*) FROM `network_points`";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchColumn();
 }
 
-function getMaterialsStats($pdo) {
+function getMaterialsStats($pdo)
+{
     $sql = "SELECT 
                 COUNT(DISTINCT `type`) as unique_types, 
                 COUNT(*) as total_records 
@@ -580,13 +594,15 @@ function getMaterialsStats($pdo) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function getDefectsCount($pdo) {
+function getDefectsCount($pdo)
+{
     $sql = "SELECT COUNT(*) FROM `defects`"; // Убедитесь, что таблица называется defects
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchColumn();
 }
-//функция пагинации реестр оборудования и Таблица инвентарь 
+
+//функция пагинации реестр оборудования и Таблица инвентарь
 function getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params = [])
 {
     try {
@@ -605,14 +621,14 @@ function getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params = [])
         WHERE 1=1 $filter
         ORDER BY network_points.id
         LIMIT $limit OFFSET $offset";
-        
+
         $stmt = $pdo->prepare($sql);
-        
+
         // Привязываем параметры
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
-        
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $error) {
@@ -681,13 +697,13 @@ function getAllMaterialUsageFiltered($pdo, $page = 1, $perPage = 10, $filters = 
             $whereClause
             ORDER BY mu.used_at DESC
             LIMIT $offset, $perPage";
-    
+
     $stmt = $pdo->prepare($sql);
     foreach ($params as $key => $value) {
         $stmt->bindValue($key, $value);
     }
     $stmt->execute();
-    
+
     return [
         'items' => $stmt->fetchAll(PDO::FETCH_ASSOC),
         'total' => $total,
@@ -720,4 +736,13 @@ function getUsersForFilter($pdo)
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getDefectCategories($pdo)
+{
+    $sql = "SELECT * FROM defect_category ORDER BY name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>
