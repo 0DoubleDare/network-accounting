@@ -45,7 +45,7 @@ $statuses = getNetworkPointStatusList($pdo);
 
                         <div class="mb-3">
                             <label class="form-label">Фотография сетевой точки</label>
-                            <input type="file" name="image_path" class="form-control">
+                            <input type="file" name="image_name" class="form-control" accept="image/*">
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Добавить</button>

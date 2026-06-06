@@ -46,11 +46,11 @@ $action = $_GET['action'] ?? 'index';
 if ($action === 'index') {
     $typeList = getNetworkPointTypeList($pdo);
     $statusList = getNetworkPointStatusList($pdo);
-    
+
     // Главная функция Вывод + фильтрация (выполняет 2 действия)
     $points = getAllInventoryFiltered($pdo, $filter, $limit, $offset, $params);
-    
-    include '../app/includes/header.php';
+
+//    include '../app/includes/header.php';
     include '../app/view/inventory.php';
     exit();
 }
