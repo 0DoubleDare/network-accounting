@@ -583,20 +583,21 @@ function getPointsCount($pdo)
     return $stmt->fetchColumn();
 }
 
-function getMaterialsStats($pdo) {
-    
+function getMaterialsStats($pdo)
+{
+
     $sql_types = "SELECT COUNT(DISTINCT `type`) FROM `materials`";
     $stmt_types = $pdo->prepare($sql_types);
     $stmt_types->execute();
     $unique_types = $stmt_types->fetchColumn();
 
-    $sql_sum = "SELECT SUM(`unit`) FROM `materials`"; 
+    $sql_sum = "SELECT SUM(`unit`) FROM `materials`";
     $stmt_sum = $pdo->prepare($sql_sum);
     $stmt_sum->execute();
     $total_quantity = $stmt_sum->fetchColumn();
 
     return [
-        'unique_types'   => $unique_types,
+        'unique_types' => $unique_types,
         'total_quantity' => $total_quantity ?? 0
     ];
 }
@@ -750,6 +751,23 @@ function getDefectCategories($pdo)
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getDefectCountWithCategories($pdo)
+{
+    $sql = "SELECT dc.display_name, COUNT(d.id) as defect_count 
+        FROM defect_category dc
+        LEFT JOIN defects d ON dc.id = d.category
+        GROUP BY dc.id, dc.display_name
+        HAVING defect_count > 0";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    // Категории и количество дефектов нужно разнести по разным таблицам
+    return [
+        'categories' => array_keys($data),
+        'defect_count' => array_map('intval', array_values($data))
+    ];
 }
 
 ?>
