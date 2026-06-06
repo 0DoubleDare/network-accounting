@@ -204,11 +204,11 @@ function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
         'type' => $type,
         'location' => $location,
         'status' => $status,
-        'image_name' => $image_name
+        'image_name' => $image_path
     ]);
     $response = [
         'id' => $pdo->lastInsertId(),
-        'image_name' => $image_name
+        'image_name' => $image_path
     ];
     return $response;
 }
@@ -768,6 +768,25 @@ function getDefectCountWithCategories($pdo)
         'categories' => array_keys($data),
         'defect_count' => array_map('intval', array_values($data))
     ];
+//Функция для экпорта
+
+function exportToCSV($data, $headers, $filename) {
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '_' . date('Y-m-d_H-i-s') . '.csv"');
+    header('Cache-Control: no-cache, must-revalidate');
+    
+    // BOM для кириллицы в Excel
+    echo "\xEF\xBB\xBF";
+    
+    $output = fopen('php://output', 'w');
+    fputcsv($output, $headers, ';');
+    
+    foreach ($data as $row) {
+        fputcsv($output, $row, ';');
+    }
+    
+    fclose($output);
+    exit();
 }
 
 ?>
