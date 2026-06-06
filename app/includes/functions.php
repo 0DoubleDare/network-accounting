@@ -181,7 +181,7 @@ function addRegistrationLog($pdo, $user_id)
     return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
 }
 
-function uploudImage($image, $uploadDir = '..\public\storage\network_points')
+function uploudImage($image, $uploadDir = '..\public\storage\network_points\README.md')
 {
     $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
     $filename = uniqid('', true) . '.' . $extension;
@@ -196,7 +196,7 @@ function uploudImage($image, $uploadDir = '..\public\storage\network_points')
 // Поменял "image_path" на "image_name"
 function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
 {
-    $image_path = uploudImage($file);
+    $image_name = uploudImage($file);
     $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_name`) VALUES (:label, :type, :location, :status, :image_name)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -583,20 +583,27 @@ function getPointsCount($pdo)
     return $stmt->fetchColumn();
 }
 
-function getMaterialsStats($pdo)
-{
-    $sql = "SELECT 
-                COUNT(DISTINCT `type`) as unique_types, 
-                COUNT(*) as total_records 
-            FROM `materials`";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+function getMaterialsStats($pdo) {
+    
+    $sql_types = "SELECT COUNT(DISTINCT `type`) FROM `materials`";
+    $stmt_types = $pdo->prepare($sql_types);
+    $stmt_types->execute();
+    $unique_types = $stmt_types->fetchColumn();
+
+    $sql_sum = "SELECT SUM(`unit`) FROM `materials`"; 
+    $stmt_sum = $pdo->prepare($sql_sum);
+    $stmt_sum->execute();
+    $total_quantity = $stmt_sum->fetchColumn();
+
+    return [
+        'unique_types'   => $unique_types,
+        'total_quantity' => $total_quantity ?? 0
+    ];
 }
 
 function getDefectsCount($pdo)
 {
-    $sql = "SELECT COUNT(*) FROM `defects`"; // Убедитесь, что таблица называется defects
+    $sql = "SELECT COUNT(*) FROM `defects`";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchColumn();

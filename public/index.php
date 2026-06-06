@@ -31,11 +31,11 @@ $defectCount = getDefectsCount($pdo);
         <h4>Количество сетевых точек</h4>
         <h5> <?php echo $count  ?></h5><br>
 
-        <h4>Общее количество материалов</h4>
-        <h5><?php echo $materials['unique_types'];  ?></h5>
+        <h4>Количество различных типов материалов</h4>
+        <h5><?php echo $materials['unique_types']; ?></h5>
 
         <h4>Общее количество записей о списанных материалах</h4>
-        <h5><?php echo $materials['total_records'];  ?></h5>
+        <h5><?php echo $materials['total_quantity'];  ?></h5>
 
         <h4>Общее количество Дефектов</h4>
         <h5><?php echo $defectCount;  ?></h5>
