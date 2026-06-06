@@ -35,6 +35,10 @@
                 <a href="../controllers/inventorycontroller.php?action=index" class="btn btn-sm btn-outline-secondary">
                     &larr; Назад к точкам
                 </a>
+                <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
+                <a href="../controllers/materialusageControllers.php?action=index&point_id=<?= $point_id ?>" class="btn btn-sm btn-info">
+                    Расход материалов по этой точке
+                </a>
             </div>
 
             <!-- Минималистичная карточка фильтра -->
@@ -141,6 +145,7 @@
                         <th>Статус</th>
                         <th>Автор</th>
                         <th class="pe-4">Дата</th>
+                        <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody class="small">
@@ -167,6 +172,15 @@
                                 </td>
                                 <td><?= htmlspecialchars($defect['author'] ?? '—') ?></td>
                                 <td class="pe-4 text-muted"><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
+                                <td>
+                                    <?php if ($defect['status'] == 'open'): ?>
+                                        <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress">Начать работу</a>
+                                    <?php elseif ($defect['status'] == 'in_progress'): ?>
+                                        <a href="../controllers/defectscontroller.php?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed">Исправлено</a>
+                                    <?php else: ?>
+                                        Закрыто
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
