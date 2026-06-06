@@ -11,57 +11,7 @@ if (!isset($points)) {
 
 <?php include '../app/includes/header.php'; ?>
 
-<div class="container mt-4 w-20 p-3 border border-dark" style="background-color: #eee;">
-    <h1 class="text-center">Реестр оборудования</h1>
-    <a href="../app/view/insert_networck_point.php" class="btn btn-success mb-3">Добавить точку</a>
-    <a href="../controllers/exportcontroller.php?type=network_points">Экспорт</a>
-    <table class="table table-bordered table-striped">
-        <thead class="table-primary">
-        <tr>
-            <th>ID</th>
-            <th>Метка</th>
-            <th>Тип</th>
-            <th>Расположение</th>
-            <th>Статус</th>
-            <th>Последние посещение</th>
-            <th>Дата создания</th>
-            <th>Кол-во дефектов</th>
-            <th>Действие</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php if (empty($points)): ?>
-            <tr>
-                <td colspan="6">Нет данных</td>
-            </tr>
-        <?php else: ?>
-            <?php foreach ($points as $point): ?>
-                <tr>
-                    <th><?php echo $point['id'] ?></th>
-                    <th><?php echo $point['label'] ?></th>
-                    <th><?php echo $point['type'] ?></th>
-                    <th><?php echo $point['location'] ?></th>
-                    <th><?php echo $point['status'] ?></th>
-                    <th>
-                        <?php
-                        //Посещение
-                        if (!empty($point['last_check'])) {
-                            echo htmlspecialchars($point['last_check']);
-                        } else {
-                            echo '-';
-                        }
-                        ?>
-                    </th>
-                    <th><?php echo $point['point_created_at'] ?></th>
-                    <th>
-                        <?php
-                        // Получаем количество дефектов для точки
-                        $sql = "SELECT COUNT(*) as defect_count FROM defects WHERE point_id = :point_id";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['point_id' => $point['id']]);
-                        echo $stmt->fetchColumn();
-                        ?>
-                    </th>
+<div class="container my-5">
 
     <!-- Шапка страницы -->
     <div class="row mb-4 align-items-center">
@@ -71,10 +21,11 @@ if (!isset($points)) {
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <a href="../app/view/insert_networck_point.php" class="btn btn-success mb-3">Добавить точку</a>
+            <a href="../controllers/exportcontroller.php?type=network_points" class="btn btn-outline-secondary mb-3 ms-2">Экспорт</a>
         </div>
     </div>
 
-    <!-- Минималистичная карточка фильтра (из примера) -->
+    <!-- Минималистичная карточка фильтра -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-secondary-subtle bg-white">
@@ -93,9 +44,11 @@ if (!isset($points)) {
                             <label class="form-label small fw-medium text-muted">Тип оборудования</label>
                             <select name="type" class="form-select form-select-sm">
                                 <option value="">Все</option>
-                                <?php foreach ($typeList as $type): ?>
-                                    <option value="<?= $type['id'] ?>" <?= (isset($_GET['type']) && $_GET['type'] == $type['id']) ? 'selected' : '' ?>><?= htmlspecialchars($type['display_name']) ?></option>
-                                <?php endforeach; ?>
+                                <?php if (isset($typeList)): ?>
+                                    <?php foreach ($typeList as $type): ?>
+                                        <option value="<?= $type['id'] ?>" <?= (isset($_GET['type']) && $_GET['type'] == $type['id']) ? 'selected' : '' ?>><?= htmlspecialchars($type['display_name']) ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -110,9 +63,11 @@ if (!isset($points)) {
                             <label class="form-label small fw-medium text-muted">Статус</label>
                             <select name="status" class="form-select form-select-sm">
                                 <option value="">Все</option>
-                                <?php foreach ($statusList as $status): ?>
-                                    <option value="<?= $status['id'] ?>" <?= (isset($_GET['status']) && $_GET['status'] == $status['id']) ? 'selected' : '' ?>><?= htmlspecialchars($status['display_name']) ?></option>
-                                <?php endforeach; ?>
+                                <?php if (isset($statusList)): ?>
+                                    <?php foreach ($statusList as $status): ?>
+                                        <option value="<?= $status['id'] ?>" <?= (isset($_GET['status']) && $_GET['status'] == $status['id']) ? 'selected' : '' ?>><?= htmlspecialchars($status['display_name']) ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -154,10 +109,10 @@ if (!isset($points)) {
                         <?php foreach ($points as $point): ?>
                             <tr>
                                 <td class="ps-4"><?php echo $point['id'] ?></td>
-                                <td><?php echo $point['label'] ?></td>
-                                <td><?php echo $point['type'] ?></td>
-                                <td><?php echo $point['location'] ?></td>
-                                <td><?php echo $point['status'] ?></td>
+                                <td><strong><?php echo htmlspecialchars($point['label']) ?></strong></td>
+                                <td><?php echo htmlspecialchars($point['type']) ?></td>
+                                <td><?php echo htmlspecialchars($point['location']) ?></td>
+                                <td><?php echo htmlspecialchars($point['status']) ?></td>
                                 <td>
                                     <?php
                                     if (!empty($point['last_check'])) {
@@ -167,7 +122,7 @@ if (!isset($points)) {
                                     }
                                     ?>
                                 </td>
-                                <td><?php echo $point['point_created_at'] ?></td>
+                                <td><?php echo htmlspecialchars($point['point_created_at']) ?></td>
                                 <td>
                                     <?php
                                     $sql = "SELECT COUNT(*) as defect_count FROM defects WHERE point_id = :point_id";
@@ -177,9 +132,9 @@ if (!isset($points)) {
                                     ?>
                                 </td>
                                 <td class="pe-4">
-                                    <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>" class="btn btn-outline-primary">Подробнее</a>
-                                    <a href="./deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-outline-danger">Удалить</a>
-                                    <a href="../app/view/updateNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-outline-secondary">Изменить</a>
+                                    <a href="../controllers/defectscontroller.php?point_id=<?= $point['id'] ?>">Подробнее</a>
+                                    <a href="../app/view/updateNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
+                                    <a href="./deleteNetworkPoint.php?id=<?php echo htmlspecialchars($point['id']); ?>" class="btn btn-outline-danger btn-sm ms-2" onclick="return confirm('Удалить?')">Удалить</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -190,23 +145,23 @@ if (!isset($points)) {
         </div>
     </div>
 
-    <!-- Твоя оригинальная пагинация ссылками -->
+    <!-- Пагинация ссылками -->
     <?php if (isset($pages) && $pages > 0): ?>
         <div class="mb-4">
             <?php if ($page > 1): ?>
-                <a href="?action=index&point_id=<?= $id ?>&page=<?= $page - 1 ?>">← Назад</a>
+                <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>">← Назад</a>
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $pages; $i++): ?>
                 <?php if ($i == $page): ?>
                     <strong><?= $i ?></strong>
                 <?php else: ?>
-                    <a href="?action=index&point_id=<?= $id ?>&page=<?= $i ?>"><?= $i ?></a>
+                    <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>"><?= $i ?></a>
                 <?php endif; ?>
             <?php endfor; ?>
 
             <?php if ($page < $pages): ?>
-                <a href="?action=index&point_id=<?= $id ?>&page=<?= $page + 1 ?>">Вперёд →</a>
+                <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>">Вперёд →</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -217,4 +172,6 @@ if (!isset($points)) {
     </div>
 
 </div>
+
 <?php include '../app/includes/footer.php'; ?>
+
