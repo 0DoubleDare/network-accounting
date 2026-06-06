@@ -763,13 +763,14 @@ function getDefectCountWithCategories($pdo)
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    // Категории и количество дефектов нужно разнести по разным таблицам
+    
     return [
         'categories' => array_keys($data),
         'defect_count' => array_map('intval', array_values($data))
     ];
-//Функция для экпорта
+} // <-- ВОТ ЭТУ СКОБКУ ОНИ ПОТЕРЯЛИ!
 
+//Функция для экпорта
 function exportToCSV($data, $headers, $filename) {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '_' . date('Y-m-d_H-i-s') . '.csv"');
@@ -790,3 +791,5 @@ function exportToCSV($data, $headers, $filename) {
 }
 
 ?>
+
+
