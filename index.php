@@ -10,7 +10,7 @@ session_start();
 //print_r($_SESSION);
 require './config/db.php';
 require './app/includes/functions.php';
-require './app/includes/functions/get_dashbord_stats.php';
+require './app/includes/functions/dashbord_stats.php';
 
 $count = getPointsCount($pdo);
 $materials = getMaterialsStats($pdo);

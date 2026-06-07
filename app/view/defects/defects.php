@@ -28,6 +28,9 @@
                class="btn btn-sm btn-info">
                 Расход материалов по этой точке
             </a>
+            <a href="../../app/view/material_usage/insert_material_usage.php">
+                Добавить списание
+            </a>
         </div>
     </div>
     <div class="row mb-4">
