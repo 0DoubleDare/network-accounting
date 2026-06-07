@@ -8,37 +8,51 @@ $types = materialType($pdo);
 ?>
 
 <?php include '../../includes/header.php'; ?>
-    <form method="post" action="../../../controllers/materials/update_material.php">
-        <input type="hidden" name="id" value="<?php echo $idMaterials['id']; ?>">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Редактирование материала</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="../../../controllers/materials/update_material.php">
+                            <input type="hidden" name="id" value="<?php echo $idMaterials['id']; ?>">
 
-        <label>Название</label><br>
-        <input type="text" name="name" value="<?php echo htmlspecialchars($idMaterials['name']); ?>"><br><br>
+                            <div class="mb-3">
+                                <label class="form-label">Название</label>
+                                <input type="text" name="name"
+                                       value="<?php echo htmlspecialchars($idMaterials['name']); ?>"
+                                       class="form-control">
+                            </div>
 
-        <label>тип</label><br>
-        <select name="type">
+                            <div class="mb-3">
+                                <label class="form-label">Тип</label>
+                                <select name="type" class="form-select">
+                                    <?php foreach ($typesId as $typeId): ?>
+                                        <option value="<?= $typeId['id'] ?>" <?= $typeId['id'] == $idMaterials['type'] ? 'selected' : '' ?> >
+                                            <?= $typeId['display_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                    <?php foreach ($types as $type): ?>
+                                        <option value="<?= $type['id'] ?>"><?php echo htmlspecialchars($type['name']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-            <?php foreach ($typesId as $typeId): ?>
-                <option value="<?= $typeId['id'] ?>" <?= $typeId['id'] == $idMaterials['type'] ? 'selected' : '' ?> >
-                    <?= $typeId['display_name']; ?>
-                </option>
-            <?php endforeach; ?>
+                            <div class="mb-3">
+                                <label class="form-label">Единица измерения</label>
+                                <select name="unit" class="form-select">
+                                    <option value="m">m</option>
+                                    <option value="pcs">pcs</option>
+                                </select>
+                            </div>
 
-            <?php foreach ($types as $type): ?>
-                <option value="<?= $type['id'] ?>"><?php echo htmlspecialchars($type['name']); ?></option>
-            <?php endforeach; ?>
-        </select><br><br>
-
-        <label>Единица измерения</label><br>
-        <select name="unit">
-            <!--            <option value="--><?php //= $idMaterials['id'] ?><!--">-->
-            <?php //echo htmlspecialchars($idMaterials['unit']); ?><!--</option>-->
-
-            <option value="m">m</option>
-            <option value="pcs">pcs</option>
-        </select><br><br>
-
-        <button type="submit">Редактировать</button>
-
-
-    </form>
+                            <button type="submit" class="btn btn-primary">Редактировать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php include '../../includes/footer.php'; ?>

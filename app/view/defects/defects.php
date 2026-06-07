@@ -12,7 +12,7 @@
     <!-- Шапка страницы с информацией о точке -->
     <div class="row mb-4">
         <h1>Информация</h1>
-        <img src="../public/storage/network_points/<?= $point['image_name'] ?>"
+        <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
              alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
         <div class="text-muted small">
             <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>

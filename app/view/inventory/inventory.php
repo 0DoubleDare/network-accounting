@@ -135,7 +135,7 @@ if (!isset($points)) {
                                 </td>
                                 <td class="pe-4">
                                     <a href="../defects/defects_view.php?point_id=<?= $point['id'] ?>">Подробнее</a>
-                                    <a href="../../app/view/inventory/update_network_pointid=<?php echo htmlspecialchars($point['id']); ?>"
+                                    <a href="../../app/view/inventory/update_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
                                        class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
                                     <a href="./delete_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
                                        class="btn btn-outline-danger btn-sm ms-2" onclick="return confirm('Удалить?')">Удалить</a>
