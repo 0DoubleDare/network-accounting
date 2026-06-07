@@ -2,16 +2,22 @@
 /**
  * Учёт бракованных товаров. Список того что сломалось. Добавление дефекта или редактирование
  */
-//require '../config/db.php';
-//require '../app/includes/functions.php';
+// require 'config/db.php';
+// require '../includes/functions.php';
+// $point_id = $_GET['point_id'] ?? 0;
+// $point = getIDDefects($pdo, $point_id);
 ?>
 
 <?php include '../app/includes/header.php'; ?>
+
+
+
 <div class="container my-5">
 
     <!-- Шапка страницы с информацией о точке -->
     <div class="row mb-4">
         <div class="col-12">
+            
             <h1 class="h3 mb-2 fw-bold">Дефекты точки: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
             <div class="text-muted small">
                 <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
@@ -26,6 +32,8 @@
         </div>
     </div>
 
+
+
     <!-- Навигация и Форма фильтрации -->
     <div class="row mb-4">
         <div class="col-12">
@@ -34,7 +42,8 @@
             <div class="mb-3">
                 <a href="../controllers/inventorycontroller.php?action=index" class="btn btn-sm btn-outline-secondary">
                     &larr; Назад к точкам
-                </a>
+                </a><br>
+                <a href="strDefects.php" type="button">Добавить списание</a>
             </div>
 
             <!-- Минималистичная карточка фильтра -->
@@ -126,7 +135,7 @@
 
         </div>
     </div>
-
+    
     <!-- Строгая таблица с дефектами -->
     <div class="row mb-4">
         <div class="col-12">

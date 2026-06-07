@@ -13,7 +13,7 @@ require '../app/includes/functions.php';
 
 $count = getPointsCount($pdo);
 $materials = getMaterialsStats($pdo);
-$defectCount = getDefectsCount($pdo);
+$defectCount = getDefectsStatsByCategory($pdo);
 
 ?>
 <?php include '../app/includes/header.php'; ?>
@@ -37,8 +37,13 @@ $defectCount = getDefectsCount($pdo);
         <h4>Общее количество записей о списанных материалах</h4>
         <h5><?php echo $materials['total_quantity'];  ?></h5>
 
-        <h4>Общее количество Дефектов</h4>
-        <h5><?php echo $defectCount;  ?></h5>
+        <h4>Статистика дефектов по категориям:</h4>
+        <?php foreach ($defectCount as $item): ?>
+
+            <h5><?php echo htmlspecialchars($item['category']); ?>:</h5> 
+            <?php echo $item['count']; ?> шт.
+
+        <?php endforeach; ?>
 
     </form>
 </body>
