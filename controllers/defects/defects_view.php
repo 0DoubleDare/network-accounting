@@ -1,9 +1,15 @@
 <?php
 session_start();
-
 require '../../config/db.php';
 require '../../app/includes/functions.php';
 
+if (!empty($_SESSION['user_info']['user_id'])) {
+    $sql = "
+        UPDATE network_points SET last_check = current_timestamp() WHERE id = :point_id;
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['point_id' => $_GET['point_id']]);
+}
 //Пагинация
 $limit = 1;
 $categories = getDefectCategories($pdo);
