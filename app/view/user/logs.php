@@ -74,7 +74,7 @@
 
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary" style="color: #fff;">Фильтр</button>
-                    <a href="../controllers/exportcontroller.php?type=logs">Экспорт</a>
+                    <a href="../controllers/export_to_csv.php?type=logs">Экспорт в CSV</a>
                     <a href="?" class="btn btn-outline-secondary" style="color: #000;">Сбросить</a>
                 </div>
             </form>

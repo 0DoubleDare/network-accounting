@@ -22,12 +22,16 @@ if ($action === 'index') {
 // фильтрация
     $materialTypes = getMaterialTypeList($pdo);
     $materialUnits = getMaterialUnits($pdo);
-// плагинация
+// пагинация
     $result = getAllMaterialsFiltered($pdo, $page, $perPage, $filters);
 
 
     include '../../app/view/materials/materials.php';
 
     exit();
+} else if ($action === 'delete') {
+    $id = $_GET['id'];
+
+    deleteMaterials($pdo, $id);
 }
 ?>

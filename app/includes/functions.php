@@ -553,7 +553,9 @@ function getAllMaterialsFiltered($pdo, $page = 1, $perPage = 10, $filters = [])
     $countStmt->execute();
     $total = $countStmt->fetchColumn();
     // Основной запрос
-    $sql = "SELECT m.*, mt.display_name as type_name 
+    $sql = "SELECT 
+                m.*, 
+                mt.display_name as type_name
             FROM materials m 
             LEFT JOIN material_type mt ON m.type = mt.id 
             $whereClause
