@@ -32,7 +32,7 @@ $message = getMessage();
             <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required maxlength="50"
                    id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"><br><br>
 
-            <button type="submit" class="btn btn-outline-info w-100">Зарегистрироваться</button>
+            <button type="submit" class="btn btn-outline-primary w-100">Зарегистрироваться</button>
             <br><br>
 
             <p>

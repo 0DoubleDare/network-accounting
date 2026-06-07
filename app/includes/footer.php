@@ -3,20 +3,22 @@
  * Подвал сайта. Закрывает теги, подключает скрипты, используем на всех страницах в самом конце
  */
 ?>
-<!-- Подключаем Bootstrap 5 CSS и иконки -->
-<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
-<!--<link rel="stylesheet" href="assets/css/style.css">-->
 
 </main>
-<footer class="site-footer bg-white pt-5 pb-4 mt-auto border-top">
+
+<footer class="site-footer bg-white pt-2 pb-4 mt-auto border-top">
     <div class="container">
-        <div class="row text-center text-md-start">
-            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-                <h3 class="mb-3">Сетевая бухгалтерия</h3>
+        <!-- text-md-start выравнивает левую часть по левому краю, а на мобилках центрует -->
+        <div class="row text-center text-md-start align-items-start">
+
+            <!-- Левая колонка с названием проекта (поставили mt-5, чтобы опустить текст ниже) -->
+            <div class="col-md-6 col-lg-4 mt-5">
+                <h3 class="mb-3">Network accounting</h3>
                 <p class="text-muted">Учёт сетевой инфраструктуры</p>
             </div>
-            <div class="col-md-5 col-lg-10 col-xl-5 mt-3" style="margin-left: auto;">
+
+            <!-- Правая колонка: ms-auto толкает её вправо, text-md-end выравнивает контент по правому краю -->
+            <div class="col-md-6 col-lg-4 mt-5 ms-auto text-md-end">
                 <h4 class="mb-3">Соцсети</h4>
                 <ul class="list-unstyled">
                     <li class="mb-2">
@@ -27,16 +29,13 @@
                             <i class="fab fa-github me-2"></i>GitHub
                         </a>
                     </li>
-
                 </ul>
-                <p class="copyright text-muted">
-                    &copy; <?php echo date('Y'); ?> Сетевая бухгалтерия
+                <p class="copyright text-muted mt-4">
+                    &copy; 2026 Network accounting
                 </p>
             </div>
 
-
         </div>
-    </div>
     </div>
 </footer>
 

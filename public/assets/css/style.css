@@ -2,6 +2,10 @@
 Стили для всего проекта (сайта). Цвета, шрифты, таблицы, кнопки и т.д.
 */
 
+.content {
+    flex: 1 0 auto;
+}
+
 /** Footer **/
 
 /* 1. Прижимаем футер к низу */
@@ -16,9 +20,6 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
-
-
-
 
 
 /* Адаптивность для планшетов и десктопов */
@@ -108,12 +109,12 @@ body {
     .site-header {
         padding: 12px 20px;
     }
-    
+
     .header-container {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .logo-title {
         font-size: 20px;
     }

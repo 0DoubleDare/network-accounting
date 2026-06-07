@@ -30,32 +30,32 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
 
         <a href="<?= $web_root ?>controllers/inventory/inventory_view.php?action=index">
-            <button type="button" class="btn btn-info">Инвентарь</button>
+            <button type="button" class="btn btn-primary">Инвентарь</button>
         </a>
         <a href="<?= $web_root ?>controllers/materials/materials_view.php?action=index">
-            <button type="button" class="btn btn-info">Материалы</button>
+            <button type="button" class="btn btn-primary">Материалы</button>
         </a>
         <a href="<?= $web_root ?>controllers/materials_usage/materials_usage_view.php?action=index">
-            <button type="button" class="btn btn-info">Расход материалов</button>
+            <button type="button" class="btn btn-primary">Расход материалов</button>
         </a>
         <nav style="display: flex; gap: 12px; align-items: center">
             <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                 <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
 
                 <?php if (isset($_SESSION['user_info']['role']) && $_SESSION['user_info']['role'] === 'admin'): ?>
-                    <a href="<?= $web_root ?>controllers/logs.php?action=index">
+                    <a href="<?= $web_root ?>controllers/logscontroller.php?action=index">
                         <button type="button" class="btn btn-secondary">Журнал действий</button>
                     </a>
                 <?php endif; ?>
 
-                <a href="<?= $web_root ?>controllers/user/logout.php">
+                <a href="<?= $web_root ?>controllers/logout.php">
                     <button type="button" class="btn btn-danger">Выйти</button>
                 </a>
             <?php else: ?>
-                <a href="<?= $web_root ?>app/view/user/registration.php">
+                <a href="<?= $web_root ?>app/view/registration.php">
                     <button type="button" class="btn btn-primary">Регистрация</button>
                 </a>
-                <a href="<?= $web_root ?>app/view/user/login.php">
+                <a href="<?= $web_root ?>app/view/login.php">
                     <button type="button" class="btn btn-success">Войти</button>
                 </a>
             <?php endif; ?>
