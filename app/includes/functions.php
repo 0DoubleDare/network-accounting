@@ -181,7 +181,7 @@ function addRegistrationLog($pdo, $user_id)
     return addLog($pdo, $user_id, 'Регистрация нового пользователя (роль: operator)', 'users', $user_id);
 }
 
-function uploudImage($image, $uploadDir = '..\public\storage\network_points\README.md')
+function uploadImage($image, $uploadDir = '..\public\storage\network_points')
 {
     $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
     $filename = uniqid('', true) . '.' . $extension;
@@ -194,9 +194,8 @@ function uploudImage($image, $uploadDir = '..\public\storage\network_points\READ
 
 
 // Поменял "image_path" на "image_name"
-function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
+function insertNetworkPoint($pdo, $label, $type, $location, $status, $image_name)
 {
-    $image_name = uploudImage($file);
     $sql = "INSERT INTO network_points (`label`, `type`, `location`, `status`, `image_name`) VALUES (:label, :type, :location, :status, :image_name)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -204,11 +203,11 @@ function insertNetvorkPoint($pdo, $label, $type, $location, $status, $file)
         'type' => $type,
         'location' => $location,
         'status' => $status,
-        'image_name' => $image_path
+        'image_name' => $image_name
     ]);
     $response = [
         'id' => $pdo->lastInsertId(),
-        'image_name' => $image_path
+        'image_name' => $image_name
     ];
     return $response;
 }
@@ -220,9 +219,9 @@ function deleteNetworkPoint($pdo, $id)
     $stmt->execute(['id' => $id]);
 }
 
-function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
+function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $image_name)
 {
-    $image_name = uploudImage($file);
+//    $image_name = uploadImage($file);
     $sql = "UPDATE `network_points` SET label=:label, type=:type, location=:location, status=:status, image_name=:image_name WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
@@ -231,7 +230,8 @@ function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $file)
         'type' => $type,
         'location' => $location,
         'status' => $status,
-        'image_name' => $image_name]);
+        'image_name' => $image_name
+    ]);
 }
 
 function networkPointInfo($pdo, $id)

@@ -311,11 +311,11 @@ DROP TABLE IF EXISTS `network_points`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `network_points` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(20) NOT NULL,
+  `label` varchar(255) NOT NULL,
   `type` int(11) NOT NULL,
-  `location` varchar(100) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `status` int(11) NOT NULL,
-  `last_check` date DEFAULT NULL,
+  `last_check` timestamp DEFAULT NULL DEFAULT current_timestamp(),
   `point_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `image_name` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`),
