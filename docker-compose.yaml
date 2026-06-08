@@ -5,8 +5,8 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html/
-    command: >
-      sh -c "sed -i 's/localhost/db/g' /var/www/html/config/db.php && apache2-foreground"
+    environment:
+      - DB_HOST_PURE=db
     depends_on:
       - db
   db:

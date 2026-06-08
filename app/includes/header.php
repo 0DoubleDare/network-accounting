@@ -2,11 +2,12 @@
 // Берем корень нашего проекта. Нужно чтобы при подключении хедера в разные файлы не ломались отноcительные пути
 // УСТАРЕЛО / DEPRECATED
 
-//$web_root = explode('/', trim($_SERVER['SCRIPT_NAME'], '/'))[0];
-//$web_root = '/' . $web_root . '/';
-
-$web_root = '/';
-
+$web_root = explode('/', trim($_SERVER['SCRIPT_NAME'], '/'))[0];
+if ($web_root != 'network-accounting') {
+    $web_root = '/';
+} else {
+    $web_root = '/' . $web_root . '/';
+}
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
