@@ -8,6 +8,7 @@ if ($web_root != 'network-accounting') {
 } else {
     $web_root = '/' . $web_root . '/';
 }
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -52,7 +53,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </a>
                 <?php endif; ?>
 
-                <a href="<?= $web_root ?>controllers/logout.php">
+                <a href="<?= $web_root ?>controllers/user/logout.php">
                     <button type="button" class="btn btn-danger">Выйти</button>
                 </a>
             <?php else: ?>
