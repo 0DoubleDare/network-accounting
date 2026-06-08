@@ -12,8 +12,10 @@
     <!-- Шапка страницы с информацией о точке -->
     <div class="row mb-4">
         <h1>Информация</h1>
-        <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
-             alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
+        <?php if (isset($point['image_name'])): ?>
+            <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
+                 alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
+        <?php endif; ?>
         <div class="text-muted small">
             <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
             <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
@@ -124,7 +126,10 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th class="ps-4">№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Категория</th>
                         <th>Критичность</th>
                         <th>Описание</th>
@@ -144,7 +149,10 @@
                     <?php else: ?>
                         <?php foreach ($defects as $defect): ?>
                             <tr>
-                                <td class="ps-4 fw-bold"><?= htmlspecialchars($defect['id']) ?></td>
+                                <td class="ps-4"><?= $offset++ ?></td>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                    <th class="ps-4 fw-bold"><?= $defect['id'] ?></th>
+                                <?php endif; ?>
                                 <td><?= htmlspecialchars($defect['category'] ?? '—') ?></td>
                                 <td>
                                     <span class="fw-medium"><?= htmlspecialchars($defect['severity'] ?? '—') ?></span>

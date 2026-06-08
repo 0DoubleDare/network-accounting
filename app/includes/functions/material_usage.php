@@ -38,3 +38,12 @@ function insertUsageMaterials($pdo, $material_id, $quantity, $point_id, $used_by
     ]);
     return ['id' => $pdo->lastInsertId()];
 }
+
+function checkMaterialIsUse($pdo, $material_id)
+{
+    $sql = "SELECT * FROM material_usage WHERE material_id = :material_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['material_id' => $material_id]);
+
+    return $stmt->rowCount() > 0;
+}

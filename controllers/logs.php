@@ -42,6 +42,7 @@ $logActions = getLogActions($pdo);
 $logTables = getLogTables($pdo);
 $result = getAllLogsFiltered($pdo, $page, $perPage, $filters);
 
+$offset = ($page - 1) * $perPage + 1;
 //include '../app/includes/header.php';
 include '../app/view/user/logs.php';
 //include '../app/includes/footer.php';

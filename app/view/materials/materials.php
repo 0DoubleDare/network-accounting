@@ -158,7 +158,10 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light text-muted small">
                             <tr>
-                                <th class="ps-4">ID</th>
+                                <th class="ps-4">№</th>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                    <th class="ps-4">ID</th>
+                                <?php endif; ?>
                                 <th>Название</th>
                                 <th>Тип</th>
                                 <th>Единица измерения</th>
@@ -175,7 +178,10 @@
                             <?php else: ?>
                                 <?php foreach ($result['materials'] as $material): ?>
                                     <tr>
-                                        <td class="ps-4 fw-bold"><?php echo $material['id']; ?></td>
+                                        <th class="ps-4"><?= $offset++ ?></th>
+                                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                            <th class="ps-4 fw-bold"><?= $material['id']; ?></th>
+                                        <?php endif; ?>
                                         <td><?php echo htmlspecialchars($material['name']); ?></td>
                                         <td><?php echo htmlspecialchars($material['type_name']); ?></td>
                                         <td>
