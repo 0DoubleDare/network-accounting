@@ -38,7 +38,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Метка</label>
                             <input type="text" name="label" class="form-control form-control-sm"
-                                value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
+                                   value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
                         </div>
 
                         <!-- Тип -->
@@ -58,7 +58,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Расположение</label>
                             <input type="text" name="location" class="form-control form-control-sm"
-                                value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
+                                   value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
                         </div>
 
                         <!-- Статус -->
@@ -143,18 +143,20 @@ if (!isset($points)) {
                                     ?>
                                 </td>
                                 <td class="pe-4">
-                                    <a href="../defects/defects_view.php?point_id=<?= $point['id'] ?>">Подробнее</a>
+                                    <a href="../defects/defects_view.php?action=index&point_id=<?= $point['id'] ?>&category=&severity=&status=">Подробнее</a>
                                     <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                                         <a href="../../app/view/inventory/update_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                        class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
+                                           class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
                                         <a href="./delete_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                        class="btn btn-outline-danger btn-sm ms-2" 
-                                        onclick="return confirm('Удалить точку?')">Удалить</a>
+                                           class="btn btn-outline-danger btn-sm ms-2"
+                                           onclick="return confirm('Удалить точку?')">Удалить</a>
                                     <?php else: ?>
-                                        <button class="btn btn-outline-secondary btn-sm ms-2" disabled 
-                                                title="Доступно только зарегистрированным пользователям">Изменить</button>
-                                        <button class="btn btn-outline-danger btn-sm ms-2" disabled 
-                                                title="Доступно только зарегистрированным пользователям">Удалить</button>
+                                        <button class="btn btn-outline-secondary btn-sm ms-2" disabled
+                                                title="Доступно только зарегистрированным пользователям">Изменить
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm ms-2" disabled
+                                                title="Доступно только зарегистрированным пользователям">Удалить
+                                        </button>
                                     <?php endif; ?>
                                 </td>
                             </tr>

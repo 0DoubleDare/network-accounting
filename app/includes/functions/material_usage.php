@@ -47,3 +47,4 @@ function checkMaterialIsUse($pdo, $material_id)
 
     return $stmt->rowCount() > 0;
 }
+

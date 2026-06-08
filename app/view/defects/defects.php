@@ -4,7 +4,7 @@
  */
 //require '../config/db.php';
 //require '../app/includes/functions.php';
- 
+
 
 ?>
 
@@ -16,11 +16,11 @@
 
         <div class="col-12">
             <h1 class="h3 mb-3 fw-bold">Информация о точке: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
-            
+
             <?php if (!empty($point['image_name'])): ?>
                 <div class="mb-3">
                     <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-thumbnail"
-                        alt="Изображение точки <?= htmlspecialchars($point['label']) ?>" style="max-height: 250px;">
+                         alt="Изображение точки <?= htmlspecialchars($point['label']) ?>" style="max-height: 250px;">
                 </div>
             <?php endif; ?>
 
@@ -28,21 +28,21 @@
                 <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
                 <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
             </div>
-            
+
             <!-- Навигационная панель с кнопками в едином стиле проекта -->
             <div class="d-flex flex-wrap gap-2 mb-3">
                 <a href="../inventory/inventory_view.php?action=index" class="btn btn-sm btn-outline-secondary">
                     &larr; Назад к точкам
                 </a>
-                
+
                 <a href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= urlencode($point['label'] ?? '') ?>"
-                    class="btn btn-sm btn-outline-secondary">
+                   class="btn btn-sm btn-outline-secondary">
                     <i class="fas fa-list me-1"></i> Расход материалов по точке
                 </a>
-                
+
                 <!-- Теперь ссылка передаёт ID точки в GET-параметре, и форма заполнится автоматически! -->
-                <a href="../../app/view/material_usage/insert_material_usage.php?id=<?= htmlspecialchars($point['id'] ?? '') ?>" 
-                    class="btn btn-sm btn-primary">
+                <a href="../../app/view/material_usage/insert_material_usage.php?id=<?= htmlspecialchars($point['id'] ?? '') ?>"
+                   class="btn btn-sm btn-primary">
                     <i class="fas fa-plus me-1"></i> Добавить списание
                 </a>
             </div>
@@ -60,7 +60,7 @@
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
                     <img src="../public/storage/defects/<?= htmlspecialchars($point['image_path']) ?>" alt="Фото точки"
-                        class="img-thumbnail" style="max-height: 150px;">
+                         class="img-thumbnail" style="max-height: 150px;">
                 </div>
             <?php endif; ?>
         </div>
@@ -129,7 +129,7 @@
                             <button type="submit" class="btn btn-sm btn-primary w-50">Применить</button>
                             <a href="?action=index&point_id=<?= $point_id ?>&category=&severity=&status="
 
-                            class="btn btn-sm btn-outline-secondary w-50 text-center">Сбросить</a>
+                               class="btn btn-sm btn-outline-secondary w-50 text-center">Сбросить</a>
 
 
                         </div>
@@ -170,7 +170,7 @@
                     <?php else: ?>
                         <?php foreach ($defects as $defect): ?>
                             <tr>
-                                <td class="ps-4"><?= $offset++ ?></td>
+                                <td class="ps-4"><?= $offset++ + 1 ?></td>
                                 <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
                                     <th class="ps-4 fw-bold"><?= $defect['id'] ?></th>
                                 <?php endif; ?>
@@ -178,7 +178,8 @@
                                 <td>
                                     <span class="badge bg-light text-dark border"><?= htmlspecialchars($defect['severity'] ?? '—') ?></span>
                                 </td>
-                                <td class="text-wrap" style="max-width: 300px;"><?= htmlspecialchars($defect['description'] ?? '') ?></td>
+                                <td class="text-wrap"
+                                    style="max-width: 300px;"><?= htmlspecialchars($defect['description'] ?? '') ?></td>
                                 <td>
                                     <span class="badge bg-light text-dark border border-secondary-subtle">
                                         <?= htmlspecialchars($defect['status'] ?? '') ?>
@@ -189,19 +190,24 @@
                                 <td class="pe-4 text-end"> <!-- Ячейка с кнопкой просмотра фотки -->
                                     <?php if (!empty($defect['image_name'])): ?>
                                         <!-- Уникальная кнопка открытия для конкретного ID дефекта -->
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
                                             <i class="fas fa-image me-1"></i> Просмотр
                                         </button>
 
-                                        
+
                                         <!-- Уникальное диалоговое окно -->
-                                        <dialog id="openImage<?= $defect['id'] ?>" class="border-0 rounded-3 shadow-lg p-4 text-center" style="max-width: 500px; outline: none; background: white;">
+                                        <dialog id="openImage<?= $defect['id'] ?>"
+                                                class="border-0 rounded-3 shadow-lg p-4 text-center"
+                                                style="max-width: 500px; outline: none; background: white;">
                                             <div class="d-flex justify-content-end mb-2">
-                                                <button type="button" class="btn-close" onclick="document.getElementById('openImage<?= $defect['id'] ?>').close()"></button>
+                                                <button type="button" class="btn-close"
+                                                        onclick="document.getElementById('openImage<?= $defect['id'] ?>').close()"></button>
                                             </div>
                                             <img src="../public/storage/defects/<?= htmlspecialchars($defect['image_name']) ?>"
-                                                alt="Изображение дефекта" class="img-fluid rounded mb-2">
-                                            <p class="text-muted small mb-0">Кликните на крестик или нажмите Esc для закрытия</p>
+                                                 alt="Изображение дефекта" class="img-fluid rounded mb-2">
+                                            <p class="text-muted small mb-0">Кликните на крестик или нажмите Esc для
+                                                закрытия</p>
 
 
                                         </dialog>
@@ -210,12 +216,11 @@
                                     <?php endif; ?>
 
 
-
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
-                    
+
                     </tbody>
                 </table>
             </div>
@@ -232,11 +237,8 @@
 
                         <!-- Назад -->
                         <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-<<<<<<< HEAD
                             <a class="page-link text-secondary border-secondary-subtle small"
-=======
-
-                                href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">←
+                               href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">←
                                 Назад</a>
                         </li>
 
@@ -251,7 +253,7 @@
 
                                     <a class="page-link text-dark border-secondary-subtle"
 
-                                        href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>"><?= $i ?></a>
+                                       href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>"><?= $i ?></a>
                                 <?php endif; ?>
                             </li>
                         <?php endfor; ?>
@@ -262,7 +264,7 @@
                             <a class="page-link text-secondary border-secondary-subtle small"
 
 
-                                href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
+                               href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                                 Вперёд →
                             </a>
                         </li>
