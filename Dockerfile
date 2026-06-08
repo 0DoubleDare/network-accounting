@@ -1,6 +1,8 @@
-FROM ubuntu:latest
-LABEL authors="nikita"
+FROM php:8.2-apache
 
-ENTRYPOINT ["top", "-b"]
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN a2enmod rewrite
 
-#TODO: Если не лень будет напишу докер контейнер для сайта
+COPY . /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html
