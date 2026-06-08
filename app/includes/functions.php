@@ -785,5 +785,51 @@ function exportToCSV($data, $headers, $filename)
     exit();
 }
 
+function defect_category($pdo){
+    $sql = "SELECT * FROM defect_category";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute();
+    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+}
+
+function uploadImageDefects($image, $uploadDir = '../../storage/defects')
+{
+    $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+    $filename = uniqid('', true) . '.' . $extension;
+    $fullPath = $uploadDir . $filename;
+
+    move_uploaded_file($image['tmp_name'], $fullPath);
+
+    return $filename;
+}
+
+function insert_defects($pdo, $point_id, $category, $severity, $description, $status, $created_by, $file){
+    $image_name = uploadImageDefects($file);
+    $sql = "INSERT INTO defects(point_id, category, severity, description, status, created_by, image_name) 
+    VALUES(:point_id, :category, :severity, :description, :status, :created_by, :image_name)";
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute([
+        'point_id' => $point_id,
+        'category' => $category,
+        'severity' => $severity,
+        'description' => $description,
+        'status' => $status,
+        'created_by' => $created_by,
+        'image_name' => $image_name
+    ]);
+    $response = [
+        'id' => $pdo->lastInsertId()
+    ];
+    return $response;
+    }
+
+    function deleteDefects($pdo, $id){
+        $sql = "DELETE FROM `defects` WHERE id = :id";
+        $stmt = $pdo -> prepare($sql);
+        $stmt -> execute([
+            'id' => $id
+        ]);
+    }
+
 
 ?>

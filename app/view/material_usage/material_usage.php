@@ -19,6 +19,9 @@
             <a href="../../">назад</a>
             <a href="../export_to_csv?type=material_usage">Экспорт</a>
         </p>
+        <p>
+            <button onclick="printDiv4('printable-table')" >Печать</button>
+        </p>
 
         <!-- Навигация (кнопка назад в едином стиле) -->
         <div class="mb-3">
@@ -72,14 +75,14 @@
                     <div class="col-md-4">
                         <label class="form-label small fw-medium text-muted">Дата с</label>
                         <input type="date" name="date_from" class="form-control form-control-sm"
-                               value="<?php echo htmlspecialchars($_GET['date_from'] ?? ''); ?>">
+                            value="<?php echo htmlspecialchars($_GET['date_from'] ?? ''); ?>">
                     </div>
 
                     <!-- Дата по -->
                     <div class="col-md-4">
                         <label class="form-label small fw-medium text-muted">по</label>
                         <input type="date" name="date_to" class="form-control form-control-sm"
-                               value="<?php echo htmlspecialchars($_GET['date_to'] ?? ''); ?>">
+                            value="<?php echo htmlspecialchars($_GET['date_to'] ?? ''); ?>">
                     </div>
 
                     <!-- Кнопки управления фильтром -->
@@ -99,11 +102,14 @@
         <?php else: ?>
 
             <!-- Строгая современная таблица -->
-            <div class="table-responsive card border-secondary-subtle bg-white mb-3">
+            <div id="printable-table" class="table-responsive card border-secondary-subtle bg-white mb-3">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th class="ps-4">№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Материал</th>
                         <th>Тип</th>
                         <th class="text-end">Количество</th>
@@ -118,7 +124,10 @@
                     <tbody class="small">
                     <?php foreach ($result['items'] as $item): ?>
                         <tr>
-                            <td class="ps-4"><?php echo $item['id']; ?></td>
+                            <td class="ps-4"><?= $offset++ ?></td>
+                            <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                <th class="ps-4"><?= $item['id'] ?></th>
+                            <?php endif; ?>
                             <td><strong><?php echo htmlspecialchars($item['material_name'] ?? '—'); ?></strong></td>
                             <td><?php echo htmlspecialchars($item['material_type'] ?? '—'); ?></td>
                             <td class="text-end fw-bold"><?php echo $item['quantity']; ?></td>
@@ -154,7 +163,7 @@
                     <div>
                         <?php if ($result['page'] > 1): ?>
                             <a href="?action=index&page=<?php echo $result['page'] - 1; ?>&material_id=<?php echo urlencode($_GET['material_id'] ?? ''); ?>&point_id=<?php echo urlencode($_GET['point_id'] ?? ''); ?>&used_by=<?php echo urlencode($_GET['used_by'] ?? ''); ?>&date_from=<?php echo urlencode($_GET['date_from'] ?? ''); ?>&date_to=<?php echo urlencode($_GET['date_to'] ?? ''); ?>"
-                               class="text-decoration-none me-2">← Предыдущая</a>
+                                class="text-decoration-none me-2">← Предыдущая</a>
                         <?php else: ?>
                             <span class="text-muted me-2">← Предыдущая</span>
                         <?php endif; ?>
@@ -163,7 +172,7 @@
 
                         <?php if ($result['page'] < $result['totalPages']): ?>
                             <a href="?action=index&page=<?php echo $result['page'] + 1; ?>&material_id=<?php echo urlencode($_GET['material_id'] ?? ''); ?>&point_id=<?php echo urlencode($_GET['point_id'] ?? ''); ?>&used_by=<?php echo urlencode($_GET['used_by'] ?? ''); ?>&date_from=<?php echo urlencode($_GET['date_from'] ?? ''); ?>&date_to=<?php echo urlencode($_GET['date_to'] ?? ''); ?>"
-                               class="text-decoration-none ms-2">Следующая →</a>
+                                class="text-decoration-none ms-2">Следующая →</a>
                         <?php else: ?>
                             <span class="text-muted ms-2">Следующая →</span>
                         <?php endif; ?>

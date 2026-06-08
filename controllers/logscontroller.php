@@ -3,13 +3,13 @@ session_start();
 
 if (!isset($_SESSION['user_info']) || empty($_SESSION['user_info'])) {
     $_SESSION['error'] = "Необходимо авторизоваться";
-    header('Location: ../app/view/user/login.php');
+    header('Location: ../app/view/login.php');
     exit();
 }
 
 if ($_SESSION['user_info']['role'] !== 'admin') {
     $_SESSION['error'] = "Доступ запрещён. Только для администраторов";
-    header('Location: ../public/dashboard.php');
+    header('Location: ../public/index.php');
     exit();
 }
 
@@ -32,18 +32,17 @@ $filters = [
     'date_to' => isset($_GET['date_to']) ? trim($_GET['date_to']) : ''
 ];
 
-$filters = array_filter($filters, function ($value) {
+$filters = array_filter($filters, function($value) {
     return $value !== '' && $value !== null;
 });
 
 $logUsers = getLogUsers($pdo);
-$logRoles = getLogRoles($pdo);
+$logRoles = getLogRoles($pdo);  
 $logActions = getLogActions($pdo);
 $logTables = getLogTables($pdo);
 $result = getAllLogsFiltered($pdo, $page, $perPage, $filters);
 
-$offset = ($page - 1) * $perPage + 1;
-//include '../app/includes/header.php';
-include '../app/view/user/logs.php';
-//include '../app/includes/footer.php';
+include '../app/includes/header.php';
+include '../app/view/logs.php';
+include '../app/includes/footer.php';
 ?>

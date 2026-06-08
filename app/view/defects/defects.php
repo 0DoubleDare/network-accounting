@@ -4,6 +4,8 @@
  */
 //require '../config/db.php';
 //require '../app/includes/functions.php';
+ 
+
 ?>
 
 <?php include '../../app/includes/header.php'; ?>
@@ -11,6 +13,7 @@
 
     <!-- Шапка страницы с информацией о точке -->
     <div class="row mb-4">
+<<<<<<< HEAD
         <div class="col-12">
             <h1 class="h3 mb-3 fw-bold">Информация о точке: <?= htmlspecialchars($point['label'] ?? '') ?></h1>
             
@@ -43,13 +46,43 @@
                     <i class="fas fa-plus me-1"></i> Добавить списание
                 </a>
             </div>
+=======
+        <h1>Информация</h1>
+        <?php if (isset($point['image_name'])): ?>
+            <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
+                 alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
+        <?php endif; ?>
+        <div class="text-muted small">
+            <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
+            <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
+        </div>
+        <!-- Кнопка назад -->
+        <div class="mb-3">
+            <a href="../inventory/inventory_view.php?action=index" class="btn btn-sm btn-outline-secondary">
+                &larr; Назад к точкам
+            </a>
+            <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
+            <a href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= $point['label'] ?>"
+                class="btn btn-sm btn-info">
+                Расход материалов по этой точке
+            </a>
+            <a href="../../app/view/material_usage/insert_material_usage.php">
+                Добавить списание
+            </a>
+            <button onclick="printDiv('printable-table')" >Печать</button>
+>>>>>>> develop
         </div>
     </div>
 
     <div class="row mb-4">
         <div class="col-12">
+<<<<<<< HEAD
             <h2 class="h4 mb-2 fw-bold text-dark">Дефекты точки</h2>
 
+=======
+            <h2 class="h3 mb-2 fw-bold">Дефекты точки</h2>
+    <a href="../../app/view/defects/insert_defects.php?point_id=<?php echo htmlspecialchars($_GET['point_id']); ?>" type="submit">Добавить дефект</a>
+>>>>>>> develop
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
                     <img src="../public/storage/defects/<?= htmlspecialchars($point['image_path']) ?>" alt="Фото точки"
@@ -121,7 +154,11 @@
                         <div class="col-md-3 d-flex align-items-end gap-2">
                             <button type="submit" class="btn btn-sm btn-primary w-50">Применить</button>
                             <a href="?action=index&point_id=<?= $point_id ?>&category=&severity=&status="
+<<<<<<< HEAD
                             class="btn btn-sm btn-outline-secondary w-50 text-center">Сбросить</a>
+=======
+                                class="btn btn-outline-secondary">Сбросить</a>
+>>>>>>> develop
                         </div>
                     </form>
                 </div>
@@ -131,13 +168,16 @@
     </div>
 
     <!-- Строгая таблица с дефектами -->
-    <div class="row mb-4">
+    <div id="printable-table" class="row mb-4">
         <div class="col-12">
             <div class="table-responsive card border-secondary-subtle bg-white">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th class="ps-4">№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Категория</th>
                         <th>Критичность</th>
                         <th>Описание</th>
@@ -157,7 +197,10 @@
                     <?php else: ?>
                         <?php foreach ($defects as $defect): ?>
                             <tr>
-                                <td class="ps-4 fw-bold"><?= htmlspecialchars($defect['id']) ?></td>
+                                <td class="ps-4"><?= $offset++ ?></td>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                    <th class="ps-4 fw-bold"><?= $defect['id'] ?></th>
+                                <?php endif; ?>
                                 <td><?= htmlspecialchars($defect['category'] ?? '—') ?></td>
                                 <td>
                                     <span class="badge bg-light text-dark border"><?= htmlspecialchars($defect['severity'] ?? '—') ?></span>
@@ -176,6 +219,7 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
                                             <i class="fas fa-image me-1"></i> Просмотр
                                         </button>
+<<<<<<< HEAD
                                         
                                         <!-- Уникальное диалоговое окно -->
                                         <dialog id="openImage<?= $defect['id'] ?>" class="border-0 rounded-3 shadow-lg p-4 text-center" style="max-width: 500px; outline: none; background: white;">
@@ -185,14 +229,30 @@
                                             <img src="../public/storage/defects/<?= htmlspecialchars($defect['image_name']) ?>"
                                                 alt="Изображение дефекта" class="img-fluid rounded mb-2">
                                             <p class="text-muted small mb-0">Кликните на крестик или нажмите Esc для закрытия</p>
+=======
+                                        <dialog id="openImage" onclick="this.close()">
+                                            <img src="../public/storage/defects/<?= $defect['image_name'] ?>"
+                                                alt="Изображение дефекта для <?= $point['label'] ?>">
+                                            <p>Нажми на меня, чтобы закрыть окно</p>
+>>>>>>> develop
                                         </dialog>
                                     <?php else: ?>
                                         <span class="text-muted small">—</span>
                                     <?php endif; ?>
+<<<<<<< HEAD
+=======
+
+<a href="../../../controllers/defects/deleteDefects.php?id=<?= $defect['id'] ?>&point_id=<?= $_GET['point_id'] ?>" 
+   onclick="return confirm('Вы уверены, что хотите удалить этот дефект?');" 
+   class="text-danger">
+   удалить
+</a>
+>>>>>>> develop
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
+                    
                     </tbody>
                 </table>
             </div>
@@ -209,7 +269,11 @@
 
                         <!-- Назад -->
                         <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+<<<<<<< HEAD
                             <a class="page-link text-secondary border-secondary-subtle small"
+=======
+                            <a class="page-link text-dark border-secondary-subtle"
+>>>>>>> develop
                                 href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">←
                                 Назад</a>
                         </li>
@@ -220,7 +284,11 @@
                                 <?php if ($i == $page): ?>
                                     <span class="page-link bg-secondary border-secondary text-white small"><?= $i ?></span>
                                 <?php else: ?>
+<<<<<<< HEAD
                                     <a class="page-link text-secondary border-secondary-subtle small"
+=======
+                                    <a class="page-link text-dark border-secondary-subtle"
+>>>>>>> develop
                                         href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>"><?= $i ?></a>
                                 <?php endif; ?>
                             </li>
@@ -228,7 +296,11 @@
 
                         <!-- Вперёд -->
                         <li class="page-item <?= ($page >= $pages) ? 'disabled' : '' ?>">
+<<<<<<< HEAD
                             <a class="page-link text-secondary border-secondary-subtle small"
+=======
+                            <a class="page-link text-dark border-secondary-subtle"
+>>>>>>> develop
                                 href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                                 Вперёд →
                             </a>
