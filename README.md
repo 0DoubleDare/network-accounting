@@ -45,7 +45,7 @@
 
 ### Работа с сессиями
 
-id пользователя должен храниться в $_SESSION['user_info']['id']
+id пользователя должен храниться в $_SESSION['user_info']['user_id']
 
 роль пользователя в $_SESSION['user_info']['role']
 
