@@ -188,19 +188,20 @@
                                             ?>
                                         </td>
                                         <td class="pe-4">
-                                            <!--                                            <a href="?action=edit&id=-->
-                                            <?php //echo $material['id']; ?><!--" class="btn btn-sm btn-outline-secondary me-1">-->
-                                            <!--                                                Изменить-->
-                                            <!--                                            </a>-->
+                                            <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                                             <a href="../../app/view/materials/update_material.php?id=<?php echo $material['id']; ?>"
-                                               class="btn btn-sm btn-outline-secondary me-1">
+                                            class="btn btn-sm btn-outline-secondary me-1">
                                                 Изменить
                                             </a>
                                             <a href="?action=delete&id=<?php echo $material['id']; ?>"
-                                               class="btn btn-sm btn-outline-danger"
-                                               onclick="return confirm('Удалить материал?')">
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Удалить материал?')">
                                                 Удалить
                                             </a>
+                                        <?php else: ?>
+                                            <button class="btn btn-sm btn-outline-secondary me-1" disabled>Изменить</button>
+                                            <button class="btn btn-sm btn-outline-danger" disabled>Удалить</button>
+                                        <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

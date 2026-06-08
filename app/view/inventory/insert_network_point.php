@@ -25,7 +25,9 @@ $statuses = getNetworkPointStatusList($pdo);
                                 <label class="form-label">Тип</label>
                                 <select name="type" class="form-select">
                                     <?php foreach ($types as $type): ?>
-                                        <option value="<?= $type['id'] ?>"><?= $type['display_name'] ?></option>
+                                        <option value="<?php echo (int)$type['id'] ?>">
+                                        <?php echo htmlspecialchars($type['display_name']) ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -39,7 +41,9 @@ $statuses = getNetworkPointStatusList($pdo);
                                 <label class="form-label">Статус</label>
                                 <select name="status" class="form-select">
                                     <?php foreach ($statuses as $status): ?>
-                                        <option value="<?= $status['id'] ?>"><?= $status['display_name'] ?></option>
+                                        <option value="<?php echo (int)$status['id'] ?>">
+                                        <?php echo htmlspecialchars($status['display_name']) ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

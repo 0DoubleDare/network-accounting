@@ -2,6 +2,7 @@
 session_start();
 require '../../config/db.php';
 require '../../app/includes/functions.php';
+require '../../app/includes/auth.php';
 
 if (!empty($_SESSION['user_info']['user_id'])) {
     $sql = "
@@ -47,6 +48,8 @@ $point_id = $_GET['point_id'] ?? 0;
 
 // контроллер для для работы с режимами действиями дефектов
 if ($action === 'change_status') {
+    // Проверяем авторизацию для смены статуса
+    $user = requireAuth($pdo);
     $defect_id = $_GET['defect_id'] ?? 0;
     $new_status = $_GET['status'] ?? '';
     $point_id = $_GET['point_id'] ?? 0;
@@ -61,12 +64,10 @@ if ($action === 'change_status') {
                 ':defect_id' => $defect_id
             ]);
             // Добавляем запись в лог
-            if (isset($_SESSION['user_info']['user_id'])) {
-                $status_text = '';
-                if ($new_status == 'in_progress') $status_text = 'Начат';
-                elseif ($new_status == 'closed') $status_text = 'Закрыт';
-                addLog($pdo, $_SESSION['user_info']['user_id'], 'Изменение статуса дефекта на "' . $status_text . '"', 'defects', $defect_id);
-            }
+            $status_text = '';
+            if ($new_status == 'in_progress') $status_text = 'Начат';
+            elseif ($new_status == 'closed') $status_text = 'Закрыт';
+            addLog($pdo, $user['user_id'], 'Изменение статуса дефекта на "' . $status_text . '"', 'defects', $defect_id);
         } catch (PDOException $e) {
             error_log("Error changing defect status: " . $e->getMessage());
         }
