@@ -52,10 +52,10 @@ if (session_status() === PHP_SESSION_NONE) {
                     <button type="button" class="btn btn-danger">Выйти</button>
                 </a>
             <?php else: ?>
-                <a href="<?= $web_root ?>app/view/registration.php">
+                <a href="<?= $web_root ?>app/view/user/registration.php">
                     <button type="button" class="btn btn-primary">Регистрация</button>
                 </a>
-                <a href="<?= $web_root ?>app/view/login.php">
+                <a href="<?= $web_root ?>app/view/user/login.php">
                     <button type="button" class="btn btn-success">Войти</button>
                 </a>
             <?php endif; ?>

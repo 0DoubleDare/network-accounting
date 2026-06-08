@@ -114,7 +114,9 @@ if (!isset($points)) {
                                 <td><strong><?php echo htmlspecialchars($point['label']) ?></strong></td>
                                 <td><?php echo htmlspecialchars($point['type']) ?></td>
                                 <td><?php echo htmlspecialchars($point['location']) ?></td>
-                                <td><?php echo htmlspecialchars($point['status']) ?></td>
+                                <td>
+                                    <span style="color: <?= $point['status'] == 'Активный' ? 'green' : 'red' ?>"><?php echo htmlspecialchars($point['status']) ?></span>
+                                </td>
                                 <td>
                                     <?php
                                     if (!empty($point['last_check'])) {
