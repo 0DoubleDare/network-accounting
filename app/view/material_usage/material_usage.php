@@ -106,7 +106,10 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th class="ps-4">№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Материал</th>
                         <th>Тип</th>
                         <th class="text-end">Количество</th>
@@ -121,7 +124,10 @@
                     <tbody class="small">
                     <?php foreach ($result['items'] as $item): ?>
                         <tr>
-                            <td class="ps-4"><?php echo $item['id']; ?></td>
+                            <td class="ps-4"><?= $offset++ ?></td>
+                            <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                                <th class="ps-4"><?= $item['id'] ?></th>
+                            <?php endif; ?>
                             <td><strong><?php echo htmlspecialchars($item['material_name'] ?? '—'); ?></strong></td>
                             <td><?php echo htmlspecialchars($item['material_type'] ?? '—'); ?></td>
                             <td class="text-end fw-bold"><?php echo $item['quantity']; ?></td>

@@ -27,6 +27,7 @@ if ($action === 'index') {
 // плагинация
     $result = getAllMaterialUsageFiltered($pdo, $page, $perPage, $filters);
 
+    $offset = ($page - 1) * $perPage + 1;
     include '../../app/view/material_usage/material_usage.php';
     exit();
 }

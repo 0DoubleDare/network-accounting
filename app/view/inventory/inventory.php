@@ -92,7 +92,10 @@ if (!isset($points)) {
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th class="ps-4">№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Метка</th>
                         <th>Тип</th>
                         <th>Расположение</th>
@@ -111,12 +114,15 @@ if (!isset($points)) {
                     <?php else: ?>
                         <?php foreach ($points as $point): ?>
                             <tr>
-                                <td class="ps-4"><?php echo $point['id'] ?></td>
-                                <td><strong><?php echo htmlspecialchars($point['label']) ?></strong></td>
-                                <td><?php echo htmlspecialchars($point['type']) ?></td>
-                                <td><?php echo htmlspecialchars($point['location']) ?></td>
+                                <td class="ps-4"><?= $offset++ + 1 ?></td>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') == 'admin'): ?>
+                                    <td class="ps-4"><?= $point['id'] ?></td>
+                                <?php endif; ?>
+                                <td><strong><?= htmlspecialchars($point['label']) ?></strong></td>
+                                <td><?= htmlspecialchars($point['type']) ?></td>
+                                <td><?= htmlspecialchars($point['location']) ?></td>
                                 <td>
-                                    <span style="color: <?= $point['status'] == 'Активный' ? 'green' : 'red' ?>"><?php echo htmlspecialchars($point['status']) ?></span>
+                                    <span style="color: <?= $point['status'] == 'Активный' ? 'green' : 'red' ?>"><?= htmlspecialchars($point['status']) ?></span>
                                 </td>
                                 <td>
                                     <?php
