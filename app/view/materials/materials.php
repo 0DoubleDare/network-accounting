@@ -33,6 +33,9 @@
                     <a href="../export_to_csv.php?type=materials" class="btn btn-sm btn-success">
                         Экспорт в CSV
                     </a>
+                    <div>
+                        <button onclick="printDiv2('printable-table2')">Печать</button>
+                    </div>
                 </div>
 
                 <!-- Карточка фильтра -->
@@ -43,8 +46,8 @@
                             <div class="col-md-4">
                                 <label class="form-label small fw-medium text-muted">Название</label>
                                 <input type="text" name="name" class="form-control"
-                                       value="<?php echo htmlspecialchars($_GET['name'] ?? ''); ?>"
-                                       placeholder="Поиск по названию">
+                                    value="<?php echo htmlspecialchars($_GET['name'] ?? ''); ?>"
+                                    placeholder="Поиск по названию">
                             </div>
 
                             <!-- Тип -->
@@ -101,7 +104,7 @@
                                     unset($queryParams['page']);
                                     ?>
                                     <a class="page-link text-dark border-secondary-subtle"
-                                       href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] - 1])); ?>">
+                                        href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] - 1])); ?>">
                                         ← Назад
                                     </a>
                                 <?php else: ?>
@@ -121,7 +124,7 @@
                                         unset($queryParams['page']);
                                         ?>
                                         <a class="page-link text-dark border-secondary-subtle"
-                                           href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $i])); ?>">
+                                            href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $i])); ?>">
                                             <?php echo $i; ?>
                                         </a>
                                     <?php endif; ?>
@@ -137,7 +140,7 @@
                                     unset($queryParams['page']);
                                     ?>
                                     <a class="page-link text-dark border-secondary-subtle"
-                                       href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] + 1])); ?>">
+                                        href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] + 1])); ?>">
                                         Вперёд →
                                     </a>
                                 <?php else: ?>
@@ -151,7 +154,7 @@
             </div>
         <?php endif; ?>
         <!-- Таблица с материалами -->
-        <div class="row mb-4">
+        <div id="printable-table2" class="row mb-4">
             <div class="col-12">
                 <div class="table-responsive card border-secondary-subtle bg-white">
                     <div class="card-body p-0">
