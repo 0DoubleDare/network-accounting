@@ -1,0 +1,121 @@
+/*
+Стили для всего проекта (сайта). Цвета, шрифты, таблицы, кнопки и т.д.
+*/
+
+.content {
+    flex: 1 0 auto;
+}
+
+/** Footer **/
+
+/* 1. Прижимаем футер к низу */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+/* Адаптивность для планшетов и десктопов */
+@media (min-width: 768px) {
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+
+    .social-links {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 767px) {
+    .site-footer {
+        padding: 1.5rem 0 1rem 0;
+    }
+
+    .footer-section {
+        margin-bottom: 1rem;
+    }
+
+    .footer-section:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+/* Header */
+
+/* Стили для шапки */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    padding: 15px 40px;
+    border-bottom: 1px solid #c0c0c0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.site-logo {
+    text-decoration: none;
+}
+
+.site-logo:hover {
+    opacity: 0.8;
+}
+
+.logo-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.header-nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-greeting {
+    font-size: 14px;
+    color: #555;
+    background-color: #f0f0f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 12px 20px;
+    }
+
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo-title {
+        font-size: 20px;
+    }
+}
