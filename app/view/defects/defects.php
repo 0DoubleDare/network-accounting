@@ -15,7 +15,7 @@
     <div class="row mb-4">
         <h1>Информация</h1>
         <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
-             alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
+            alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
         <div class="text-muted small">
             <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
             <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
@@ -33,6 +33,7 @@
             <a href="../../app/view/material_usage/insert_material_usage.php">
                 Добавить списание
             </a>
+            <button onclick="printDiv('printable-table')" >Печать</button>
         </div>
     </div>
     <div class="row mb-4">
@@ -110,7 +111,7 @@
                         <div class="col-md-3 d-flex align-items-end gap-2">
                             <button type="submit" class="btn btn-primary">Применить</button>
                             <a href="?action=index&point_id=<?= $point_id ?>&category=&severity=&status="
-                               class="btn btn-outline-secondary">Сбросить</a>
+                                class="btn btn-outline-secondary">Сбросить</a>
                         </div>
                     </form>
                 </div>
@@ -120,7 +121,7 @@
     </div>
 
     <!-- Строгая таблица с дефектами -->
-    <div class="row mb-4">
+    <div id="printable-table" class="row mb-4">
         <div class="col-12">
             <div class="table-responsive card border-secondary-subtle bg-white">
                 <table class="table table-hover align-middle mb-0">
@@ -181,7 +182,7 @@
                                         </button>
                                         <dialog id="openImage" onclick="this.close()">
                                             <img src="../public/storage/defects/<?= $defect['image_name'] ?>"
-                                                 alt="Изображение дефекта для <?= $point['label'] ?>">
+                                                alt="Изображение дефекта для <?= $point['label'] ?>">
                                             <p>Нажми на меня, чтобы закрыть окно</p>
                                         </dialog>
                                     <?php endif; ?>
@@ -212,7 +213,7 @@
                         <!-- Назад -->
                         <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
                             <a class="page-link text-dark border-secondary-subtle"
-                               href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">←
+                                href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">←
                                 Назад</a>
                         </li>
 
@@ -223,7 +224,7 @@
                                     <span class="page-link bg-dark border-dark text-white"><?= $i ?></span>
                                 <?php else: ?>
                                     <a class="page-link text-dark border-secondary-subtle"
-                                       href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>"><?= $i ?></a>
+                                        href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>"><?= $i ?></a>
                                 <?php endif; ?>
                             </li>
                         <?php endfor; ?>
@@ -231,7 +232,7 @@
                         <!-- Вперёд -->
                         <li class="page-item <?= ($page >= $pages) ? 'disabled' : '' ?>">
                             <a class="page-link text-dark border-secondary-subtle"
-                               href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
+                                href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>&category=<?= urlencode($_GET['category'] ?? '') ?>&severity=<?= urlencode($_GET['severity'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                                 Вперёд →
                             </a>
                         </li>
