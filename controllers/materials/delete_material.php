@@ -2,12 +2,19 @@
 session_start();
 require '../../config/db.php';
 require '../../app/includes/functions.php';
-require '../../app/includes/functions/material_usage.php';
+require '../../app/includes/auth.php';
+
+// Проверяем авторизацию
+$user = requireAuth($pdo);
 
 $id = $_POST['id'];
+$material_id = $id;
 
-if (!checkMaterialIsUse($pdo, $id)) {
-    deleteMaterials($pdo, $id);
-}
+deleteMaterials($pdo, $id);
 
-header('Location: ./materials_view.php');
+// Добавляем в лог
+addLog($pdo, $user['user_id'], 'Удаление материала', 'materials', $material_id);
+
+header('Location: ../app/view/materials.php');
+exit();
+?>

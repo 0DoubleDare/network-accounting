@@ -27,6 +27,9 @@
                    aria-describedby="passwordHelpBlock" placeholder="Введите пароль"><br><br>
             <button type="submit" class="btn btn-outline-success w-100">Войти</button>
         </div>
+        <p class="text-center">
+        Нет аккаунта? - <a href="registration.php" class="link-primary">Зарегистрироваться</a>
+        </p>
     </form>
     <?php if (!empty($_SESSION['error'])): ?>
         <div class="alert alert-danger">

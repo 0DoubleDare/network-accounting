@@ -22,6 +22,7 @@ if (!isset($points)) {
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <a href="../../app/view/inventory/insert_network_point.php" class="btn btn-success mb-3">Добавить точку</a>
             <a href="../export_to_csv.php?type=network_points" class="btn btn-outline-secondary mb-3 ms-2">Экспорт</a>
+            <button onclick="printDiv('printable-table')">Печать</button>
         </div>
     </div>
 
@@ -37,7 +38,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Метка</label>
                             <input type="text" name="label" class="form-control form-control-sm"
-                                   value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
+                                value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
                         </div>
 
                         <!-- Тип -->
@@ -57,7 +58,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Расположение</label>
                             <input type="text" name="location" class="form-control form-control-sm"
-                                   value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
+                                value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
                         </div>
 
                         <!-- Статус -->
@@ -85,7 +86,7 @@ if (!isset($points)) {
     </div>
 
     <!-- Строгая таблица с оборудованием -->
-    <div class="row mb-4">
+    <div id="printable-table" class="row mb-4">
         <div class="col-12">
             <div class="table-responsive card border-secondary-subtle bg-white">
                 <table class="table table-hover align-middle mb-0">
@@ -143,10 +144,18 @@ if (!isset($points)) {
                                 </td>
                                 <td class="pe-4">
                                     <a href="../defects/defects_view.php?point_id=<?= $point['id'] ?>">Подробнее</a>
-                                    <a href="../../app/view/inventory/update_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                       class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
-                                    <a href="./delete_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                       class="btn btn-outline-danger btn-sm ms-2" onclick="return confirm('Удалить?')">Удалить</a>
+                                    <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
+                                        <a href="../../app/view/inventory/update_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
+                                        class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
+                                        <a href="./delete_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
+                                        class="btn btn-outline-danger btn-sm ms-2" 
+                                        onclick="return confirm('Удалить точку?')">Удалить</a>
+                                    <?php else: ?>
+                                        <button class="btn btn-outline-secondary btn-sm ms-2" disabled 
+                                                title="Доступно только зарегистрированным пользователям">Изменить</button>
+                                        <button class="btn btn-outline-danger btn-sm ms-2" disabled 
+                                                title="Доступно только зарегистрированным пользователям">Удалить</button>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
