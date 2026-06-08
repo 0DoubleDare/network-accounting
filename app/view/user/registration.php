@@ -35,9 +35,8 @@ $message = getMessage();
             <button type="submit" class="btn btn-outline-primary w-100">Зарегистрироваться</button>
             <br><br>
 
-            <p>
+            <p class="text-center">
                 Уже есть аккаунт? - <a href="login.php" class="link-success">Войти</a>
-
             </p>
         </div>
     </form>
