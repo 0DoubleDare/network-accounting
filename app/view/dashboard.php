@@ -227,11 +227,11 @@
             type: 'pie', // Тип диаграммы: bar (столбцы), line (линия), pie (круговая)
             data: {
                 // labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
-                labels: <?php echo json_encode($materialsCountWithCategories['categories']); ?>,
+                labels: <?= json_encode($networkPointsWithCategories['categories']); ?>,
                 datasets: [{
                     label: 'Количество',
                     // data: [12, 19, 3, 5, 2, 3],
-                    data: <?= json_encode($materialsCountWithCategories['count']); ?>,
+                    data: <?= json_encode($networkPointsWithCategories['count']); ?>,
                     backgroundColor: [
                         'rgb(13 110 253 / 0.7)',
                         'rgb(13 202 240 / 0.7)',

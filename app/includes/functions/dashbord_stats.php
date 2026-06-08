@@ -38,9 +38,9 @@ function getMaterialsCountWithCategories($pdo)
 function getNetworkPointsCountWithCategories($pdo)
 {
     $sql = "
-        SELECT npt.display_name, COUNT(np.id) as network_point_count
-        FROM network_points np
-                 LEFT JOIN network_point_type npt ON npt.id = np.status
+       SELECT npt.display_name, COUNT(np.id) as network_point_count
+         FROM network_points np
+         LEFT JOIN network_point_type npt ON npt.id = np.type
         GROUP BY npt.id, npt.display_name
         HAVING network_point_count > 0
     ";
