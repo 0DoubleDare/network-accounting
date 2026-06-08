@@ -22,8 +22,8 @@ $types = materialType($pdo);
                             <div class="mb-3">
                                 <label class="form-label">Название</label>
                                 <input type="text" name="name"
-                                       value="<?php echo htmlspecialchars($idMaterials['name']); ?>"
-                                       class="form-control">
+                                    value="<?php echo htmlspecialchars($idMaterials['name']); ?>"
+                                    class="form-control">
                             </div>
 
                             <div class="mb-3">
