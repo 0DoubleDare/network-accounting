@@ -24,7 +24,7 @@ if ($page < 1) $page = 1;
 $perPage = 20;
 
 $filters = [
-    'user_id' => isset($_GET['user_id']) && $_GET['user_id'] !== '' ? (int)$_GET['user_id'] : '',
+    'user_login' => isset($_GET['user_login']) ? trim($_GET['user_login']) : '',
     'role' => isset($_GET['role']) ? trim($_GET['role']) : '',
     'action' => isset($_GET['action']) ? trim($_GET['action']) : '',
     'target_table' => isset($_GET['target_table']) ? trim($_GET['target_table']) : '',
@@ -32,14 +32,17 @@ $filters = [
     'date_to' => isset($_GET['date_to']) ? trim($_GET['date_to']) : ''
 ];
 
+// Убираем пустые фильтры
 $filters = array_filter($filters, function ($value) {
     return $value !== '' && $value !== null;
 });
 
-$logUsers = getLogUsers($pdo);
-$logRoles = getLogRoles($pdo);
+// Получаем данные для фильтров
+$logRoles = ['admin', 'operator']; // Роли из enum
 $logActions = getLogActions($pdo);
 $logTables = getLogTables($pdo);
+
+// Получаем результаты с пагинацией
 $result = getAllLogsFiltered($pdo, $page, $perPage, $filters);
 
 $offset = ($page - 1) * $perPage + 1;
