@@ -9,6 +9,9 @@ $types = materialType($pdo);
 
 <?php include '../../includes/header.php'; ?>
     <div class="container mt-4">
+        <button onclick="history.back()" class="btn btn-sm btn-outline-secondary">
+            &larr; Назад
+        </button>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -22,8 +25,8 @@ $types = materialType($pdo);
                             <div class="mb-3">
                                 <label class="form-label">Название</label>
                                 <input type="text" name="name"
-                                    value="<?php echo htmlspecialchars($idMaterials['name']); ?>"
-                                    class="form-control">
+                                       value="<?php echo htmlspecialchars($idMaterials['name']); ?>"
+                                       class="form-control">
                             </div>
 
                             <div class="mb-3">

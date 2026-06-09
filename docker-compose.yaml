@@ -8,12 +8,19 @@ services:
     environment:
       - DB_HOST_PURE=db
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Ждет, пока db успешно пройдет healthcheck
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80/" ] # Или другой внутренний порт вашего веб-сервера
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
   db:
     image: mysql:8.0
     command: >
-      sh -c "sed 's/NO_AUTO_CREATE_USER//g' /docker-entrypoint-initdb.d/init.sql > /docker-entrypoint-initdb.d/00_fixed.sql
-      && exec /usr/local/bin/docker-entrypoint.sh mysqld"
+      sh -c "sed 's/NO_AUTO_CREATE_USER//g' /docker-entrypoint-initdb.d/init.sql > /docker-entrypoint-initdb.d/00_fixed.sql && exec /usr/local/bin/docker-entrypoint.sh mysqld"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ""
@@ -24,5 +31,12 @@ services:
       - ./install/network_accounting_db.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root" ]
+      interval: 10s        # Как часто проверять
+      timeout: 5s         # Сколько ждать ответа
+      retries: 5          # Количество неудачных попыток до статуса unhealthy
+      start_period: 15s   # Время на запуск и инициализацию (создание таблиц)
+
 volumes:
   db_data:
