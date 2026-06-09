@@ -5,7 +5,7 @@ require '../../config/db.php';
 require '../../app/includes/functions.php';
 
 // Пагинация
-$limit = 10;
+$limit = 25;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 $offset = ($page - 1) * $limit;
@@ -30,9 +30,17 @@ if (!empty($_GET['status'])) {
     $filter .= " AND network_points.status = :status";
     $params[':status'] = $_GET['status'];
 }
+if (!empty($_GET['date_to'])) {
+    $filter .= " AND network_points.point_created_at <= :date_to";
+    $params[':date_to'] = $_GET['date_to'];
+}
+if (!empty($_GET['date_from'])) {
+    $filter .= " AND network_points.point_created_at >= :date_from";
+    $params[':date_from'] = $_GET['date_from'];
+}
 
 // Подсчёт количества для пагинации
-$sql_count = "SELECT COUNT(*) FROM network_points WHERE 1=1 $filter";
+$sql_count = "SELECT COUNT(*) FROM network_points WHERE 1=1 $filter ORDER BY point_created_at DESC";
 $stmt = $pdo->prepare($sql_count);
 foreach ($params as $key => $value) {
     $stmt->bindValue($key, $value);

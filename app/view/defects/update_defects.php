@@ -34,15 +34,18 @@ $categories = getDefectCategories($pdo);
 <?php include '../../includes/header.php'; ?>
 
     <div class="container py-4">
+
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card border">
                     <div class="card-body p-4">
                         <h3 class="mb-4">Редактирование дефекта</h3>
 
-                        <form action="../../../controllers/defects/update_defect.php" method="post">
+                        <form action="../../../controllers/defects/update_defect.php" method="post"
+                              enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?= $defect['id']; ?>">
                             <input type="hidden" name="point_id" value="<?= $defect['point_id']; ?>">
+                            <input type="hidden" name="current_image_name" value="<?= $defect['image_name'] ?>">
 
                             <div class="mb-3">
                                 <label class="form-label">Описание дефекта</label>
@@ -93,7 +96,7 @@ $categories = getDefectCategories($pdo);
                             <?php if (!empty($defect['image_name'])): ?>
                                 <div class="mb-3">
                                     <label class="form-label">Текущая фотография</label><br>
-                                    <img src="../../storage/defects/<?= htmlspecialchars($defect['image_name']); ?>"
+                                    <img src="../../../storage/defects/<?= htmlspecialchars($defect['image_name']); ?>"
                                          alt="Фото дефекта" style="max-width: 200px;">
                                 </div>
                             <?php endif; ?>

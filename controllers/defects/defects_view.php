@@ -12,7 +12,7 @@ if (!empty($_SESSION['user_info']['user_id'])) {
     $stmt->execute(['point_id' => $_GET['point_id']]);
 }
 //Пагинация
-$limit = 1;
+$limit = 25;
 $categories = getDefectCategories($pdo);
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;

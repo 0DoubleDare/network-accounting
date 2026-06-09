@@ -19,9 +19,9 @@
         <div class="card-body">
             <form method="GET" action="" class="row g-3">
                 <div class="col-md-3">
-                    <input type="text" 
-                           name="user_login" 
-                           class="form-control" 
+                    <input type="text"
+                           name="user_login"
+                           class="form-control"
                            placeholder="Поиск по логину..."
                            value="<?= htmlspecialchars($_GET['user_login'] ?? '') ?>"
                            style="color: #000;">
@@ -72,8 +72,11 @@
 
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary" style="color: #fff;">Фильтр</button>
-                    <a href="../controllers/export_to_csv.php?type=logs">Экспорт в CSV</a>
                     <a href="?" class="btn btn-outline-secondary" style="color: #000;">Сбросить</a>
+                    <a href="../controllers/export_to_csv.php?type=logs" class="btn btn-success">Экспорт в CSV</a>
+                    <button type="button" onclick="printDiv('printable-table')" class="btn btn-success">
+                        Печать
+                    </button>
                 </div>
             </form>
         </div>
@@ -84,7 +87,7 @@
     <?php else: ?>
         <p style="color: #000;">Всего записей: <?= $result['total'] ?></p>
 
-        <div class="table-responsive">
+        <div class="table-responsive" id="printable-table">
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                 <tr style="color: #000;">
@@ -93,8 +96,8 @@
                     <th>Пользователь</th>
                     <th>Роль</th>
                     <th>Действия</th>
-                    <th>Таблица</th>
-                    <th>ID запись</th>
+                    <th>Таблица в БД</th>
+                    <th>ID записи</th>
                     <th>Дата и время</th>
                 </tr>
                 </thead>

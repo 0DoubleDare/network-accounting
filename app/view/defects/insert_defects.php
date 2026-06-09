@@ -11,14 +11,6 @@ $point_id = $_GET['point_id'];
 
 <?php include '../../includes/header.php'; ?>
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавление дефекта</title>
-</head>
-<body class="bg-white">
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -26,7 +18,8 @@ $point_id = $_GET['point_id'];
                     <div class="card-body p-4">
                         <h3 class="mb-4">Добавление дефекта</h3>
 
-                        <form method="post" action="../../../controllers/defects/insert_defects.php" enctype="multipart/form-data">
+                        <form method="post" action="../../../controllers/defects/insert_defects.php"
+                              enctype="multipart/form-data">
                             <input type="hidden" name="point_id" value="<?= $point_id; ?>">
                             <input type="hidden" name="created_by" value="<?= $current_user_id; ?>">
 
@@ -42,24 +35,25 @@ $point_id = $_GET['point_id'];
                             <div class="mb-3">
                                 <label class="form-label">Критичность</label>
                                 <select name="severity" class="form-select">
-                                    <option value="high">Высокий</option>
-                                    <option value="medium">Средний</option>
-                                    <option value="low">Низкий</option>
+                                    <option value="high">Высокая</option>
+                                    <option value="medium">Средняя</option>
+                                    <option value="low">Низкая</option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Описание</label>
-                                <textarea name="description" class="form-control" rows="3"></textarea>
+                                <textarea name="description" class="form-control" rows="3" required></textarea>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Статус</label>
-                                <select name="status" class="form-select">
-                                    <option value="open">Открыто</option>
-                                    <option value="in_progress">В процессе решения</option>
-                                    <option value="closed">Закрыто</option>
-                                </select>
+                                <!--                                <label class="form-label">Статус</label>-->
+                                <!--                                <select name="status" class="form-select">-->
+                                <!--                                    <option value="open">Открыто</option>-->
+                                <!--                                    <option value="in_progress">В процессе решения</option>-->
+                                <!--                                    <option value="closed">Закрыто</option>-->
+                                <!--                                </select>-->
+                                <input type="hidden" value="open" name="status">
                             </div>
 
                             <div class="mb-3">
@@ -74,6 +68,5 @@ $point_id = $_GET['point_id'];
             </div>
         </div>
     </div>
-</body>
-</html>
+
 <?php include '../../includes/footer.php'; ?>

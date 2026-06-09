@@ -192,7 +192,6 @@ function uploadImage($image, $uploadDir = '..\public\storage\network_points')
     return $filename;
 }
 
-
 // Поменял "image_path" на "image_name"
 function insertNetworkPoint($pdo, $label, $type, $location, $status, $image_name)
 {
@@ -835,10 +834,10 @@ function exportToCSV($data, $headers, $filename)
     echo "\xEF\xBB\xBF";
 
     $output = fopen('php://output', 'w');
-    fputcsv($output, $headers, ';');
+    fputcsv($output, $headers, ';', escape: "");
 
     foreach ($data as $row) {
-        fputcsv($output, $row, ';');
+        fputcsv($output, $row, ';', escape: "");
     }
 
     fclose($output);

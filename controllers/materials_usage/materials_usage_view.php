@@ -9,7 +9,7 @@ $action = $_GET['action'] ?? 'index';
 if ($action === 'index') {
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
-    $perPage = 10;
+    $perPage = 25;
 
     $filters = [
         'material_id' => isset($_GET['material_id']) && $_GET['material_id'] !== '' ? (int)$_GET['material_id'] : '',

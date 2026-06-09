@@ -21,7 +21,7 @@ require '../app/includes/functions.php';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 //количество записей на странице 
-$perPage = 20;
+$perPage = 25;
 
 $filters = [
     'user_login' => isset($_GET['user_login']) ? trim($_GET['user_login']) : '',
