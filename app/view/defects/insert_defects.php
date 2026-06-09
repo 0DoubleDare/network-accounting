@@ -47,12 +47,6 @@ $point_id = $_GET['point_id'];
                             </div>
 
                             <div class="mb-3">
-                                <!--                                <label class="form-label">Статус</label>-->
-                                <!--                                <select name="status" class="form-select">-->
-                                <!--                                    <option value="open">Открыто</option>-->
-                                <!--                                    <option value="in_progress">В процессе решения</option>-->
-                                <!--                                    <option value="closed">Закрыто</option>-->
-                                <!--                                </select>-->
                                 <input type="hidden" value="open" name="status">
                             </div>
 

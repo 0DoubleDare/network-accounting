@@ -5,4 +5,5 @@ RUN a2enmod rewrite
 RUN echo "output_buffering = On" > /usr/local/etc/php/conf.d/output-buffering.ini
 COPY . /var/www/html/
 
+RUN chmod -R 755 /var/www/html
 RUN chown -R www-data:www-data /var/www/html
