@@ -7,47 +7,73 @@ $defects = defect_category($pdo);
 $current_user_id = $_SESSION['user_info']['user_id'] ?? '';
 
 $point_id = $_GET['point_id'];
-
 ?>
 
+<?php include '../../includes/header.php'; ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Добавление дефекта</title>
 </head>
-<body>
-<form method="post" action="/network-accounting/controllers/defects/insert_defects.php" enctype="multipart/form-data">
-    <input type="hidden" name="point_id" value="<?= $point_id; ?>">
-    <input type="hidden" name="created_by" value="<?= $current_user_id; ?>">
+<body class="bg-white">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border">
+                    <div class="card-body p-4">
+                        <h3 class="mb-4">Добавление дефекта</h3>
 
-    <label>Категория</label><br>
-    <select name="category">
-        <?php foreach ($defects as $defect): ?>
-            <option value="<?php echo $defect['id']; ?>"><?php echo htmlspecialchars($defect['display_name']); ?></option>
-        <?php endforeach; ?>
-    </select><br><br>
-    <label>Критичность</label><br>
-    <select name="severity">
-        <option value="high">Высокий</option>
-        <option value="medium">Средний</option>
-        <option value="low">Низкий</option>
-    </select><br><br>
+                        <form method="post" action="../../../controllers/defects/insert_defects.php" enctype="multipart/form-data">
+                            <input type="hidden" name="point_id" value="<?= $point_id; ?>">
+                            <input type="hidden" name="created_by" value="<?= $current_user_id; ?>">
 
-    <label>Описание</label><br>
-    <textarea name="description"></textarea><br><br>
+                            <div class="mb-3">
+                                <label class="form-label">Категория</label>
+                                <select name="category" class="form-select">
+                                    <?php foreach ($defects as $defect): ?>
+                                        <option value="<?php echo $defect['id']; ?>"><?php echo htmlspecialchars($defect['display_name']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-    <label>Статус</label><br>
-    <select name="status">
-        <option value="open">Открыто</option>
-        <option value="in_progress">В процессе решения</option>
-        <option value="closed">Закрыто</option>
-    </select><br><br>
+                            <div class="mb-3">
+                                <label class="form-label">Критичность</label>
+                                <select name="severity" class="form-select">
+                                    <option value="high">Высокий</option>
+                                    <option value="medium">Средний</option>
+                                    <option value="low">Низкий</option>
+                                </select>
+                            </div>
 
-    <input type="file" name="image_name" accept="image/*"><br><br>
+                            <div class="mb-3">
+                                <label class="form-label">Описание</label>
+                                <textarea name="description" class="form-control" rows="3"></textarea>
+                            </div>
 
-    <button type="submit">Добавить дефект</button>
-</form>
+                            <div class="mb-3">
+                                <label class="form-label">Статус</label>
+                                <select name="status" class="form-select">
+                                    <option value="open">Открыто</option>
+                                    <option value="in_progress">В процессе решения</option>
+                                    <option value="closed">Закрыто</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Фотография дефекта</label>
+                                <input type="file" name="image_name" class="form-control" accept="image/*">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Добавить дефект</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+<?php include '../../includes/footer.php'; ?>
