@@ -234,6 +234,40 @@ function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $image
     ]);
 }
 
+// // Обновление дефекта
+// function updateDefect($pdo, $id, $point_id, $category, $severity, $description, $status, $created_by, $created_at, $image_name){
+//     $sql = "UPDATE `defects` SET `id`= :id, `point_id`= :point_id, `category`= :category, `severity`= :severity,
+//             `description`= :description, `status`= :status, `created_by`= :created_by, `created_at`= :created_at, `image_name`= :image_name' WHERE id = :id";
+//     $stmt = $pdo->prepare($sql);
+//     return $stmt->execute([
+//         'id' => $id,
+//         'point_id' => $point_id,
+//         'category' => $category,
+//         'severity' => $severity,
+//         'description' => $description, 
+//         'status' => $status, 
+//         'created_by' => $created_by, 
+//         'created_at' => $created_at, 
+//         'image_name' => $image_name
+//     ]);
+// }
+
+//Полная информация 
+function defectInfo($pdo, $id){
+    $sql = "SELECT * FROM defects WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function defectCategory($pdo){
+    $sql = "SELECT display_name FROM defect_category ORDER BY display_name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+}
+//SELECT display_name FROM defect_category ORDER BY display_name;
+
+
 function networkPointInfo($pdo, $id)
 {
     $sql = "SELECT * FROM `network_points` WHERE id = :id";
@@ -807,8 +841,8 @@ function insert_defects($pdo, $point_id, $category, $severity, $description, $st
     $image_name = uploadImageDefects($file);
     $sql = "INSERT INTO defects(point_id, category, severity, description, status, created_by, image_name) 
     VALUES(:point_id, :category, :severity, :description, :status, :created_by, :image_name)";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
         'point_id' => $point_id,
         'category' => $category,
         'severity' => $severity,
@@ -821,15 +855,14 @@ function insert_defects($pdo, $point_id, $category, $severity, $description, $st
         'id' => $pdo->lastInsertId()
     ];
     return $response;
-    }
+}
 
-    function deleteDefects($pdo, $id){
-        $sql = "DELETE FROM `defects` WHERE id = :id";
-        $stmt = $pdo -> prepare($sql);
-        $stmt -> execute([
-            'id' => $id
-        ]);
-    }
+function deleteDefects($pdo, $id)
+{
+    $sql = "DELETE FROM `defects` WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+}
 
 
 ?>
