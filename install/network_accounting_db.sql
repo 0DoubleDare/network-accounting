@@ -298,7 +298,7 @@ INSERT INTO `network_point_type` VALUES
 (2,'cabel_run','Сетевой кабель'),
 (3,'path_cord','Патч-корд'),
 (12,'switch_port','Порт коммутатора'),
-(13,'router_port','Порт маршрутизатора');
+(13,'router_port','Порт маршрутизатора'),
 (14,'router','Маршрутизатор');
 /*!40000 ALTER TABLE `network_point_type` ENABLE KEYS */;
 UNLOCK TABLES;
