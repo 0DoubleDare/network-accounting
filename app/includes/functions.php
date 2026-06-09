@@ -253,18 +253,21 @@ function updateNetworkPoint($pdo, $id, $label, $type, $location, $status, $image
 // }
 
 //Полная информация 
-function defectInfo($pdo, $id){
+function defectInfo($pdo, $id)
+{
     $sql = "SELECT * FROM defects WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function defectCategory($pdo){
+function defectCategory($pdo)
+{
     $sql = "SELECT display_name FROM defect_category ORDER BY display_name";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 }
+
 //SELECT display_name FROM defect_category ORDER BY display_name;
 
 
@@ -282,55 +285,78 @@ function getAllLogsFiltered($pdo, $page = 1, $perPage = 20, $filters = [])
     $offset = ($page - 1) * $perPage;
     $where = [];
     $params = [];
-    // Фильтр по ID пользователя
-    if (!empty($filters['user_id'])) {
-        $where[] = "logs.user_id = :user_id";
-        $params[':user_id'] = $filters['user_id'];
+
+    // Фильтр по логину пользователя (текстовый поиск)
+    if (!empty($filters['user_login'])) {
+        $where[] = "u.login LIKE :user_login";
+        $params[':user_login'] = '%' . $filters['user_login'] . '%';
     }
+
     // Фильтр по роли
     if (!empty($filters['role'])) {
-        $where[] = "users.role = :role";
+        $where[] = "u.role = :role";
         $params[':role'] = $filters['role'];
     }
+
     // Фильтр по действию (поиск по части строки)
     if (!empty($filters['action'])) {
-        $where[] = "logs.action LIKE :action";
+        $where[] = "l.action LIKE :action";
         $params[':action'] = '%' . $filters['action'] . '%';
     }
+
     // Фильтр по названию таблицы
     if (!empty($filters['target_table'])) {
-        $where[] = "logs.target_table = :target_table";
+        $where[] = "l.target_table = :target_table";
         $params[':target_table'] = $filters['target_table'];
     }
+
     // Фильтр по дате (с какой даты)
     if (!empty($filters['date_from'])) {
-        $where[] = "DATE(logs.created_at) >= :date_from";
+        $where[] = "DATE(l.created_at) >= :date_from";
         $params[':date_from'] = $filters['date_from'];
     }
+
     // Фильтр по дате (по какую дату)
     if (!empty($filters['date_to'])) {
-        $where[] = "DATE(logs.created_at) <= :date_to";
+        $where[] = "DATE(l.created_at) <= :date_to";
         $params[':date_to'] = $filters['date_to'];
     }
+
     $whereClause = $where ? "WHERE " . implode(" AND ", $where) : "";
+
     // Подсчёт общего количества записей (для пагинации)
-    $countSql = "SELECT COUNT(*) FROM logs $whereClause";
+    $countSql = "SELECT COUNT(*) 
+                FROM logs l
+                LEFT JOIN users u ON l.user_id = u.id 
+                $whereClause";
     $countStmt = $pdo->prepare($countSql);
-    $countStmt->execute($params);
+    foreach ($params as $key => $value) {
+        $countStmt->bindValue($key, $value);
+    }
+    $countStmt->execute();
     $total = $countStmt->fetchColumn();
 
-    $sql = "SELECT logs.*, users.login, users.role 
-            FROM logs 
-            LEFT JOIN users ON logs.user_id = users.id 
+    $sql = "SELECT 
+                l.*, 
+                u.login, 
+                u.role 
+            FROM logs l
+            LEFT JOIN users u ON l.user_id = u.id 
             $whereClause
-            ORDER BY logs.created_at DESC 
-            LIMIT $offset, $perPage";
+            ORDER BY l.created_at DESC 
+            LIMIT :offset, :perPage";
 
     $stmt = $pdo->prepare($sql);
 
+    // Привязываем параметры фильтрации
     foreach ($params as $key => $value) {
         $stmt->bindValue($key, $value);
     }
+
+    // Привязываем параметры пагинации
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindValue(':perPage', $perPage, PDO::PARAM_INT);
+
     $stmt->execute();
     return [
         'logs' => $stmt->fetchAll(),           // Список логов
@@ -819,11 +845,12 @@ function exportToCSV($data, $headers, $filename)
     exit();
 }
 
-function defect_category($pdo){
+function defect_category($pdo)
+{
     $sql = "SELECT * FROM defect_category";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute();
-    return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function uploadImageDefects($image, $uploadDir = '../../storage/defects')
@@ -837,8 +864,9 @@ function uploadImageDefects($image, $uploadDir = '../../storage/defects')
     return $filename;
 }
 
-function insert_defects($pdo, $point_id, $category, $severity, $description, $status, $created_by, $file){
-    $image_name = uploadImageDefects($file);
+function insert_defects($pdo, $point_id, $category, $severity, $description, $status, $created_by, $file)
+{
+    $image_name = $file;
     $sql = "INSERT INTO defects(point_id, category, severity, description, status, created_by, image_name) 
     VALUES(:point_id, :category, :severity, :description, :status, :created_by, :image_name)";
     $stmt = $pdo->prepare($sql);
