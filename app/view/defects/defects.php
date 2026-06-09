@@ -13,24 +13,24 @@
     <div class="row mb-4">
         <h1>Информация</h1>
         <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-fluid w-50"
-             alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
+            alt="Изображение точки <?= htmlspecialchars($point['label']) ?>">
         <div class="text-muted small">
             <span class="me-3"><strong>Расположение:</strong> <?= htmlspecialchars($point['location'] ?? '—') ?></span>
             <span><strong>Статус точки:</strong> <?= htmlspecialchars($point['status_name'] ?? '—') ?></span>
         </div>
         <!-- Кнопка назад -->
         <div class="mb-3">
-            <a href="../inventory/inventory_view.php?action=index" class="btn btn-sm btn-outline-secondary">
+            <a href="../inventory/inventory_view.php" class="btn btn-sm btn-outline-secondary">
                 &larr; Назад к точкам
-            </a>
+            </a> 
             <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
-            <a href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= $point['label'] ?>"
-               class="btn btn-sm btn-info">
+            <button type="button" href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= $point['label'] ?>"
+                class="btn btn-primary">
                 Расход материалов по этой точке
-            </a>
-            <a href="../../app/view/material_usage/insert_material_usage.php">
-                Добавить списание
-            </a>
+            </button>
+            <button type="button" href="../../app/view/material_usage/insert_material_usage.php"class="btn btn-success"> 
+                добавить списание
+            </button>
         </div>
     </div>
     <div class="row mb-4">
@@ -40,7 +40,7 @@
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
                     <img src="../public/storage/defects/<?= htmlspecialchars($point['image_path']) ?>" alt="Фото точки"
-                         class="img-thumbnail" style="max-height: 150px;">
+                        class="img-thumbnail" style="max-height: 150px;">
                 </div>
             <?php endif; ?>
         </div>
@@ -152,34 +152,50 @@
                                 <td class="text-wrap"
                                     style="max-width: 300px;"><?= htmlspecialchars($defect['description'] ?? '') ?></td>
                                 <td>
-                                        <span class="badge bg-light text-dark border border-secondary-subtle">
-                                            <?= htmlspecialchars($defect['status'] ?? '') ?>
-                                        </span>
+                                    <?php
+                                    $status = $defect['status'] ?? '';
+                                    if ($status == 'open') {
+                                        $statusColor = 'green';
+                                        $statusText = 'Открыт';
+                                    } elseif ($status == 'in_progress') {
+                                        $statusColor = 'orange';
+                                        $statusText = 'В работе';
+                                    } elseif ($status == 'closed') {
+                                        $statusColor = 'red';
+                                        $statusText = 'Закрыт';
+                                    } else {
+                                        $statusColor = 'black';
+                                        $statusText = htmlspecialchars($status);
+                                    }
+                                    ?>
+                                    <span style="color: <?= $statusColor ?>; font-weight: 500;">
+                                        <?= $statusText ?>
+                                    </span>
                                 </td>
                                 <td><?= htmlspecialchars($defect['author'] ?? '—') ?></td>
                                 <td class="pe-4 text-muted"><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
                                 <td>
                                     <?php if ($defect['status'] == 'open'): ?>
-                                        <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress">
-                                            Начать работу
-                                        </a>
-                                    <?php elseif ($defect['status'] == 'in_progress'): ?>
-                                        <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed">
-                                            Исправлено
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open">
-                                            Переоткрыть
-                                        </a>
-                                    <?php endif; ?>
-
+                                        <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress'">
+                                Начать работу
+                                    </button>
+                                <?php elseif ($defect['status'] == 'in_progress'): ?>
+                                        <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed'">
+                                Исправлено
+                                    </button>
+                                        <?php else: ?>
+                                <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open'">
+                                Переоткрыть
+                                    </button>
+                                        <?php endif; ?>
+                                    
                                     <?php if (!empty($defect['image_name'])): ?>
-                                        <button onclick="document.getElementById('openImage').showModal()">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('openImage').showModal()"> 
                                             Открыть фотографию
                                         </button>
                                         <dialog id="openImage" onclick="this.close()">
                                             <img src="../public/storage/defects/<?= $defect['image_name'] ?>"
-                                                 alt="Изображение дефекта для <?= $point['label'] ?>">
+                                                alt="Изображение дефекта для <?= $point['label'] ?>">
                                             <p>Нажми на меня, чтобы закрыть окно</p>
                                         </dialog>
                                     <?php endif; ?>
