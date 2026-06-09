@@ -63,7 +63,7 @@
                             <select name="category" class="form-select">
                                 <option value="">Все</option>
                                 <?php foreach ($categories as $category): ?>
-                                    <option value="<?= $category['name'] ?>" <?= ($_GET['category'] ?? '') == $category['name'] ? 'selected' : '' ?>>
+                                    <option value="<?= $category['name'] ?>" <?= $category['name'] ? 'selected' : '' ?>>
                                         <?= $category['display_name'] ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -106,19 +106,26 @@
             <div class="table-responsive card border-secondary-subtle bg-white">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
-                        <tr>
+                    <tr>
+                        <th>№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
                             <th class="ps-4">ID</th>
-                            <th>Категория</th>
-                            <th>Критичность</th>
-                            <th>Описание</th>
-                            <th>Статус</th>
-                            <th>Автор</th>
-                            <th>Дата</th>
-                            <th class="pe-4 text-end">Фото дефекта</th>
-                            <th class="pe-4">Действия</th>
-                        </tr>
+                        <?php endif; ?>
+                        <th>Категория</th>
+                        <th>Критичность</th>
+                        <th>Описание</th>
+                        <th>Статус</th>
+                        <th>Автор</th>
+                        <th class="pe-4">Дата</th>
+                        <th>Действия</th>
+                    </tr>
                     </thead>
                     <tbody class="small">
+
+                    
+                        
+                    
+
                     <?php if (empty($defects)): ?>
                         <tr>
                             <td colspan="9" class="text-center py-4 text-muted">
@@ -128,7 +135,10 @@
                     <?php else: ?>
                         <?php foreach ($defects as $defect): ?>
                             <tr>
+                                <td class="ps-4"><?= $offset++ + 1 ?></td>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') == 'admin'): ?>
                                 <td class="ps-4 fw-bold"><?= htmlspecialchars($defect['id']) ?></td>
+                                <?php endif; ?>
                                 <td><?= htmlspecialchars($defect['category'] ?? '—') ?></td>
                                 <td><?= htmlspecialchars($defect['severity'] ?? '—') ?></td>
                                 <td><?= htmlspecialchars($defect['description'] ?? '') ?></td>
