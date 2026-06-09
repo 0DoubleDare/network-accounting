@@ -9,5 +9,5 @@ if (empty($_SESSION['user_info']['user_id']) && empty($_SESSION['user_id'])) {
     $id = $_GET['id'] ?? '';
     $point_id = $_GET['point_id'] ?? '';
     deleteDefects($pdo, $id);
-    header('Location: ../../../app/view/defects/defects.php?point_id=' . $point_id);
+    header('Location: ../../controllers/defects/defects_view.php?point_id=' . $point_id);
 }

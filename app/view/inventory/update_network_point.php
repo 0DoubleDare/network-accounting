@@ -29,7 +29,7 @@ $statuses = getNetworkPointStatusList($pdo);
                         <h3 class="mb-4">Редактирование сетевой точки</h3>
 
                         <form action="../../../controllers/inventory/update_network_point.php" method="post"
-                              enctype="multipart/form-data">
+                            enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?php echo $networkPointInfo['id']; ?>">
 
 

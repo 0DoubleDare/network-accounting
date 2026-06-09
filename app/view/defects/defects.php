@@ -4,11 +4,9 @@
  */
 //require '../config/db.php';
 //require '../app/includes/functions.php';
-
-
 ?>
 
-<?php include '../../app/includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 <div class="container my-5">
 
     <!-- Шапка страницы с информацией о точке -->
@@ -55,7 +53,7 @@
         <div class="col-12">
 
             <h2 class="h4 mb-2 fw-bold text-dark">Дефекты точки</h2>
-
+            <a href="../../app/view/defects/insert_defects.php?point_id=<?= $_GET['point_id'] ?>">Вставить</a>
 
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
@@ -158,6 +156,7 @@
                         <th>Автор</th>
                         <th>Дата</th>
                         <th class="pe-4 text-end">Фото дефекта</th> <!-- Выровняли заголовок по правому краю -->
+                        <th>Действие</th>
                     </tr>
                     </thead>
                     <tbody class="small">
@@ -189,13 +188,12 @@
                                 <td class="text-muted"><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
                                 <td class="pe-4 text-end"> <!-- Ячейка с кнопкой просмотра фотки -->
                                     <?php if (!empty($defect['image_name'])): ?>
-                                        <!-- Уникальная кнопка открытия для конкретного ID дефекта -->
+                                        Уникальная кнопка открытия для конкретного ID дефекта
                                         <button type="button" class="btn btn-sm btn-outline-secondary"
                                                 onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
                                             <i class="fas fa-image me-1"></i> Просмотр
                                         </button>
-
-
+                                        
                                         <!-- Уникальное диалоговое окно -->
                                         <dialog id="openImage<?= $defect['id'] ?>"
                                                 class="border-0 rounded-3 shadow-lg p-4 text-center"
@@ -205,7 +203,7 @@
                                                         onclick="document.getElementById('openImage<?= $defect['id'] ?>').close()"></button>
                                             </div>
                                             <img src="../public/storage/defects/<?= htmlspecialchars($defect['image_name']) ?>"
-                                                 alt="Изображение дефекта" class="img-fluid rounded mb-2">
+                                                alt="Изображение дефекта" class="img-fluid rounded mb-2">
                                             <p class="text-muted small mb-0">Кликните на крестик или нажмите Esc для
                                                 закрытия</p>
 
@@ -214,6 +212,12 @@
                                     <?php else: ?>
                                         <span class="text-muted small">—</span>
                                     <?php endif; ?>
+                                <td><a href="../../app/view/defects/update_defects.php?id=<?= $defect['id']?>">
+                                            Изменить
+                                        </a>
+                                        <a href="../../controllers/defects/delete_defect.php?id=<?= $defect['id']?>">
+                                            Удалить
+                                        </a></td>
 
 
                                 </td>
@@ -276,5 +280,5 @@
     <?php endif; ?>
 
 </div>
-<?php include '../../app/includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>
 
