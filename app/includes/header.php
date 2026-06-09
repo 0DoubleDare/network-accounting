@@ -1,8 +1,8 @@
 <?php
 // Берем корень нашего проекта. Нужно чтобы при подключении хедера в разные файлы не ломались отноcительные пути
 // УСТАРЕЛО / DEPRECATED
-
-$web_root = explode('/', trim($_SERVER['SCRIPT_NAME'], '/'))[0];
+$m = explode('/', trim($_SERVER['SCRIPT_NAME'], '/'));
+$web_root = $m[0];
 if ($web_root != 'network-accounting') {
     $web_root = '/';
 } else {
@@ -11,6 +11,12 @@ if ($web_root != 'network-accounting') {
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+if ($m[array_key_last($m)] != 'registration.php' && $m[array_key_last($m)] != 'login.php') {
+    if (empty($_SESSION['user_info'])) {
+        $_SESSION['error'] = "Чтобы пользоваться сервисом необходимо авторизоваться";
+        header('Location: ' . $web_root . 'app/view/user/login.php');
+    }
 }
 /**
  * Шапка сайта. Открывает HTML, показывает меню, подключает стили. Используем на всех страницах в самом конце.
