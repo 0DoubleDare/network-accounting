@@ -26,7 +26,7 @@
 <?php include './app/includes/header.php'; ?>
 
     <div class="container py-4">
-        <div class="row g-4 mb-5">
+        <div class="row g-4 mb-5 mx-auto d-flex align-items-center justify-content-center">
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm text-center bg-white">
                     <div class="card-body py-4">
@@ -39,7 +39,7 @@
                 <div class="card border-0 shadow-sm text-center bg-white">
                     <div class="card-body py-4">
                         <h4 class="text-dark">Количество различных типов материалов</h4>
-                        <h2 class="display-4 fw-bold mb-0 text-dark"><?php echo $materials['unique_types']; ?></h2>
+                        <h2 class="display-4 fw-bold mb-0 text-dark"><?= $materials['unique_types']; ?></h2>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <div class="card border-0 shadow-sm text-center bg-white">
                     <div class="card-body py-4">
                         <h4 class="text-dark">Общее количество записей о списанных материалах</h4>
-                        <h2 class="display-4 fw-bold mb-0 text-dark"><?php echo $materials['total_quantity']; ?></h2>
+                        <h2 class="display-4 fw-bold mb-0 text-dark"><?= $materials['total_quantity']; ?></h2>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,15 @@
                 <div class="card border-0 shadow-sm text-center bg-white">
                     <div class="card-body py-4">
                         <h4 class="text-dark">Общее количество Дефектов</h4>
-                        <h2 class="display-4 fw-bold mb-0 text-dark"><?php echo $defectCount; ?></h2>
+                        <h2 class="display-4 fw-bold mb-0 text-dark"><?= $defectCount; ?></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center bg-white">
+                    <div class="card-body py-4">
+                        <h4 class="text-dark">Использовано метров материала</h4>
+                        <h2 class="display-4 fw-bold mb-0 text-dark"><?= $totalMeterUse; ?></h2>
                     </div>
                 </div>
             </div>

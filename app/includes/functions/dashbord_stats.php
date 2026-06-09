@@ -70,3 +70,15 @@ function getNetworkPointsCountWithStatus($pdo)
         'count' => array_map('intval', array_values($data))
     ];
 }
+
+function totalMetersUsage($pdo)
+{
+    $sql = "SELECT SUM(mu.quantity) AS total_meters_used
+FROM material_usage mu
+         JOIN materials m ON mu.material_id = m.id
+WHERE m.unit = 'm';";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $data['total_meters_used'];
+}

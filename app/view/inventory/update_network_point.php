@@ -36,15 +36,16 @@ $statuses = getNetworkPointStatusList($pdo);
                             <div class="mb-3">
                                 <label class="form-label">Название сетевой точки</label>
                                 <input type="text" name="label" class="form-control"
-                                       value="<?php echo $networkPointInfo['label']; ?>">
+                                    value="<?php echo htmlspecialchars($networkPointInfo['label']); ?>">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Тип</label>
                                 <select name="type" class="form-select">
                                     <?php foreach ($types as $type): ?>
-                                        <option value="<?= $type['id'] ?>" <?= $type['id'] == $networkPointInfo['type'] ? 'selected' : '' ?>>
-                                            <?= $type['display_name'] ?>
+                                        <option value="<?php echo (int)$type['id'] ?>" 
+                                        <?php echo $type['id'] == $networkPointInfo['type'] ? 'selected' : '' ?>>
+                                        <?php echo htmlspecialchars($type['display_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -53,15 +54,16 @@ $statuses = getNetworkPointStatusList($pdo);
                             <div class="mb-3">
                                 <label class="form-label">Локация</label>
                                 <input type="text" name="location" class="form-control"
-                                       value="<?php echo $networkPointInfo['location']; ?>">
+                                    value="<?php echo htmlspecialchars($networkPointInfo['location']); ?>">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Статус</label>
                                 <select name="status" class="form-select">
                                     <?php foreach ($statuses as $status): ?>
-                                        <option value="<?= $status['id'] ?>" <?= $status['id'] == $networkPointInfo['status'] ? 'selected' : '' ?>>
-                                            <?= $status['display_name'] ?>
+                                        <option value="<?php echo (int)$status['id'] ?>"
+                                        <?php echo $status['id'] == $networkPointInfo['status'] ? 'selected' : '' ?>>
+                                        <?php echo htmlspecialchars($status['display_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -69,8 +71,8 @@ $statuses = getNetworkPointStatusList($pdo);
                             <?php if (!empty($networkPointInfo)): ?>
                                 <div class="mb-3">
                                     <label class="form-label">Текущая фотография сетевой точки</label><br>
-                                    <img src="../../public/storage/network_points/<?= $networkPointInfo['image_name'] ?>"
-                                         alt="Изображение сетевой точки <?= $networkPointInfo['label'] ?>">
+                                    <img src="../../public/storage/network_points/<?php echo htmlspecialchars($networkPointInfo['image_name']); ?>"
+                                    alt="Изображение сетевой точки <?php echo htmlspecialchars($networkPointInfo['label']); ?>">
                                 </div>
                             <?php endif; ?>
                             <div class="mb-3">

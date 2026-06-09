@@ -20,6 +20,8 @@ $defectCountWithCategories = getDefectCountWithCategories($pdo);
 $materialsCountWithCategories = getMaterialsCountWithCategories($pdo);
 $networkPointsWithStatus = getNetworkPointsCountWithStatus($pdo);
 $networkPointsWithCategories = getNetworkPointsCountWithCategories($pdo);
+
+$totalMeterUse = totalMetersUsage($pdo);
 //echo '<pre>';
 //print_r($defectCountWithCategories);
 //print_r($materialsCountWithCategories);

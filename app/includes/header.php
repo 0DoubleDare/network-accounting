@@ -48,7 +48,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <span class=""><?php echo htmlspecialchars($_SESSION['user_info']['login'] ?? ''); ?></span>
 
                 <?php if (isset($_SESSION['user_info']['role']) && $_SESSION['user_info']['role'] === 'admin'): ?>
-                    <a href="<?= $web_root ?>controllers/logs.php?action=index">
+                    <a href="<?= $web_root ?>controllers/logs.php">
                         <button type="button" class="btn btn-secondary">Журнал действий</button>
                     </a>
                 <?php endif; ?>

@@ -3,6 +3,7 @@ session_start();
 
 require '../../config/db.php';
 require '../../app/includes/functions.php';
+require '../../app/includes/functions/material_usage.php';
 
 $action = $_GET['action'] ?? 'index';
 
@@ -26,12 +27,16 @@ if ($action === 'index') {
     $result = getAllMaterialsFiltered($pdo, $page, $perPage, $filters);
 
 
+    $offset = ($page - 1) * $perPage + 1;
     include '../../app/view/materials/materials.php';
 
     exit();
 } else if ($action === 'delete') {
     $id = $_GET['id'];
-
-    deleteMaterials($pdo, $id);
+    if (!checkMaterialIsUse($pdo, $id)) {
+        deleteMaterials($pdo, $id);
+    }
+    header('Location: ./materials_view.php?action=index');
 }
+
 ?>

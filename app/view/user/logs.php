@@ -90,6 +90,7 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                 <tr style="color: #000;">
+                    <th>№</th>
                     <th>ID</th>
                     <th>Пользователь</th>
                     <th>Роль</th>
@@ -102,7 +103,8 @@
                 <tbody>
                 <?php foreach ($result['logs'] as $log): ?>
                     <tr style="color: #000;">
-                        <td><?= htmlspecialchars($log['id']) ?></td>
+                        <td><?= $offset++ ?></td>
+                        <td><?= $log['id'] ?></td>
                         <td><?= htmlspecialchars($log['login'] ?? 'Система') ?></td>
                         <td><?= htmlspecialchars($log['role'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($log['action']) ?></td>
