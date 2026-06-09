@@ -18,7 +18,7 @@ $statuses = getNetworkPointStatusList($pdo);
                               enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label class="form-label">Название сетевой точки</label>
-                                <input type="text" name="label" class="form-control" required>
+                                <input type="text" name="label" class="form-control" required maxlength="255">
                             </div>
 
                             <div class="mb-3">
@@ -26,7 +26,7 @@ $statuses = getNetworkPointStatusList($pdo);
                                 <select name="type" class="form-select">
                                     <?php foreach ($types as $type): ?>
                                         <option value="<?php echo (int)$type['id'] ?>">
-                                        <?php echo htmlspecialchars($type['display_name']) ?>
+                                            <?php echo htmlspecialchars($type['display_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -34,7 +34,7 @@ $statuses = getNetworkPointStatusList($pdo);
 
                             <div class="mb-3">
                                 <label class="form-label">Локация</label>
-                                <input type="text" name="location" class="form-control" required>
+                                <input type="text" name="location" class="form-control" required maxlength="100">
                             </div>
 
                             <div class="mb-3">
@@ -42,7 +42,7 @@ $statuses = getNetworkPointStatusList($pdo);
                                 <select name="status" class="form-select">
                                     <?php foreach ($statuses as $status): ?>
                                         <option value="<?php echo (int)$status['id'] ?>">
-                                        <?php echo htmlspecialchars($status['display_name']) ?>
+                                            <?php echo htmlspecialchars($status['display_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>

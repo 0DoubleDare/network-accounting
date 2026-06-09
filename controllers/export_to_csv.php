@@ -30,13 +30,13 @@ if ($type === 'materials') {
             FROM materials
             LEFT JOIN material_type ON materials.type = material_type.id
             ORDER BY materials.id";
-    
+
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     $headers = ['ID', 'Название материала', 'Тип материала', 'Единица измерения'];
-    
+
     $data = [];
     foreach ($result as $row) {
         $data[] = [
@@ -46,7 +46,7 @@ if ($type === 'materials') {
             $row['unit_rus']
         ];
     }
-    
+
     exportToCSV($data, $headers, 'materials');
 }
 
@@ -65,13 +65,13 @@ if ($type === 'logs') {
             FROM logs
             LEFT JOIN users ON logs.user_id = users.id
             ORDER BY logs.created_at DESC";
-    
+
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     $headers = ['ID', 'Пользователь', 'Роль', 'Действие', 'Таблица', 'ID записи', 'Дата и время'];
-    
+
     $data = [];
     foreach ($result as $row) {
         $data[] = [
@@ -84,7 +84,7 @@ if ($type === 'logs') {
             date('d.m.Y H:i:s', strtotime($row['created_at']))
         ];
     }
-    
+
     exportToCSV($data, $headers, 'logs');
 }
 
@@ -105,13 +105,13 @@ if ($type === 'network_points') {
             LEFT JOIN network_point_type ON network_points.type = network_point_type.id
             LEFT JOIN network_point_status ON network_points.status = network_point_status.id
             ORDER BY network_points.id";
-    
+
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     $headers = ['ID', 'Метка', 'Тип', 'Расположение', 'Статус', 'Последняя проверка', 'Дата создания', 'Изображение'];
-    
+
     $data = [];
     foreach ($result as $row) {
         $data[] = [
@@ -125,7 +125,7 @@ if ($type === 'network_points') {
             $row['image_name'] ?? '-'
         ];
     }
-    
+
     exportToCSV($data, $headers, 'network_points');
 }
 
@@ -154,11 +154,11 @@ if ($type === 'material_usage') {
             LEFT JOIN users ON material_usage.used_by = users.id
             LEFT JOIN defects ON material_usage.defect_id = defects.id
             ORDER BY material_usage.used_at DESC";
-    
+
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     $headers = [
         'ID расхода',
         'Материал',
@@ -174,17 +174,17 @@ if ($type === 'material_usage') {
         'Описание дефекта',
         'Статус дефекта'
     ];
-    
+
     $data = [];
     foreach ($result as $row) {
         $unit_rus = ($row['unit'] == 'm') ? 'метров' : 'штук';
-        
+
         $defectStatusMap = [
             'open' => 'Открыт',
             'in_progress' => 'В работе',
             'closed' => 'Закрыт'
         ];
-        
+
         $data[] = [
             $row['id'],
             $row['material_name'] ?? 'Не указан',
@@ -201,7 +201,86 @@ if ($type === 'material_usage') {
             $defectStatusMap[$row['defect_status']] ?? '-'
         ];
     }
-    
+
     exportToCSV($data, $headers, 'material_usage');
 }
+
+/**
+ * ЭКСПОРТ ДЕФЕКТОВ СЕТЕВОЙ ТОЧКИ
+ */
+/**
+ * ЭКСПОРТ ДЕФЕКТОВ СЕТЕВОЙ ТОЧКИ
+ */
+if ($type === 'defects' && !empty($_GET['point_id'])) {
+    $point_id = (int)$_GET['point_id'];
+
+    $query = "SELECT 
+                defects.id,
+                defects.description,
+                defects.status,
+                defects.severity,
+                defects.created_at,
+                defects.image_name,
+                defect_category.display_name AS category_name,
+                users.login AS creator_login,
+                network_points.label AS point_label
+              FROM defects
+              LEFT JOIN defect_category ON defects.category = defect_category.id
+              LEFT JOIN users ON defects.created_by = users.id
+              LEFT JOIN network_points ON defects.point_id = network_points.id
+              WHERE defects.point_id = :point_id
+              ORDER BY defects.created_at DESC";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['point_id' => $point_id]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $headers = [
+        '№',
+        'Точка сети',
+        'Категория',
+        'Критичность',
+        'Описание дефекта',
+        'Статус',
+        'Кто обнаружил',
+        'Дата создания',
+        'Имя изображения'
+    ];
+
+    $defectStatusMap = [
+        'open' => 'Открыт',
+        'in_progress' => 'В работе',
+        'closed' => 'Закрыт'
+    ];
+
+    $severityMap = [
+        'high' => 'Высокая',
+        'medium' => 'Средняя',
+        'low' => 'Низкая'
+    ];
+
+    $data = [];
+    $rowNumber = 1;
+
+    foreach ($result as $row) {
+        $description = $row['description']
+            ? mb_substr($row['description'], 0, 100) . (mb_strlen($row['description']) > 100 ? '...' : '')
+            : '-';
+
+        $data[] = [
+            $rowNumber++,
+            $row['point_label'] ?? '-',
+            $row['category_name'] ?? 'Не указана',
+            $severityMap[$row['severity']] ?? '-',
+            $description,
+            $defectStatusMap[$row['status']] ?? '-',
+            $row['creator_login'] ?? 'Система',
+            date('d.m.Y H:i:s', strtotime($row['created_at'])),
+            $row['image_name'] ?? '-'
+        ];
+    }
+
+    exportToCSV($data, $headers, 'defects_point_' . $point_id);
+}
+
 ?>

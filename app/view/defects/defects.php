@@ -15,7 +15,7 @@
                 <?php if (!empty($point['image_name'])): ?>
                     <div class="mb-3">
                         <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-thumbnail"
-                             alt="Изображение точки <?= htmlspecialchars($point['label']) ?>"
+                             alt='Изображение точки "<?= htmlspecialchars($point['label']) ?>" отсутствует'
                              style="max-height: 250px;">
                     </div>
                 <?php endif; ?>
@@ -27,15 +27,15 @@
 
                 <!-- Навигационная панель с кнопками -->
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <a href="../inventory/inventory_view.php?action=index" class="btn btn-sm btn-outline-secondary">
+                    <a href="../inventory/inventory_view.php?action=index" class="btn btn-outline-secondary">
                         &larr; Назад к точкам
                     </a>
                     <a href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= urlencode($point['label'] ?? '') ?>"
-                       class="btn btn-sm btn-outline-secondary">
+                       class="btn btn-outline-secondary">
                         <i class="fas fa-list me-1"></i> Расход материалов по точке
                     </a>
                     <a href="../../app/view/material_usage/insert_material_usage.php?id=<?= htmlspecialchars($point['id'] ?? '') ?>"
-                       class="btn btn-sm btn-primary">
+                       class="btn btn-primary">
                         <i class="fas fa-plus me-1"></i> Добавить списание
                     </a>
                 </div>
@@ -47,7 +47,9 @@
             <div class="col-12">
                 <h2 class="h4 mb-2 fw-bold text-dark">Дефекты точки</h2>
                 <a href="../../app/view/defects/insert_defects.php?point_id=<?= $point_id ?>"
-                   class="btn btn-sm btn-primary mb-3">+ Добавить дефект</a>
+                   class="btn btn-primary">+ Добавить дефект</a>
+                <a href="../export_to_csv.php?type=defects&point_id=<?= $point_id ?>" class="btn btn-success">Экспорт
+                    в CSV</a>
             </div>
         </div>
 
@@ -105,9 +107,9 @@
                             </div>
 
                             <div class="col-md-3 d-flex align-items-end gap-2">
-                                <button type="submit" class="btn btn-sm btn-primary">Применить</button>
+                                <button type="submit" class="btn btn-primary">Применить</button>
                                 <a href="?action=index&point_id=<?= $point_id ?>"
-                                   class="btn btn-sm btn-outline-secondary">Сбросить</a>
+                                   class="btn btn-outline-secondary">Сбросить</a>
                             </div>
                         </form>
                     </div>
@@ -157,18 +159,19 @@
                                     <td>
                                         <?php
                                         $status = $defect['status'] ?? '';
-                                        if ($status == 'open') {
-                                            $statusColor = 'green';
-                                            $statusText = 'Открыт';
-                                        } elseif ($status == 'in_progress') {
-                                            $statusColor = 'orange';
-                                            $statusText = 'В работе';
-                                        } elseif ($status == 'closed') {
-                                            $statusColor = 'red';
-                                            $statusText = 'Закрыт';
-                                        } else {
-                                            $statusColor = 'black';
-                                            $statusText = htmlspecialchars($status);
+                                        switch ($status) {
+                                            case 'open':
+                                                $statusColor = 'green';
+                                                $statusText = 'Открыт';
+                                                break;
+                                            case 'in_progress':
+                                                $statusColor = 'orange';
+                                                $statusText = 'В работе';
+                                                break;
+                                            case 'closed':
+                                                $statusColor = 'red';
+                                                $statusText = 'Закрыт';
+                                                break;
                                         }
                                         ?>
                                         <span style="color: <?= $statusColor ?>; font-weight: 500;"><?= $statusText ?></span>
@@ -176,35 +179,34 @@
                                     <td><?= htmlspecialchars($defect['author'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
                                     <td class="pe-4 text-end">
-                                        <?php if (!empty($defect['image_name'])): ?>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                    onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
-                                                <i class="fas fa-image me-1"></i> Просмотр
-                                            </button>
-                                            <dialog id="openImage<?= $defect['id'] ?>"
-                                                    class="border-0 rounded-3 shadow-lg p-4 text-center"
-                                                    style="max-width: 500px; outline: none; background: white;">
-                                                <div class="d-flex justify-content-end mb-2">
-                                                    <button type="button" class="btn-close"
-                                                            onclick="document.getElementById('openImage<?= $defect['id'] ?>').close()"></button>
-                                                </div>
-                                                <img src="../../storage/defects/<?= $defect['image_name'] ?>"
-                                                     alt="Изображение дефекта" class="img-fluid rounded mb-2">
-                                                <p class="text-muted small mb-0">Нажмите Esc или крестик для
-                                                    закрытия</p>
-                                            </dialog>
-                                        <?php else: ?>
-                                            <span class="text-muted">—</span>
-                                        <?php endif; ?>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                onclick="document.getElementById('openImage<?= $defect['id'] ?>').showModal()">
+                                            Просмотр
+                                        </button>
+                                        <dialog id="openImage<?= $defect['id'] ?>"
+                                                class="border-0 rounded-3 shadow-lg p-4 text-center"
+                                                style="max-width: 500px; outline: none; background: white;">
+                                            <div class="d-flex justify-content-end mb-2">
+                                                <button type="button" class="btn-close"
+                                                        onclick="document.getElementById('openImage<?= $defect['id'] ?>').close()"></button>
+                                            </div>
+
+                                            <img src="../../storage/defects/<?= $defect['image_name'] ?>"
+                                                 alt="Изображение дефекта отсутствует."
+                                                 class="img-fluid rounded mb-2 text-muted">
+                                            <p class="text"><?= $defect['description'] ?: "Без описания" ?></p>
+                                            <p class="text-muted small mb-0">Нажмите Esc или крестик для
+                                                закрытия</p>
+                                        </dialog>
                                         <?php if ($defect['status'] == 'open'): ?>
                                             <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress"
-                                               class="btn btn-sm btn-link">Начать работу</a>
+                                               class="btn btn-primary btn-sm">Начать работу</a>
                                         <?php elseif ($defect['status'] == 'in_progress'): ?>
                                             <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed"
-                                               class="btn btn-sm btn-link">Исправлено</a>
+                                               class="btn btn-success btn-sm">Исправлено</a>
                                         <?php else: ?>
                                             <a href="?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open"
-                                               class="btn btn-sm btn-link">Переоткрыть</a>
+                                               class="btn btn-warning btn-sm">Переоткрыть</a>
                                         <?php endif; ?>
                                         <a href="../../app/view/defects/update_defects.php?id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>"
                                            class="btn btn-sm btn-outline-secondary">Изменить</a>
