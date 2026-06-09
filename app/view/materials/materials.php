@@ -34,7 +34,7 @@
                         Экспорт в CSV
                     </a>
                     <div>
-                        <button onclick="printDiv2('printable-table2')">Печать</button>
+                        <button onclick="printDiv2('printable-table2')" type="button" class="btn btn-outline-secondary">Печать</button>
                     </div>
                 </div>
 
@@ -228,64 +228,34 @@
                 <?php endif; ?>
             </div>
         </div>
-        <!-- Пагинация -->
+        <!-- Легкая и простая пагинация для материалов -->
         <?php if (isset($result['totalPages']) && $result['totalPages'] > 1): ?>
             <div class="row">
                 <div class="col-12">
                     <nav aria-label="Навигация по страницам">
                         <ul class="pagination justify-content-center">
 
-                            <!-- Предыдущая -->
+                            <!-- Предыдущая страница -->
                             <li class="page-item <?php echo ($result['page'] <= 1) ? 'disabled' : ''; ?>">
-                                <?php if ($result['page'] > 1): ?>
-                                    <?php
-                                    $currentUrl = strtok($_SERVER['REQUEST_URI'], '?');
-                                    $queryParams = $_GET;
-                                    unset($queryParams['page']);
-                                    ?>
-                                    <a class="page-link text-dark border-secondary-subtle"
-                                       href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] - 1])); ?>">
-                                        ← Назад
-                                    </a>
-                                <?php else: ?>
-                                    <span class="page-link text-muted border-secondary-subtle">← Назад</span>
-                                <?php endif; ?>
+                                <a class="page-link text-primary" href="?page=<?php echo max(1, $result['page'] - 1); ?>">
+                                    &larr; Назад
+                                </a>
                             </li>
 
                             <!-- Номера страниц -->
                             <?php for ($i = 1; $i <= $result['totalPages']; $i++): ?>
                                 <li class="page-item <?php echo ($i == $result['page']) ? 'active' : ''; ?>">
-                                    <?php if ($i == $result['page']): ?>
-                                        <span class="page-link bg-dark border-dark text-white"><?php echo $i; ?></span>
-                                    <?php else: ?>
-                                        <?php
-                                        $currentUrl = strtok($_SERVER['REQUEST_URI'], '?');
-                                        $queryParams = $_GET;
-                                        unset($queryParams['page']);
-                                        ?>
-                                        <a class="page-link text-dark border-secondary-subtle"
-                                           href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $i])); ?>">
-                                            <?php echo $i; ?>
-                                        </a>
-                                    <?php endif; ?>
+                                    <a class="page-link" href="?page=<?php echo $i; ?>">
+                                        <?php echo $i; ?>
+                                    </a>
                                 </li>
                             <?php endfor; ?>
 
-                            <!-- Следующая -->
+                            <!-- Следующая страница -->
                             <li class="page-item <?php echo ($result['page'] >= $result['totalPages']) ? 'disabled' : ''; ?>">
-                                <?php if ($result['page'] < $result['totalPages']): ?>
-                                    <?php
-                                    $currentUrl = strtok($_SERVER['REQUEST_URI'], '?');
-                                    $queryParams = $_GET;
-                                    unset($queryParams['page']);
-                                    ?>
-                                    <a class="page-link text-dark border-secondary-subtle"
-                                       href="<?php echo $currentUrl . '?' . http_build_query(array_merge($queryParams, ['page' => $result['page'] + 1])); ?>">
-                                        Вперёд →
-                                    </a>
-                                <?php else: ?>
-                                    <span class="page-link text-muted border-secondary-subtle">Вперёд →</span>
-                                <?php endif; ?>
+                                <a class="page-link text-primary" href="?page=<?php echo min($result['totalPages'], $result['page'] + 1); ?>">
+                                    Вперёд &rarr;
+                                </a>
                             </li>
 
                         </ul>
@@ -293,5 +263,6 @@
                 </div>
             </div>
         <?php endif; ?>
-    </div>
+    </div> <!-- /container -->
+
 <?php include '../../app/includes/footer.php'; ?>

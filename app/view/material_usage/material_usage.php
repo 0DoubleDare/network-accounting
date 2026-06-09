@@ -15,19 +15,22 @@
                 <p class="text-muted small mb-0">История расхода материалов по сетевым точкам</p>
             </div>
         </div>
-        <p>
-            <a href="../../">назад</a>
-            <a href="../export_to_csv?type=material_usage">Экспорт</a>
-        </p>
-        <p>
-            <button onclick="printDiv4('printable-table')" >Печать</button>
-        </p>
-
-        <!-- Навигация (кнопка назад в едином стиле) -->
-        <div class="mb-3">
-            <a href="../../" class="btn btn-sm btn-outline-secondary">
+        <!-- Блок кнопок управления: крупные, одинакового размера, в одну линию -->
+        <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
+            <!-- Синяя кнопка действия -->
+            <a href="../../" class="btn btn-primary">
                 &larr; Назад на главную
             </a>
+            
+            <!-- Зелёная кнопка экспорта -->
+            <a href="../export_to_csv?type=material_usage" class="btn btn-success">
+                Экспорт в CSV
+            </a>
+            
+            <!-- Строгая серая кнопка печати (функция printDiv4 на месте) -->
+            <button type="button" onclick="printDiv4('printable-table')" class="btn btn-outline-secondary">
+                Печать
+            </button>
         </div>
 
         <!-- Минималистичная карточка фильтрации (в стиле примера от коллег) -->
@@ -38,7 +41,7 @@
 
                     <!-- Материал -->
                     <div class="col-md-4">
-                        <label class="form-label small fw-medium text-muted">Материал</label>
+                        <label class="form-label small fw-medium text-muted">Material</label>
                         <select name="material_id" class="form-select form-select-sm">
                             <option value="">Все</option>
                             <?php foreach ($materialsList as $material): ?>
@@ -53,9 +56,11 @@
                     <!-- Сетевая точка -->
                     <div class="col-md-4">
                         <label class="form-label small fw-medium text-muted">Сетевая точка</label>
+                        <!-- Добавлены классы Bootstrap form-control-sm -->
                         <input
                                 type="text"
                                 name="point_label"
+                                class="form-control form-control-sm"
                                 placeholder="Поиск по названию точки"
                                 value="<?= htmlspecialchars($_GET['point_label'] ?? ''); ?>"
                         >
@@ -64,8 +69,11 @@
                     <!-- Пользователь -->
                     <div class="col-md-4">
                         <label class="form-label small fw-medium text-muted">Пользователь</label>
+                        <!-- Добавлены классы Bootstrap form-control-sm -->
                         <input
+                                type="text"
                                 name="used_by_login"
+                                class="form-control form-control-sm"
                                 placeholder="Поиск по имени пользователя"
                                 value="<?= htmlspecialchars($_GET['used_by_login'] ?? ''); ?>"
                         >
