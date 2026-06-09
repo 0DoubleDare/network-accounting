@@ -23,7 +23,7 @@
             </a>
             
             <!-- Зелёная кнопка экспорта -->
-            <a href="../export_to_csv?type=material_usage" class="btn btn-success">
+            <a href="../export_to_csv.php?type=material_usage" class="btn btn-success">
                 Экспорт в CSV
             </a>
             

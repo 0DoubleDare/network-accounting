@@ -63,7 +63,7 @@
                             <select name="category" class="form-select">
                                 <option value="">Все</option>
                                 <?php foreach ($categories as $category): ?>
-                                    <option value="<?= $category['name'] ?>" <?= $_GET['category'] == $category['name'] ? 'selected' : '' ?>>
+                                    <option value="<?= $category['name'] ?>" <?= $category['name'] ? 'selected' : '' ?>>
                                         <?= $category['display_name'] ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -124,7 +124,10 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-muted small">
                     <tr>
-                        <th class="ps-4">ID</th>
+                        <th>№</th>
+                        <?php if (($_SESSION['user_info']['role'] ?? 'null') === 'admin'): ?>
+                            <th class="ps-4">ID</th>
+                        <?php endif; ?>
                         <th>Категория</th>
                         <th>Критичность</th>
                         <th>Описание</th>
@@ -135,6 +138,11 @@
                     </tr>
                     </thead>
                     <tbody class="small">
+
+                    
+                        
+                    
+
                     <?php if (empty($defects)): ?>
                         <tr>
                             <td colspan="7" class="text-center py-4 text-muted">
@@ -144,7 +152,10 @@
                     <?php else: ?>
                         <?php foreach ($defects as $defect): ?>
                             <tr>
+                                <td class="ps-4"><?= $offset++ + 1 ?></td>
+                                <?php if (($_SESSION['user_info']['role'] ?? 'null') == 'admin'): ?>
                                 <td class="ps-4 fw-bold"><?= htmlspecialchars($defect['id']) ?></td>
+                                <?php endif; ?>
                                 <td><?= htmlspecialchars($defect['category'] ?? '—') ?></td>
                                 <td>
                                     <span class="fw-medium"><?= htmlspecialchars($defect['severity'] ?? '—') ?></span>
