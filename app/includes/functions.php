@@ -841,8 +841,8 @@ function insert_defects($pdo, $point_id, $category, $severity, $description, $st
     $image_name = uploadImageDefects($file);
     $sql = "INSERT INTO defects(point_id, category, severity, description, status, created_by, image_name) 
     VALUES(:point_id, :category, :severity, :description, :status, :created_by, :image_name)";
-    $stmt = $pdo -> prepare($sql);
-    $stmt -> execute([
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
         'point_id' => $point_id,
         'category' => $category,
         'severity' => $severity,
@@ -855,15 +855,14 @@ function insert_defects($pdo, $point_id, $category, $severity, $description, $st
         'id' => $pdo->lastInsertId()
     ];
     return $response;
-    }
+}
 
-    function deleteDefects($pdo, $id){
-        $sql = "DELETE FROM `defects` WHERE id = :id";
-        $stmt = $pdo -> prepare($sql);
-        $stmt -> execute([
-            'id' => $id
-        ]);
-    }
+function deleteDefects($pdo, $id)
+{
+    $sql = "DELETE FROM `defects` WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+}
 
 
 ?>

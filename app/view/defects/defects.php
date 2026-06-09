@@ -18,7 +18,7 @@
             <?php if (!empty($point['image_name'])): ?>
                 <div class="mb-3">
                     <img src="../../storage/network_points/<?= $point['image_name'] ?>" class="img-thumbnail"
-                         alt="Изображение точки <?= htmlspecialchars($point['label']) ?>" style="max-height: 250px;">
+                        alt="Изображение точки <?= htmlspecialchars($point['label']) ?>" style="max-height: 250px;">
                 </div>
             <?php endif; ?>
 
@@ -34,13 +34,13 @@
                 </a>
 
                 <a href="../materials_usage/materials_usage_view.php?action=index&point_label=<?= urlencode($point['label'] ?? '') ?>"
-                   class="btn btn-sm btn-outline-secondary">
+                    class="btn btn-sm btn-outline-secondary">
                     <i class="fas fa-list me-1"></i> Расход материалов по точке
                 </a>
 
                 <!-- Теперь ссылка передаёт ID точки в GET-параметре, и форма заполнится автоматически! -->
                 <a href="../../app/view/material_usage/insert_material_usage.php?id=<?= htmlspecialchars($point['id'] ?? '') ?>"
-                   class="btn btn-sm btn-primary">
+                    class="btn btn-sm btn-primary">
                     <i class="fas fa-plus me-1"></i> Добавить списание
                 </a>
             </div>
@@ -53,12 +53,12 @@
         <div class="col-12">
 
             <h2 class="h4 mb-2 fw-bold text-dark">Дефекты точки</h2>
-            <a href="../../app/view/defects/insert_defects.php?point_id=<?= $_GET['point_id'] ?>">Вставить</a>
+            <a href="/network-accounting/app/view/defects/insert_defects.php?point_id=<?= $_GET['point_id'] ?>">Вставить</a>
 
             <?php if (!empty($point['image_path'])): ?>
                 <div class="mt-2">
                     <img src="../public/storage/defects/<?= htmlspecialchars($point['image_path']) ?>" alt="Фото точки"
-                         class="img-thumbnail" style="max-height: 150px;">
+                        class="img-thumbnail" style="max-height: 150px;">
                 </div>
             <?php endif; ?>
         </div>
@@ -127,7 +127,7 @@
                             <button type="submit" class="btn btn-sm btn-primary w-50">Применить</button>
                             <a href="?action=index&point_id=<?= $point_id ?>&category=&severity=&status="
 
-                               class="btn btn-sm btn-outline-secondary w-50 text-center">Сбросить</a>
+                                class="btn btn-sm btn-outline-secondary w-50 text-center">Сбросить</a>
 
 
                         </div>
@@ -215,7 +215,7 @@
                                 <td><a href="../../app/view/defects/update_defects.php?id=<?= $defect['id']?>">
                                             Изменить
                                         </a>
-                                        <a href="../../controllers/defects/delete_defect.php?id=<?= $defect['id']?>">
+                                        <a href="../../controllers/defects/delete_defect.php?id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>">
                                             Удалить
                                         </a></td>
 
