@@ -18,7 +18,7 @@ $point_id = $_GET['point_id'];
     <title>Document</title>
 </head>
 <body>
-<form method="post" action="/network-accounting/controllers/defects/insert_defects.php" enctype="multipart/form-data">
+<form method="post" action="../../../controllers/defects/insert_defects.php" enctype="multipart/form-data">
     <input type="hidden" name="point_id" value="<?= $point_id; ?>">
     <input type="hidden" name="created_by" value="<?= $current_user_id; ?>">
 
