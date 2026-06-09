@@ -19,7 +19,7 @@
         <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
             <!-- Синяя кнопка действия -->
             <a href="../../" class="btn btn-outline-secondary">
-                &larr; Назад на главную
+                &larr; На главную
             </a>
 
             <!-- Зелёная кнопка экспорта -->

@@ -21,6 +21,9 @@ if (!isset($points)) {
             <p class="text-muted small mb-0">Список сетевых точек, фильтрация и учёт</p>
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <a href="../../" class="btn btn-outline-secondary">
+                &larr; На главную
+            </a>
             <a href="../../app/view/inventory/insert_network_point.php" class="btn btn-primary">+ Добавить точку</a>
             <a href="../export_to_csv.php?type=network_points" class="btn btn-success ms-2">Экспорт в CSV</a>
             <button type="button" onclick="printDiv('printable-table')" class="btn btn-outline-secondary ms-2">Печать

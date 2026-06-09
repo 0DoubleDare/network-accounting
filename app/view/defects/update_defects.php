@@ -93,18 +93,19 @@ $categories = getDefectCategories($pdo);
                                 </select>
                             </div>
 
-                            <?php if (!empty($defect['image_name'])): ?>
-                                <div class="mb-3">
-                                    <label class="form-label">Текущая фотография</label><br>
-                                    <img src="../../../storage/defects/<?= htmlspecialchars($defect['image_name']); ?>"
-                                         alt="Фото дефекта" style="max-width: 200px;">
-                                </div>
-                            <?php endif; ?>
+                            <!--                            --><?php //if (!empty($defect['image_name'])): ?>
+                            <!--                                <div class="mb-3">-->
+                            <!--                                    <label class="form-label">Текущая фотография</label><br>-->
+                            <!--                                    <img src="../../../storage/defects/-->
+                            <?php //= htmlspecialchars($defect['image_name']); ?><!--"-->
+                            <!--                                         alt="Фото дефекта" style="max-width: 200px;">-->
+                            <!--                                </div>-->
+                            <!--                            --><?php //endif; ?>
 
-                            <div class="mb-3">
-                                <label class="form-label">Новая фотография</label>
-                                <input type="file" name="image_name" class="form-control" accept="image/*">
-                            </div>
+                            <!--                            <div class="mb-3">-->
+                            <!--                                <label class="form-label">Новая фотография</label>-->
+                            <!--                                <input type="file" name="image_name" class="form-control" accept="image/*">-->
+                            <!--                            </div>-->
 
                             <button type="submit" class="btn btn-primary w-100">Сохранить изменения</button>
                         </form>

@@ -25,7 +25,7 @@
                 <!-- Кнопка назад и добавления -->
                 <div class="mb-3 d-flex gap-2">
                     <a href="../../" class="btn btn-outline-secondary">
-                        &larr; Назад
+                        &larr; На главную
                     </a>
                     <a href="../../app/view/materials/insert_material.php" class="btn btn-primary">
                         + Добавить материал

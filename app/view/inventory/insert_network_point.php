@@ -6,8 +6,10 @@ $statuses = getNetworkPointStatusList($pdo);
 ?>
 
 <?php include '../../includes/header.php'; ?>
-    <body class="bg-white">
     <div class="container py-4">
+        <button onclick="history.back()" class="btn btn-sm btn-outline-secondary">
+            &larr; Назад
+        </button>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card border">

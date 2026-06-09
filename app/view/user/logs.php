@@ -8,7 +8,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2 mb-0" style="color: #000;">Журнал действий системы</h1>
-        <a href="../" class="btn btn-outline-primary" style="color: #000;">← Назад</a>
+        <button onclick="history.back()" class="btn btn-sm btn-outline-secondary">
+            &larr; На предыдущую страницу
+        </button>
     </div>
 
     <!-- Форма фильтрации -->
