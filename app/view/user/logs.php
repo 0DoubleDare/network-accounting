@@ -19,14 +19,12 @@
         <div class="card-body">
             <form method="GET" action="" class="row g-3">
                 <div class="col-md-3">
-                    <select name="user_id" class="form-select" style="color: #000;">
-                        <option value="">Все пользователи</option>
-                        <?php foreach ($logUsers as $user): ?>
-                            <option value="<?= $user['id'] ?>" <?= isset($_GET['user_id']) && $_GET['user_id'] == $user['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($user['login']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <input type="text" 
+                           name="user_login" 
+                           class="form-control" 
+                           placeholder="Поиск по логину..."
+                           value="<?= htmlspecialchars($_GET['user_login'] ?? '') ?>"
+                           style="color: #000;">
                 </div>
 
                 <div class="col-md-2">
