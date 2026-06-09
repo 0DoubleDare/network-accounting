@@ -20,7 +20,7 @@
         </div>
         <!-- Кнопка назад -->
         <div class="mb-3">
-            <a href="../inventory/inventory_view.php" class="btn btn-sm btn-outline-secondary">
+            <a href="../inventory/inventory_view.php" class="btn  btn-outline-secondary">
                 &larr; Назад к точкам
             </a> 
             <!-- НОВАЯ КНОПКА: Переход к расходам материалов по этой точке -->
@@ -176,17 +176,17 @@
                                 <td class="pe-4 text-muted"><?= htmlspecialchars($defect['created_at'] ?? '') ?></td>
                                 <td>
                                     <?php if ($defect['status'] == 'open'): ?>
-                                        <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress'">
+                                        <button type="button" class="btn btn-outline-primary" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=in_progress'">
                                 Начать работу
                                     </button>
                                 <?php elseif ($defect['status'] == 'in_progress'): ?>
-                                        <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed'">
+                                        <button type="button" class="btn btn-outline-primary" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=closed'">
                                 Исправлено
                                     </button>
                                         <?php else: ?>
-                                <button type="button" class="btn btn-link" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open'">
-                                Переоткрыть
-                                    </button>
+                                <button type="button" class="btn btn-outline-primary" onclick="window.location.href='?action=change_status&defect_id=<?= $defect['id'] ?>&point_id=<?= $point_id ?>&status=open'">
+                                    Переоткрыть
+                                </button>
                                         <?php endif; ?>
                                     
                                     <?php if (!empty($defect['image_name'])): ?>
