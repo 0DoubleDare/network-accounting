@@ -20,10 +20,12 @@ if (!isset($points)) {
             <p class="text-muted small mb-0">Список сетевых точек, фильтрация и учёт</p>
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <a href="../../app/view/inventory/insert_network_point.php" class="btn btn-success mb-3">Добавить точку</a>
-            <a href="../export_to_csv.php?type=network_points" class="btn btn-outline-secondary mb-3 ms-2">Экспорт</a>
-            <button onclick="printDiv('printable-table')">Печать</button>
+            <a href="../../app/view/inventory/insert_network_point.php" class="btn btn-primary">+ Добавить точку</a>
+            <a href="../export_to_csv.php?type=network_points" class="btn btn-success ms-2">Экспорт в CSV</a>
+            <button type="button" onclick="printDiv('printable-table')" class="btn btn-outline-secondary ms-2">Печать</button>
         </div>
+
+
     </div>
 
     <!-- Минималистичная карточка фильтра -->
@@ -38,7 +40,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Метка</label>
                             <input type="text" name="label" class="form-control form-control-sm"
-                                   value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
+                                value="<?= htmlspecialchars($_GET['label'] ?? '') ?>">
                         </div>
 
                         <!-- Тип -->
@@ -58,7 +60,7 @@ if (!isset($points)) {
                         <div class="col-md-3">
                             <label class="form-label small fw-medium text-muted">Расположение</label>
                             <input type="text" name="location" class="form-control form-control-sm"
-                                   value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
+                                value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
                         </div>
 
                         <!-- Статус -->
@@ -143,20 +145,18 @@ if (!isset($points)) {
                                     ?>
                                 </td>
                                 <td class="pe-4">
-                                    <a href="../defects/defects_view.php?action=index&point_id=<?= $point['id'] ?>&category=&severity=&status=">Подробнее</a>
+                                    <a href="../defects/defects_view.php?point_id=<?= $point['id'] ?>">Подробнее</a>
                                     <?php if (isset($_SESSION['user_info']) && !empty($_SESSION['user_info'])): ?>
                                         <a href="../../app/view/inventory/update_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                           class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
+                                        class="btn btn-outline-secondary btn-sm ms-2">Изменить</a>
                                         <a href="./delete_network_point.php?id=<?php echo htmlspecialchars($point['id']); ?>"
-                                           class="btn btn-outline-danger btn-sm ms-2"
-                                           onclick="return confirm('Удалить точку?')">Удалить</a>
+                                        class="btn btn-outline-danger btn-sm ms-2" 
+                                        onclick="return confirm('Удалить точку?')">Удалить</a>
                                     <?php else: ?>
-                                        <button class="btn btn-outline-secondary btn-sm ms-2" disabled
-                                                title="Доступно только зарегистрированным пользователям">Изменить
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm ms-2" disabled
-                                                title="Доступно только зарегистрированным пользователям">Удалить
-                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm ms-2" disabled 
+                                                title="Доступно только зарегистрированным пользователям">Изменить</button>
+                                        <button class="btn btn-outline-danger btn-sm ms-2" disabled 
+                                                title="Доступно только зарегистрированным пользователям">Удалить</button>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -169,31 +169,48 @@ if (!isset($points)) {
     </div>
 
     <!-- Пагинация ссылками -->
-    <?php if (isset($pages) && $pages > 0): ?>
+    <!-- Простая и лёгкая пагинация Bootstrap 5 -->
+    <?php if (isset($pages) && $pages > 1): ?>
         <div class="mb-4">
-            <?php if ($page > 1): ?>
-                <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $page - 1 ?>">← Назад</a>
-            <?php endif; ?>
+            <nav>
+                <ul class="pagination justify-content-center">
 
-            <?php for ($i = 1; $i <= $pages; $i++): ?>
-                <?php if ($i == $page): ?>
-                    <strong><?= $i ?></strong>
-                <?php else: ?>
-                    <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>"><?= $i ?></a>
-                <?php endif; ?>
-            <?php endfor; ?>
+                    <!-- Назад -->
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link text-primary" href="?action=index&page=<?= max(1, $page - 1) ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
+                            &larr; Назад
+                        </a>
+                    </li>
 
-            <?php if ($page < $pages): ?>
-                <a href="?action=index&point_id=<?= $point_id ?>&page=<?= $page + 1 ?>">Вперёд →</a>
-            <?php endif; ?>
+                    <!-- Номера страниц -->
+                    <?php for ($i = 1; $i <= $pages; $i++): ?>
+                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                            <a class="page-link" href="?action=index&page=<?= $i ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
+                                <?= $i ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <!-- Вперёд -->
+                    <li class="page-item <?= ($page >= $pages) ? 'disabled' : '' ?>">
+                        <a class="page-link text-primary" href="?action=index&page=<?= min($pages, $page + 1) ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
+                            Вперёд &rarr;
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
         </div>
     <?php endif; ?>
 
-    <!-- Кнопка назад -->
+    <!-- Компактная кнопка Назад -->
     <div class="mb-3">
-        <button onclick="history.back()" class="btn btn-secondary">← Назад</button>
+        <button onclick="history.back()" class="btn btn-sm btn-outline-secondary">
+            &larr; Назад к списку
+        </button>
     </div>
 
-</div>
+</div> <!-- /container -->
+
 
 <?php include '../../app/includes/footer.php'; ?>
