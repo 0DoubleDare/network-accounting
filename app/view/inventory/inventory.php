@@ -177,7 +177,7 @@ if (!isset($points)) {
 
                     <!-- Назад -->
                     <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                        <a class="page-link text-primary" href="?action=index&point_id=<?= $point_id ?>&page=<?= max(1, $page - 1) ?>">
+                        <a class="page-link text-primary" href="?action=index&page=<?= max(1, $page - 1) ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                             &larr; Назад
                         </a>
                     </li>
@@ -185,7 +185,7 @@ if (!isset($points)) {
                     <!-- Номера страниц -->
                     <?php for ($i = 1; $i <= $pages; $i++): ?>
                         <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                            <a class="page-link" href="?action=index&point_id=<?= $point_id ?>&page=<?= $i ?>">
+                            <a class="page-link" href="?action=index&page=<?= $i ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                                 <?= $i ?>
                             </a>
                         </li>
@@ -193,7 +193,7 @@ if (!isset($points)) {
 
                     <!-- Вперёд -->
                     <li class="page-item <?= ($page >= $pages) ? 'disabled' : '' ?>">
-                        <a class="page-link text-primary" href="?action=index&point_id=<?= $point_id ?>&page=<?= min($pages, $page + 1) ?>">
+                        <a class="page-link text-primary" href="?action=index&page=<?= min($pages, $page + 1) ?>&label=<?= urlencode($_GET['label'] ?? '') ?>&type=<?= urlencode($_GET['type'] ?? '') ?>&location=<?= urlencode($_GET['location'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>">
                             Вперёд &rarr;
                         </a>
                     </li>
