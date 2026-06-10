@@ -50,10 +50,12 @@
                    class="btn btn-primary">+ Добавить дефект</a>
                 <a href="../export_to_csv.php?type=defects&point_id=<?= $point_id ?>" class="btn btn-success">Экспорт
                     в CSV</a>
+                <button type="button" onclick="printDiv('printable-table')" class="btn btn-success">
+                    Печать
+                </button>
             </div>
         </div>
-
-        <!-- Форма фильтрации -->
+        <!-- Форма фильтрациd -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card border-secondary-subtle">
@@ -118,7 +120,7 @@
         </div>
 
         <!-- Таблица с дефектами -->
-        <div class="row mb-4">
+        <div class="row mb-4" id="printable-table">
             <div class="col-12">
                 <div class="table-responsive card border-secondary-subtle bg-white">
                     <table class="table table-hover align-middle mb-0">
