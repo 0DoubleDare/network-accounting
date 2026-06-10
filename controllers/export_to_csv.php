@@ -11,7 +11,7 @@ require '../app/includes/functions.php';
 $type = $_GET['type'];
 
 // Разрешённые типы экспорта
-$allowedTypes = ['materials', 'logs', 'network_points', 'material_usage'];
+$allowedTypes = ['materials', 'logs', 'network_points', 'material_usage', 'defects'];
 
 /**
  * ЭКСПОРТ МАТЕРИАЛОВ
@@ -198,16 +198,13 @@ if ($type === 'material_usage') {
             $row['comment'] ?? '-',
             $row['defect_id'] ?? '-',
             $row['defect_description'] ? mb_substr($row['defect_description'], 0, 100) . (mb_strlen($row['defect_description']) > 100 ? '...' : '') : '-',
-            $defectStatusMap[$row['defect_status']] ?? '-'
+            $defectStatusMap[$row['defect_status']] ?? '-'  // ИСПРАВЛЕНО
         ];
     }
 
     exportToCSV($data, $headers, 'material_usage');
 }
 
-/**
- * ЭКСПОРТ ДЕФЕКТОВ СЕТЕВОЙ ТОЧКИ
- */
 /**
  * ЭКСПОРТ ДЕФЕКТОВ СЕТЕВОЙ ТОЧКИ
  */
@@ -224,16 +221,23 @@ if ($type === 'defects' && !empty($_GET['point_id'])) {
                 defect_category.display_name AS category_name,
                 users.login AS creator_login,
                 network_points.label AS point_label
-              FROM defects
-              LEFT JOIN defect_category ON defects.category = defect_category.id
-              LEFT JOIN users ON defects.created_by = users.id
-              LEFT JOIN network_points ON defects.point_id = network_points.id
-              WHERE defects.point_id = :point_id
-              ORDER BY defects.created_at DESC";
+            FROM defects
+            LEFT JOIN defect_category ON defects.category = defect_category.id
+            LEFT JOIN users ON defects.created_by = users.id
+            LEFT JOIN network_points ON defects.point_id = network_points.id
+            WHERE defects.point_id = :point_id
+            ORDER BY defects.created_at DESC";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute(['point_id' => $point_id]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Проверка на пустой результат
+    if (empty($result)) {
+        $_SESSION['error'] = "Нет данных для экспорта";
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
 
     $headers = [
         '№',
