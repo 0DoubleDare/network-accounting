@@ -8,21 +8,20 @@ services:
       - .:/var/www/html/
     environment:
       - DB_HOST_PURE=db
-    depends_on:
-      db:
-        condition: service_healthy  # Теперь веб-сервер запустится СТРОГО после импорта базы
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:80/" ] # Если curl нет в контейнере, можно временно удалить этот блок healthcheck
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+  #    depends_on:
+  #      db:
+  #        condition: service_healthy  # Теперь веб-сервер запустится СТРОГО после импорта базы
+  #    healthcheck:
+  #      test: [ "CMD", "curl", "-f", "http://localhost:80/" ] # Если curl нет в контейнере, можно временно удалить этот блок healthcheck
+  #      interval: 10s
+  #      timeout: 5s
+  #      retries: 3
+  #      start_period: 5s
 
   db:
-    image: mysql:8.0
-    # Читаем файл из /tmp/, а исправленный результат кладем в папку инициализации
-    command: >
-      sh -c "sed 's/NO_AUTO_CREATE_USER//g' /tmp/init.sql > /docker-entrypoint-initdb.d/init.sql && exec /usr/local/bin/docker-entrypoint.sh mysqld"
+    image: mariadb:11.4
+    #    command: >
+    #      sh -c "sed 's/NO_AUTO_CREATE_USER//g' /tmp/init.sql > /docker-entrypoint-initdb.d/init.sql && exec /usr/local/bin/docker-entrypoint.sh mysqld"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ""
@@ -33,12 +32,12 @@ services:
       - ./install/network_accounting_db.sql:/tmp/init.sql:ro  # ИСПРАВЛЕНО: монтируем в /tmp/
     ports:
       - "3307:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 15s
 
 volumes:
   db_data:

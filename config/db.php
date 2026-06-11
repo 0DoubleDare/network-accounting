@@ -10,6 +10,8 @@ $dsn = 'mysql:host=' . $db_host . ';dbname=' . $db_name;
 try {
     $pdo = new PDO($dsn, $user, $password);
 } catch (PDOException $error) {
+    $_SESSION['server_error'] = $error->getMessage();
+    header("Location: /app/view/sometimes_went_wrong.php");
     die('Error: ' . $error->getMessage());
 }
 ?>
